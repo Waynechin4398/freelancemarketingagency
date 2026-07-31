@@ -1,0 +1,40 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHero from "../../components/PageHero.astro";
+import RelatedWork from "../../components/RelatedWork.astro";
+import CtaBand from "../../components/CtaBand.astro";
+
+export async function getStaticPaths() {
+  const services = await getCollection("services", ({ data }) => !data.draft);
+  return services.map((service) => ({ params: { slug: service.id }, props: { service } }));
+}
+const { service } = Astro.props;
+---
+<BaseLayout title={service.data.title} description={service.data.intro}>
+  <PageHero eyebrow={`${service.data.group} · ${service.data.number}`} title={service.data.title} intro={service.data.intro} />
+  <section class="service-detail">
+    <div class="detail-grid">
+      <div><span class="eyebrow">Designed for outcomes</span></div>
+      <div>
+        <h2>{service.data.short}</h2>
+        <div class="detail-columns">
+          <div><span class="eyebrow">What it should improve</span><ul class="detail-list">{service.data.outcomes.map((item: string) => <li>{item}</li>)}</ul></div>
+          <div><span class="eyebrow">Typical deliverables</span><ul class="detail-list">{service.data.deliverables.map((item: string) => <li>{item}</li>)}</ul></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="service-detail dark-section">
+    <div class="detail-grid">
+      <div><span class="eyebrow light">How the work moves</span></div>
+      <div><ol class="process-list">{service.data.process.map((item: string) => <li>{item}</li>)}</ol></div>
+    </div>
+  </section>
+  <section class="section related-section">
+    <span class="eyebrow">Relevant experience</span>
+    <h2 class="large-section-title">Related work</h2>
+    <RelatedWork slugs={service.data.related} />
+  </section>
+  <CtaBand />
+</BaseLayout>

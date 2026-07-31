@@ -1,0 +1,18 @@
+---
+const stages = [
+  ["01", "Attention", "Search, social and paid media"],
+  ["02", "Experience", "Website or focused landing page"],
+  ["03", "Action", "Enquiry, booking or purchase"],
+  ["04", "Follow-up", "CRM, email and human response"],
+  ["05", "Learning", "Reporting that changes the next move"],
+];
+---
+<div class="funnel-flow">
+  {stages.map(([number, title, copy], index) => (
+    <div class="funnel-step">
+      <span>{number}</span>
+      <div><strong>{title}</strong><p>{copy}</p></div>
+      {index < stages.length - 1 && <i aria-hidden="true">→</i>}
+    </div>
+  ))}
+</div>

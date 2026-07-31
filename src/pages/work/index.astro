@@ -1,0 +1,50 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHero from "../../components/PageHero.astro";
+import CtaBand from "../../components/CtaBand.astro";
+const projects = (await getCollection("caseStudies", ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
+const filters = ["All", "Websites", "Landing Pages", "Paid Media", "CRM & Automation", "Email Marketing"];
+---
+<BaseLayout title="Work" description="Selected Wayne Omni project experience across web, acquisition and automation.">
+  <PageHero eyebrow="Selected experience" title="Work built around real business decisions." intro="Explore the challenge, strategy and systems created across real estate, tourism and finance. Metrics are only published when evidence and client permission are available." />
+  <div class="filters" aria-label="Filter projects by service">
+    {filters.map((filter, index) => <button type="button" data-filter={filter} class:list={{ active: index === 0 }}>{filter}</button>)}
+  </div>
+  <div class="work-grid" data-work-grid aria-live="polite">
+    {projects.map((project, index) => (
+      <a class:list={["project-card", project.data.palette]} data-project data-services={JSON.stringify(project.data.services)} href={`/work/${project.id}/`}>
+        <span class="project-count">0{index + 1}</span>
+        <div class="project-visual" aria-hidden="true">
+          <div class="mini-window"><i></i><i></i><i></i><b></b></div>
+          <div class="mini-data"><i></i><i></i><i></i><i></i></div>
+        </div>
+        <div class="project-copy">
+          <span class="eyebrow">{project.data.industry} · {project.data.objective}</span>
+          <h2>{project.data.client}</h2>
+          <p>{project.data.summary}</p>
+          <span class="text-link">Read case study <b>↗</b></span>
+        </div>
+      </a>
+    ))}
+  </div>
+  <p class="empty-state" data-empty hidden>More work in this capability will be added with client permission.</p>
+  <CtaBand />
+  <script>
+    const buttons = document.querySelectorAll<HTMLButtonElement>("[data-filter]");
+    const cards = document.querySelectorAll<HTMLElement>("[data-project]");
+    const empty = document.querySelector<HTMLElement>("[data-empty]");
+    buttons.forEach((button) => button.addEventListener("click", () => {
+      const active = button.dataset.filter ?? "All";
+      let visible = 0;
+      buttons.forEach((item) => item.classList.toggle("active", item === button));
+      cards.forEach((card) => {
+        const services = JSON.parse(card.dataset.services ?? "[]") as string[];
+        const show = active === "All" || services.includes(active);
+        card.hidden = !show;
+        if (show) visible += 1;
+      });
+      if (empty) empty.hidden = visible > 0;
+    }));
+  </script>
+</BaseLayout>

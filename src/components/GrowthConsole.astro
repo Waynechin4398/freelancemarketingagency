@@ -1,0 +1,41 @@
+<div class="console" data-growth-console aria-label="Interactive growth console">
+  <div class="console-top"><span class="console-kicker">Growth console</span><span class="status"><i></i> System view</span></div>
+  <div class="console-tabs" role="tablist" aria-label="Marketing channels">
+    {["Web", "Meta", "Google", "TikTok", "Social", "Email"].map((channel, index) => (
+      <button role="tab" data-channel={channel} aria-selected={index === 0 ? "true" : "false"}>{channel}</button>
+    ))}
+  </div>
+  <div class="console-stage cobalt" data-console-stage aria-live="polite">
+    <div class="signal-card"><span data-console-label>Conversion path</span><strong data-console-value>Page → action</strong><p data-console-detail>Clear message, proof and next step.</p></div>
+    <div class="signal-lines" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <div class="console-orbit" aria-hidden="true"><b></b><b></b><b></b></div>
+  </div>
+  <div class="console-foot"><span>One connected system</span><span>Strategy · Creative · Technology</span></div>
+</div>
+<script>
+  const channelData = {
+    Web: ["Conversion path", "Page → action", "Clear message, proof and next step.", "cobalt"],
+    Meta: ["Creative learning", "Hook → signal", "Test angles before scaling spend.", "coral"],
+    Google: ["Search intent", "Query → answer", "Meet active demand with relevance.", "lime"],
+    TikTok: ["Native attention", "Story → response", "Fast, human and channel-aware.", "cyan"],
+    Social: ["Brand memory", "Idea → rhythm", "Repeatable formats that compound.", "pink"],
+    Email: ["Lifecycle", "Lead → follow-up", "Timely messages tied to intent.", "amber"],
+  };
+  document.querySelectorAll("[data-growth-console]").forEach((consoleElement) => {
+    consoleElement.querySelectorAll<HTMLButtonElement>("[data-channel]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const channel = button.dataset.channel as keyof typeof channelData;
+        const [label, value, detail, tone] = channelData[channel];
+        consoleElement.querySelectorAll("[data-channel]").forEach((item) => item.setAttribute("aria-selected", String(item === button)));
+        const stage = consoleElement.querySelector("[data-console-stage]");
+        if (stage) stage.className = `console-stage ${tone}`;
+        const labelEl = consoleElement.querySelector("[data-console-label]");
+        const valueEl = consoleElement.querySelector("[data-console-value]");
+        const detailEl = consoleElement.querySelector("[data-console-detail]");
+        if (labelEl) labelEl.textContent = label;
+        if (valueEl) valueEl.textContent = value;
+        if (detailEl) detailEl.textContent = detail;
+      });
+    });
+  });
+</script>

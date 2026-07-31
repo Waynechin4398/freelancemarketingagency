@@ -1,0 +1,24 @@
+---
+import site from "../data/site.json";
+const nav = [
+  { href: "/work", label: "Work" },
+  { href: "/services", label: "Services" },
+  { href: "/about", label: "About" },
+  { href: "/insights", label: "Insights" },
+];
+---
+<header class="site-header">
+  <a class="brand" href="/" aria-label="Wayne Omni home">
+    <span class="omni-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span><strong>{site.brand.toUpperCase()}</strong><small>{site.descriptor}</small></span>
+  </a>
+  <nav class="desktop-nav" aria-label="Main navigation">
+    {nav.map((item) => <a href={item.href}>{item.label}</a>)}
+    <a class="nav-cta" href="/contact">Start a project <span>↗</span></a>
+  </nav>
+  <button class="menu-toggle" data-menu-toggle aria-expanded="false" aria-controls="mobile-nav">Menu</button>
+  <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile navigation">
+    {nav.map((item) => <a href={item.href}>{item.label}</a>)}
+    <a href="/contact">Start a project</a>
+  </nav>
+</header>

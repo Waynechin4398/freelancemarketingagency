@@ -1,0 +1,21 @@
+---
+import site from "../data/site.json";
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="footer-main">
+    <div>
+      <span class="eyebrow light">{site.location}</span>
+      <h2>{site.tagline}</h2>
+    </div>
+    <div class="footer-links">
+      <div><span>Explore</span><a href="/work">Work</a><a href="/services">Services</a><a href="/about">About</a><a href="/insights">Insights</a></div>
+      <div><span>Start</span><a href="/contact">Project brief</a><a href="/contact#audit">Growth audit</a><a href="/admin/">Content CMS</a></div>
+      <div><span>Legal</span><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/cookies">Cookies</a><a href="/pdpa">PDPA notice</a></div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© {year} {site.legalName}. {site.ssmNumber ? `SSM ${site.ssmNumber}` : "SSM details to be inserted before public launch."}</span>
+    <span>English · 中文 · Bahasa Melayu</span>
+  </div>
+</footer>

@@ -1,0 +1,50 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+---
+<BaseLayout title="Start a project" description="Prepare a focused growth brief for Wayne Omni.">
+  <PageHero dark eyebrow="Start with the constraint" title="Where is growth getting stuck?" intro="Answer three focused questions to prepare a useful first brief. No commitment, no generic twenty-field form." />
+  <section class="contact-layout" id="audit">
+    <div class="contact-copy">
+      <span class="eyebrow">Growth audit</span>
+      <h2>A better brief leads to a better first conversation.</h2>
+      <p>The audit helps identify the most relevant capability and project experience before discussing scope.</p>
+      <div class="prelaunch-note"><strong>Pre-launch note</strong><br />The final email, WhatsApp or booking destination will be connected after the preferred business contact details are confirmed.</div>
+    </div>
+    <div class="audit-form" data-audit></div>
+  </section>
+  <script>
+    const steps = [
+      { key: "goal", title: "What are you trying to improve?", choices: ["Generate more leads", "Build a better website", "Lower advertising costs", "Improve social presence", "Automate follow-up"] },
+      { key: "channels", title: "What is active today?", choices: ["Website only", "Paid advertising", "Organic social", "Email or CRM", "Starting fresh"] },
+      { key: "market", title: "Where are your customers?", choices: ["Malaysia", "Singapore", "Southeast Asia", "Multiple markets", "Not sure yet"] },
+    ];
+    const root = document.querySelector<HTMLElement>("[data-audit]");
+    let step = 0;
+    const answers: Record<string, string> = {};
+    const escapeHtml = (value: string) => value.replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[character] ?? character);
+    const render = () => {
+      if (!root) return;
+      if (step >= steps.length) {
+        const brief = `Wayne Omni growth brief\nGoal: ${answers.goal ?? "—"}\nCurrent setup: ${answers.channels ?? "—"}\nMarket: ${answers.market ?? "—"}`;
+        root.className = "audit-complete";
+        root.innerHTML = `<span class="eyebrow">Brief prepared</span><h3>A useful first conversation starts here.</h3><pre>${escapeHtml(brief)}</pre><button class="button primary" type="button" data-copy>Copy project brief</button><p class="form-note">Contact delivery will be connected after the business email or CRM destination is confirmed.</p>`;
+        root.querySelector("[data-copy]")?.addEventListener("click", async (event) => {
+          await navigator.clipboard.writeText(brief);
+          (event.currentTarget as HTMLButtonElement).textContent = "Copied";
+        });
+        return;
+      }
+      const current = steps[step];
+      root.className = "audit-form";
+      root.innerHTML = `<div class="audit-progress"><span>0${step + 1} / 0${steps.length}</span><i style="width:${((step + 1) / steps.length) * 100}%"></i></div><h3>${escapeHtml(current.title)}</h3><div class="audit-choices">${current.choices.map((choice) => `<button type="button" data-choice="${escapeHtml(choice)}">${escapeHtml(choice)}<span>→</span></button>`).join("")}</div>${step > 0 ? '<button class="back-button" type="button" data-back>← Back</button>' : ""}`;
+      root.querySelectorAll<HTMLButtonElement>("[data-choice]").forEach((button) => button.addEventListener("click", () => {
+        answers[current.key] = button.dataset.choice ?? "";
+        step += 1;
+        render();
+      }));
+      root.querySelector("[data-back]")?.addEventListener("click", () => { step -= 1; render(); });
+    };
+    render();
+  </script>
+</BaseLayout>

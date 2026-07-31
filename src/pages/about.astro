@@ -1,0 +1,28 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import ProcessFlow from "../components/ProcessFlow.astro";
+import CtaBand from "../components/CtaBand.astro";
+---
+<BaseLayout title="About" description="Wayne Omni connects strategy, creative, media and technology.">
+  <PageHero eyebrow="Wayne Omnipotent · Malaysia" title="One partner across the growth journey." intro="Wayne Omni is the public-facing name of Wayne Omnipotent: a Malaysia-registered marketing business bringing web development, acquisition, content and automation into one connected practice." />
+  <section class="about-grid">
+    <div><h2>Built for businesses that have outgrown disconnected execution.</h2></div>
+    <div class="about-copy">
+      <p>Many businesses do not have a channel problem. They have a handoff problem: the ad makes one promise, the page tells another story, the form lacks context and the follow-up arrives too late.</p>
+      <p>Wayne Omni works across that whole path. Experience includes website development, landing pages, Meta, Google, TikTok and LinkedIn advertising, Facebook, Instagram and Redbook content, email marketing, CRM workflows and measurement.</p>
+      <p>The goal is not to add complexity. It is to make the customer journey clearer and the marketing operation easier to improve.</p>
+    </div>
+  </section>
+  <section class="section dark-section">
+    <span class="eyebrow light">A connected practice</span>
+    <h2 class="large-section-title">From first attention to the next decision.</h2>
+    <ProcessFlow />
+  </section>
+  <section class="language-band">
+    <div><span>Campaign language</span><strong>English</strong></div>
+    <div><span>Campaign language</span><strong>中文</strong></div>
+    <div><span>Campaign language</span><strong>Bahasa Melayu</strong></div>
+  </section>
+  <CtaBand />
+</BaseLayout>

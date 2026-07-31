@@ -6,6 +6,8 @@ const nav = [
   { href: "/about", label: "About" },
   { href: "/insights", label: "Insights" },
 ];
+const pathname = Astro.url.pathname;
+const isCurrent = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
 ---
 <header class="site-header">
   <a class="brand" href="/" aria-label="Wayne Omni home">
@@ -13,12 +15,12 @@ const nav = [
     <span><strong>{site.brand.toUpperCase()}</strong><small>{site.descriptor}</small></span>
   </a>
   <nav class="desktop-nav" aria-label="Main navigation">
-    {nav.map((item) => <a href={item.href}>{item.label}</a>)}
+    {nav.map((item) => <a href={item.href} aria-current={isCurrent(item.href) ? "page" : undefined}>{item.label}</a>)}
     <a class="nav-cta" href="/contact">Start a project <span>↗</span></a>
   </nav>
   <button class="menu-toggle" data-menu-toggle aria-expanded="false" aria-controls="mobile-nav">Menu</button>
-  <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile navigation">
-    {nav.map((item) => <a href={item.href}>{item.label}</a>)}
+  <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile navigation" aria-hidden="true" inert>
+    {nav.map((item) => <a href={item.href} aria-current={isCurrent(item.href) ? "page" : undefined}>{item.label}</a>)}
     <a href="/contact">Start a project</a>
   </nav>
 </header>

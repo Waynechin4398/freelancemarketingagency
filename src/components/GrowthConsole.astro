@@ -1,16 +1,17 @@
 <div class="console" data-growth-console aria-label="Interactive growth console">
-  <div class="console-top"><span class="console-kicker">Growth console</span><span class="status"><i></i> System view</span></div>
+  <div class="console-top"><span class="console-kicker">Growth console <b>01</b></span><span class="status"><i></i> System online</span></div>
   <div class="console-tabs" role="tablist" aria-label="Marketing channels">
     {["Web", "Meta", "Google", "TikTok", "Social", "Email"].map((channel, index) => (
-      <button role="tab" data-channel={channel} aria-selected={index === 0 ? "true" : "false"}>{channel}</button>
+      <button role="tab" data-channel={channel} aria-selected={index === 0 ? "true" : "false"} tabindex={index === 0 ? 0 : -1}>{channel}</button>
     ))}
   </div>
   <div class="console-stage cobalt" data-console-stage aria-live="polite">
+    <div class="console-axis" aria-hidden="true"><span>Signal</span><span>Intent</span><span>Action</span></div>
     <div class="signal-card"><span data-console-label>Conversion path</span><strong data-console-value>Page → action</strong><p data-console-detail>Clear message, proof and next step.</p></div>
     <div class="signal-lines" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
     <div class="console-orbit" aria-hidden="true"><b></b><b></b><b></b></div>
   </div>
-  <div class="console-foot"><span>One connected system</span><span>Strategy · Creative · Technology</span></div>
+  <div class="console-foot"><span data-console-module>Module 01 / 06</span><span>Strategy · Creative · Technology</span></div>
 </div>
 <script>
   const channelData = {
@@ -22,19 +23,33 @@
     Email: ["Lifecycle", "Lead → follow-up", "Timely messages tied to intent.", "amber"],
   };
   document.querySelectorAll("[data-growth-console]").forEach((consoleElement) => {
-    consoleElement.querySelectorAll<HTMLButtonElement>("[data-channel]").forEach((button) => {
-      button.addEventListener("click", () => {
+    const tabs = Array.from(consoleElement.querySelectorAll<HTMLButtonElement>("[data-channel]"));
+    const activate = (button: HTMLButtonElement) => {
         const channel = button.dataset.channel as keyof typeof channelData;
         const [label, value, detail, tone] = channelData[channel];
-        consoleElement.querySelectorAll("[data-channel]").forEach((item) => item.setAttribute("aria-selected", String(item === button)));
+        tabs.forEach((item) => {
+          item.setAttribute("aria-selected", String(item === button));
+          item.tabIndex = item === button ? 0 : -1;
+        });
         const stage = consoleElement.querySelector("[data-console-stage]");
         if (stage) stage.className = `console-stage ${tone}`;
         const labelEl = consoleElement.querySelector("[data-console-label]");
         const valueEl = consoleElement.querySelector("[data-console-value]");
         const detailEl = consoleElement.querySelector("[data-console-detail]");
+        const moduleEl = consoleElement.querySelector("[data-console-module]");
         if (labelEl) labelEl.textContent = label;
         if (valueEl) valueEl.textContent = value;
         if (detailEl) detailEl.textContent = detail;
+        if (moduleEl) moduleEl.textContent = `Module ${String(tabs.indexOf(button) + 1).padStart(2, "0")} / 06`;
+    };
+    tabs.forEach((button, index) => {
+      button.addEventListener("click", () => activate(button));
+      button.addEventListener("keydown", (event) => {
+        if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+        event.preventDefault();
+        const nextIndex = event.key === "Home" ? 0 : event.key === "End" ? tabs.length - 1 : (index + (event.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length;
+        tabs[nextIndex].focus();
+        activate(tabs[nextIndex]);
       });
     });
   });

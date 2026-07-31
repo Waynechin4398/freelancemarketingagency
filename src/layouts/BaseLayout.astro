@@ -18,6 +18,16 @@ const {
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefined;
 const socialImage = Astro.site ? new URL("/og.png", Astro.site) : "/og.png";
 const pageTitle = title.startsWith(site.brand) ? title : `${title} — ${site.brand}`;
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  name: site.legalName,
+  alternateName: site.brand,
+  url: Astro.site?.toString(),
+  description,
+  areaServed: ["Malaysia", "Singapore", "Southeast Asia"],
+  knowsAbout: ["Website development", "Landing pages", "Paid media", "Social media", "Email marketing", "CRM and marketing automation"],
+};
 ---
 <!doctype html>
 <html lang="en">
@@ -38,6 +48,8 @@ const pageTitle = title.startsWith(site.brand) ? title : `${title} — ${site.br
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={socialImage} />
+    <meta name="theme-color" content="#f4f2ec" />
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
@@ -46,14 +58,53 @@ const pageTitle = title.startsWith(site.brand) ? title : `${title} — ${site.br
     <Footer />
     <script>
       document.querySelectorAll("[data-menu-toggle]").forEach((toggle) => {
+        const nav = document.querySelector<HTMLElement>("#mobile-nav");
+        const closeMenu = () => {
+          toggle.setAttribute("aria-expanded", "false");
+          toggle.textContent = "Menu";
+          nav?.classList.remove("open");
+          nav?.setAttribute("aria-hidden", "true");
+          if (nav) nav.inert = true;
+          document.body.classList.remove("menu-open");
+        };
         toggle.addEventListener("click", () => {
-          const nav = document.querySelector("#mobile-nav");
           const open = toggle.getAttribute("aria-expanded") !== "true";
           toggle.setAttribute("aria-expanded", String(open));
           toggle.textContent = open ? "Close" : "Menu";
           nav?.classList.toggle("open", open);
+          nav?.setAttribute("aria-hidden", String(!open));
+          if (nav) nav.inert = !open;
+          document.body.classList.toggle("menu-open", open);
+        });
+        nav?.querySelectorAll("a").forEach((link) => link.addEventListener("click", closeMenu));
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+            closeMenu();
+            (toggle as HTMLElement).focus();
+          }
         });
       });
+
+      const header = document.querySelector(".site-header");
+      const syncHeader = () => header?.classList.toggle("scrolled", window.scrollY > 12);
+      syncHeader();
+      window.addEventListener("scroll", syncHeader, { passive: true });
+
+      const revealTargets = document.querySelectorAll(".section-intro, .related-card, .service-list > a, .funnel-step, .principle-grid > article, .project-card, .insight-card, .story-row, .detail-grid");
+      if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        revealTargets.forEach((element, index) => {
+          element.classList.add("reveal");
+          (element as HTMLElement).style.setProperty("--reveal-delay", `${Math.min(index % 4, 3) * 70}ms`);
+        });
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add("revealed");
+            observer.unobserve(entry.target);
+          });
+        }, { threshold: 0.12, rootMargin: "0px 0px -6%" });
+        revealTargets.forEach((element) => observer.observe(element));
+      }
     </script>
   </body>
 </html>

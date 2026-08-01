@@ -1,14 +1,15 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import site from "../data/site.json";
 ---
 <BaseLayout title="Privacy Policy" noindex>
   <article class="legal">
     <span class="eyebrow">Legal · Draft for review</span><h1>Privacy Policy</h1>
-    <p class="legal-notice">This pre-launch draft must be reviewed and completed with the final business contact, SSM details, hosting providers and data processors before public launch.</p>
+    <p class="legal-notice">This pre-launch draft must still be reviewed and completed with the final hosting providers and data processors before public launch.</p>
     <h2>Information collected</h2><p>Wayne Omni may collect information you choose to provide through enquiry forms, project briefs or direct communication, together with limited technical data needed to operate and understand the website.</p>
     <h2>How information may be used</h2><p>Information may be used to respond to enquiries, evaluate project fit, provide requested services, improve the website, maintain security and meet legal obligations.</p>
     <h2>Analytics and advertising</h2><p>Analytics and advertising tags are not active in this staging version. If enabled later, this policy and the consent experience should identify the relevant providers, purposes and retention choices.</p>
     <h2>Sharing and retention</h2><p>Personal information should only be shared with service providers required to operate the business or when legally required. It should be retained only as long as needed for the stated purpose.</p>
-    <h2>Your choices</h2><p>You may request access, correction or deletion of personal data where applicable. The final contact channel will be inserted before public launch.</p>
+    <h2>Your choices</h2><p>You may request access, correction or deletion of personal data where applicable by emailing <a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a>.</p>
   </article>
 </BaseLayout>

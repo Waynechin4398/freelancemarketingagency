@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHero from "../components/PageHero.astro";
+import site from "../data/site.json";
 ---
 <BaseLayout title="Start a project" description="Prepare a focused growth brief for Wayne Omni.">
   <PageHero dark eyebrow="Start with the constraint" title="Where is growth getting stuck?" intro="Answer three focused questions to prepare a useful first brief. No commitment, no generic twenty-field form." />
@@ -9,9 +10,9 @@ import PageHero from "../components/PageHero.astro";
       <span class="eyebrow">Growth audit</span>
       <h2>A better brief leads to a better first conversation.</h2>
       <p>The audit helps identify the most relevant capability and project experience before discussing scope.</p>
-      <div class="prelaunch-note"><strong>Pre-launch note</strong><br />The final email, WhatsApp or booking destination will be connected after the preferred business contact details are confirmed.</div>
+      <div class="prelaunch-note"><strong>Email Wayne directly</strong><br /><a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a></div>
     </div>
-    <div class="audit-form" data-audit></div>
+    <div class="audit-form" data-audit data-email={site.contactEmail}></div>
   </section>
   <script>
     const steps = [
@@ -28,7 +29,9 @@ import PageHero from "../components/PageHero.astro";
       if (step >= steps.length) {
         const brief = `Wayne Omni growth brief\nGoal: ${answers.goal ?? "—"}\nCurrent setup: ${answers.channels ?? "—"}\nMarket: ${answers.market ?? "—"}`;
         root.className = "audit-complete";
-        root.innerHTML = `<span class="eyebrow">Brief prepared</span><h3>A useful first conversation starts here.</h3><pre>${escapeHtml(brief)}</pre><button class="button primary" type="button" data-copy>Copy project brief</button><p class="form-note">Contact delivery will be connected after the business email or CRM destination is confirmed.</p>`;
+        root.innerHTML = `<span class="eyebrow">Brief prepared</span><h3>A useful first conversation starts here.</h3><pre>${escapeHtml(brief)}</pre><div class="button-row"><a class="button primary" data-email-brief>Email brief to Wayne <span>↗</span></a><button class="button ghost" type="button" data-copy>Copy project brief</button></div><p class="form-note">Your email app will open with the project brief prepared. You can review it before sending.</p>`;
+        const emailLink = root.querySelector<HTMLAnchorElement>("[data-email-brief]");
+        if (emailLink) emailLink.href = `mailto:${root.dataset.email}?subject=${encodeURIComponent("Wayne Omni growth brief")}&body=${encodeURIComponent(brief)}`;
         root.querySelector("[data-copy]")?.addEventListener("click", async (event) => {
           await navigator.clipboard.writeText(brief);
           (event.currentTarget as HTMLButtonElement).textContent = "Copied";

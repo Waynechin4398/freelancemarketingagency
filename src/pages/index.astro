@@ -11,30 +11,53 @@ import site from "../data/site.json";
 const services = (await getCollection("services", ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
 ---
 <BaseLayout>
-  <section class="hero">
+  <section class="hero personal-hero">
     <div class="hero-copy">
-      <span class="eyebrow">{site.location}</span>
-      <h1>Turn attention<br />into <em>growth.</em></h1>
+      <div class="hero-index"><span>01</span><span>Who I am</span></div>
+      <span class="eyebrow">Independent growth partner · Malaysia</span>
+      <h1><span>I’m Wayne.</span><br />I build the systems<br />behind <em>growth.</em></h1>
       <p>{site.heroIntro}</p>
+      <div class="hero-roles" aria-label="Core capabilities">
+        <span>Strategy</span><span>Web</span><span>Paid media</span><span>Automation</span>
+      </div>
       <div class="button-row">
         <a class="button primary" href="/work/">Explore our work <span>↗</span></a>
         <a class="button ghost" href="/contact/#audit">Request a growth audit</a>
       </div>
     </div>
-    <GrowthConsole />
-    <div class="hero-side-note"><span>Scroll to connect the system</span><i></i></div>
+    <div class="portrait-stage" aria-label="Portrait of Wayne">
+      <span class="portrait-letter" aria-hidden="true">W</span>
+      <span class="metal-disc" aria-hidden="true"></span>
+      <span class="blue-plane" aria-hidden="true"></span>
+      <img src="/images/wayne-portrait.png" width="1080" height="1350" alt="Wayne, founder of Wayne Omni" fetchpriority="high" />
+      <div class="portrait-nameplate"><b>WAYNE</b><span>Strategy / Build / Growth</span></div>
+      <div class="portrait-coordinates" aria-hidden="true"><span>MY · 03.14°N</span><span>101.69°E</span></div>
+    </div>
+    <div class="hero-side-note"><span>Scroll to see the system</span><i></i></div>
   </section>
 
   <section class="proof-strip" aria-label="Capabilities">
-    <span>Web development</span><i></i>
-    <span>Paid acquisition</span><i></i>
-    <span>Multilingual campaigns</span><i></i>
-    <span>Social & lifecycle</span><i></i>
-    <span>CRM & measurement</span>
+    <span>Build</span><i></i>
+    <span>Acquire</span><i></i>
+    <span>Engage</span><i></i>
+    <span>Automate</span><i></i>
+    <span>Measure</span>
+  </section>
+
+  <section class="console-feature section dark-section">
+    <SectionIntro number="02" eyebrow="How I work" title="One operator across the whole customer journey." copy="I work where strategy, design, media and technology meet—so the promise in the ad still makes sense on the page, in the CRM and during follow-up." light />
+    <div class="console-feature-grid">
+      <div class="console-manifesto">
+        <span>WAYNE OMNI / SYSTEM 01</span>
+        <p>Most growth problems are not isolated channel problems. They happen in the handoffs. I design those handoffs as one operating system.</p>
+        <a href="/about/">More about my approach ↗</a>
+      </div>
+      <GrowthConsole />
+    </div>
   </section>
 
   <section class="work-preview section">
-    <SectionIntro number="01" eyebrow="Selected experience" title="The work behind the thinking." copy="Real project contexts, the role Wayne Omni played and the systems created. Public metrics are withheld unless they can be supported and approved." />
+    <SectionIntro number="03" eyebrow="Selected experience" title="The work behind the thinking." copy="Real project contexts, the role Wayne Omni played and the systems created. Public metrics are withheld unless they can be supported and approved." />
     <RelatedWork slugs={["singapore-luxury-homes", "langkawi-sunset-cruise", "sweetie-lending"]} />
     <div class="section-foot">
       <span>Additional experience</span>
@@ -44,7 +67,7 @@ const services = (await getCollection("services", ({ data }) => !data.draft)).so
   </section>
 
   <section class="services-home section dark-section">
-    <SectionIntro number="02" eyebrow="Connected capabilities" title="One marketing system. Not six disconnected services." copy="Strategy, creative, media and technology are designed around the same customer journey." light />
+    <SectionIntro number="04" eyebrow="Connected capabilities" title="One marketing system. Not six disconnected services." copy="Strategy, creative, media and technology are designed around the same customer journey." light />
     <div class="service-list">
       {services.map((service) => (
         <a href={`/services/${service.id}/`}>
@@ -57,7 +80,7 @@ const services = (await getCollection("services", ({ data }) => !data.draft)).so
   </section>
 
   <section class="system-section section">
-    <SectionIntro number="03" eyebrow="The growth operating system" title="See every handoff. Improve the whole journey." copy="The strongest gains often appear between channels—where an ad becomes a page visit, a form becomes a lead, and a lead becomes a timely conversation." />
+    <SectionIntro number="05" eyebrow="The growth operating system" title="See every handoff. Improve the whole journey." copy="The strongest gains often appear between channels—where an ad becomes a page visit, a form becomes a lead, and a lead becomes a timely conversation." />
     <ProcessFlow />
   </section>
 

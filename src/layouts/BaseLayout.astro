@@ -24,6 +24,7 @@ const structuredData = {
   name: site.legalName,
   alternateName: site.brand,
   url: Astro.site?.toString(),
+  logo: Astro.site ? new URL("/images/wayne-omni-logo.png", Astro.site).toString() : "/images/wayne-omni-logo.png",
   description,
   areaServed: ["Malaysia", "Singapore", "Southeast Asia"],
   knowsAbout: ["Website development", "Landing pages", "Paid media", "Social media", "Email marketing", "CRM and marketing automation"],
@@ -35,6 +36,8 @@ const structuredData = {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/png" href="/images/wayne-omni-logo.png" />
+    <link rel="apple-touch-icon" href="/images/wayne-omni-logo.png" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     {canonical && <link rel="canonical" href={canonical} />}

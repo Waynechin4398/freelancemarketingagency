@@ -32,12 +32,7 @@ button { color: inherit; }
 .brand > span:last-child { display: flex; flex-direction: column; line-height: 1; gap: .28rem; }
 .brand strong { font: 750 .92rem/1 var(--display); letter-spacing: -.02em; }
 .brand small { font-size: .57rem; color: var(--muted); letter-spacing: .05em; text-transform: uppercase; }
-.omni-mark { width: 34px; height: 34px; border: 5px solid var(--ink); border-radius: 50%; position: relative; display: block; transform: rotate(-24deg); }
-.omni-mark::after { content: ""; position: absolute; inset: 4px; background: var(--paper); border-radius: 50%; }
-.omni-mark i { position: absolute; width: 6px; height: 7px; background: var(--paper); z-index: 2; }
-.omni-mark i:nth-child(1) { top: -6px; left: 7px; }
-.omni-mark i:nth-child(2) { bottom: -6px; left: 7px; }
-.omni-mark i:nth-child(3) { right: -6px; top: 7px; }
+.brand-logo { width: 46px; height: 46px; display: block; flex: 0 0 auto; object-fit: contain; }
 .desktop-nav { display: flex; align-items: center; gap: clamp(1.2rem, 2.5vw, 2.8rem); font-size: .83rem; }
 .desktop-nav > a:not(.nav-cta) { position: relative; }
 .desktop-nav > a:not(.nav-cta)::after { content: ""; position: absolute; left: 0; right: 100%; bottom: -.4rem; height: 1px; background: var(--ink); transition: right .25s ease; }
@@ -157,6 +152,7 @@ button { color: inherit; }
 
 .site-footer { padding: clamp(4rem, 7vw, 6rem) var(--pad) 1.5rem; background: var(--ink); color: white; }
 .footer-main { display: grid; grid-template-columns: 1fr 1fr; gap: 5vw; padding-bottom: 5rem; }
+.footer-brand > img { width: clamp(78px, 8vw, 118px); height: auto; display: block; margin-bottom: 2rem; }
 .footer-main h2 { font: 500 clamp(3rem, 6vw, 6rem)/.88 var(--display); letter-spacing: -.065em; margin: 1.5rem 0 0; }
 .footer-links { display: grid; grid-template-columns: repeat(3,1fr); gap: 2rem; }
 .footer-links div { display: flex; flex-direction: column; gap: .7rem; font-size: .76rem; }
@@ -343,10 +339,6 @@ body { background: var(--paper); }
 .site-header { height: 84px; border-bottom: 2px solid var(--ink); background: rgba(244,244,241,.94); box-shadow: none; }
 .site-header.scrolled { background: rgba(255,255,255,.96); box-shadow: 0 10px 0 rgba(2,55,255,.1); }
 .site-header .brand, .site-header .menu-toggle { position: relative; z-index: 2; }
-.omni-mark { width: 38px; height: 38px; border: 0; border-radius: 50%; background: var(--cobalt); transform: none; overflow: hidden; }
-.omni-mark::before { content: ""; position: absolute; inset: 9px; background: var(--paper); border-radius: 50%; z-index: 1; }
-.omni-mark::after { inset: auto; width: 18px; height: 18px; right: -2px; bottom: -2px; border-radius: 0; background: var(--ink); z-index: 2; }
-.omni-mark i { display: none; }
 .brand strong { font-weight: 900; letter-spacing: -.035em; }
 .brand small { color: #555a61; letter-spacing: .11em; }
 .desktop-nav { font-weight: 700; text-transform: uppercase; letter-spacing: .08em; font-size: .68rem; }

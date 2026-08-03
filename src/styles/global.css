@@ -336,6 +336,7 @@ button { color: inherit; }
   --metal: #bcc2c9;
   --metal-light: #eef1f3;
   --metal-dark: #747b84;
+  --signal-red: #ff2828;
 }
 
 body { background: var(--paper); }
@@ -470,6 +471,53 @@ body { background: var(--paper); }
 .insight-grid { gap: 2px; background: var(--ink); }
 .insight-card { border: 0; }
 .insight-card span, .approved-metrics strong { color: var(--cobalt); }
+
+/* Signal-red interaction states */
+:where(.button, .nav-cta, .menu-toggle, .filters button, .audit-choices button, .back-button, .console-tabs button) {
+  transition: color .18s ease, background-color .18s ease, border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+
+:where(.button, .nav-cta, .menu-toggle, .filters button, .audit-choices button):hover,
+:where(.button, .nav-cta, .menu-toggle, .filters button, .audit-choices button):focus-visible,
+.personal-hero :where(.button.primary, .button.ghost):hover,
+.personal-hero :where(.button.primary, .button.ghost):focus-visible {
+  background: var(--signal-red);
+  border-color: var(--ink);
+  color: white;
+}
+
+:where(.button, .nav-cta, .audit-choices button):hover,
+:where(.button, .nav-cta, .audit-choices button):focus-visible {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.personal-hero :where(.button.primary, .button.ghost):hover,
+.personal-hero :where(.button.primary, .button.ghost):focus-visible {
+  box-shadow: 6px 6px 0 white;
+}
+
+:where(.button, .nav-cta, .audit-choices button):hover span,
+:where(.button, .nav-cta, .audit-choices button):focus-visible span {
+  color: white;
+}
+
+.console-tabs button:hover,
+.console-tabs button:focus-visible {
+  color: white;
+  border-color: var(--signal-red);
+  background: linear-gradient(to top, rgba(255,40,40,.24), transparent);
+}
+
+.back-button:hover,
+.back-button:focus-visible {
+  color: var(--signal-red);
+  transform: translateX(-2px);
+}
+
+:where(a, button, input, textarea, select):focus-visible {
+  outline-color: var(--signal-red);
+}
 
 @media (max-width: 1100px) {
   .personal-hero { grid-template-columns: minmax(0,1fr) minmax(370px,.8fr); }

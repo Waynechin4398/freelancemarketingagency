@@ -53,6 +53,15 @@ const structuredData = {
     <meta name="twitter:image" content={socialImage} />
     <meta name="theme-color" content="#0237ff" />
     <meta name="google-site-verification" content="hYYLKQxIv8oE0I-0RH7PoVSzFSuKoiRZzP90wQBS7u8" />
+    <!-- Google tag (gtag.js) -->
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-WPMY8CH9ZJ"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-WPMY8CH9ZJ');
+    </script>
     <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   </head>
   <body>

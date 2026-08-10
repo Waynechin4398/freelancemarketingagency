@@ -69,6 +69,19 @@ const structuredData = {
     <Header />
     <main id="main-content"><slot /></main>
     <Footer />
+    <a
+      class="whatsapp-float"
+      href={site.whatsappUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Message Wayne on WhatsApp (opens in a new tab)"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M20.4 11.5a8.4 8.4 0 0 1-12.3 7.4L3.5 20l1.2-4.4A8.4 8.4 0 1 1 20.4 11.5Z" />
+        <path d="M8.2 7.8c.2-.4.4-.4.7-.4h.5c.2 0 .4.1.5.4l.8 1.9c.1.3 0 .5-.2.7l-.7.8c-.2.2-.1.4 0 .6.8 1.4 1.9 2.5 3.4 3.2.3.1.5.1.7-.1l.9-1.1c.2-.2.4-.3.7-.2l1.9.9c.3.1.4.3.4.6 0 .5-.3 1.5-1 2-.6.5-1.4.8-2.3.6-1.2-.2-2.8-.8-4.7-2.5-2.4-2.1-3.2-4.4-3.3-5.5 0-.8.2-1.4.7-1.9Z" />
+      </svg>
+      <span>WhatsApp</span>
+    </a>
     <script>
       document.querySelectorAll("[data-menu-toggle]").forEach((toggle) => {
         const nav = document.querySelector<HTMLElement>("#mobile-nav");

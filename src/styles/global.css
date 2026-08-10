@@ -464,6 +464,32 @@ body { background: var(--paper); }
 .insight-card { border: 0; }
 .insight-card span, .approved-metrics strong { color: var(--cobalt); }
 
+.whatsapp-float {
+  position: fixed;
+  right: max(1.25rem, env(safe-area-inset-right));
+  bottom: max(1.25rem, env(safe-area-inset-bottom));
+  z-index: 60;
+  min-height: 58px;
+  padding: .75rem 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .65rem;
+  background: #25d366;
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  box-shadow: 6px 6px 0 var(--ink);
+  font-size: .72rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  transition: color .18s ease, background-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+.whatsapp-float svg { width: 27px; height: 27px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.whatsapp-float:hover,
+.whatsapp-float:focus-visible { background: var(--signal-red); color: white; transform: translate(-2px, -2px); box-shadow: 8px 8px 0 var(--ink); }
+
 /* Signal-red interaction states */
 :where(.button, .nav-cta, .menu-toggle, .filters button, .audit-choices button, .back-button, .console-tabs button) {
   transition: color .18s ease, background-color .18s ease, border-color .18s ease, box-shadow .18s ease, transform .18s ease;
@@ -530,6 +556,9 @@ body { background: var(--paper); }
 }
 
 @media (max-width: 620px) {
+  .whatsapp-float { width: 54px; min-height: 54px; padding: 0; border-radius: 50%; }
+  .whatsapp-float svg { width: 25px; height: 25px; }
+  .whatsapp-float span { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
   .personal-hero { padding-top: 2.5rem; gap: 3rem; }
   .personal-hero h1 { font-size: clamp(3.7rem, 17vw, 5.7rem); line-height: .86; }
   .personal-hero .hero-copy > p { font-size: .96rem; line-height: 1.7; }

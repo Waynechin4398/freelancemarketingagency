@@ -10,6 +10,11 @@ import site from "../data/site.json";
       <span class="eyebrow">Growth audit</span>
       <h2>A better brief leads to a better first conversation.</h2>
       <p>The audit helps identify the most relevant capability and project experience before discussing scope.</p>
+      <div class="button-row">
+        <a class="button primary" href={site.whatsappUrl} target="_blank" rel="noopener noreferrer" aria-label="Message Wayne on WhatsApp (opens in a new tab)">
+          Message on WhatsApp <span aria-hidden="true">↗</span>
+        </a>
+      </div>
       <div class="prelaunch-note"><strong>Email Wayne directly</strong><br /><a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a></div>
     </div>
     <div class="audit-form" data-audit data-email={site.contactEmail}></div>

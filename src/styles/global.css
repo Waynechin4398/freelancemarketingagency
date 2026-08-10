@@ -486,7 +486,7 @@ body { background: var(--paper); }
   text-transform: uppercase;
   transition: color .18s ease, background-color .18s ease, box-shadow .18s ease, transform .18s ease;
 }
-.whatsapp-float svg { width: 27px; height: 27px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.whatsapp-float svg { width: 27px; height: 27px; fill: currentColor; }
 .whatsapp-float:hover,
 .whatsapp-float:focus-visible { background: var(--signal-red); color: white; transform: translate(-2px, -2px); box-shadow: 8px 8px 0 var(--ink); }
 

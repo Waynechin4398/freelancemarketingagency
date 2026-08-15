@@ -3,13 +3,13 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHero from "../components/PageHero.astro";
 import site from "../data/site.json";
 ---
-<BaseLayout title="Start a project" description="Prepare a focused growth brief for Wayne Omni.">
-  <PageHero dark eyebrow="Start with the constraint" title="Where is growth getting stuck?" intro="Answer three focused questions to prepare a useful first brief. No commitment, no generic twenty-field form." />
+<BaseLayout title="Schedule a meeting" description="Book a focused 30-minute meeting with Wayne Omni.">
+  <PageHero dark eyebrow="Start a conversation" title="Let’s talk about what growth needs next." intro="Book a focused 30-minute meeting or message Wayne directly on WhatsApp." />
   <section class="contact-layout" id="audit">
     <div class="contact-copy">
-      <span class="eyebrow">Growth audit</span>
-      <h2>A better brief leads to a better first conversation.</h2>
-      <p>The audit helps identify the most relevant capability and project experience before discussing scope.</p>
+      <span class="eyebrow">Direct contact</span>
+      <h2>Choose the easiest way to start.</h2>
+      <p>Schedule a 30-minute call for a focused conversation. If you have a quick question, message me directly on WhatsApp.</p>
       <div class="button-row">
         <a class="button primary" href={site.whatsappUrl} target="_blank" rel="noopener noreferrer" aria-label="Message Wayne on WhatsApp (opens in a new tab)">
           Message on WhatsApp <span aria-hidden="true">↗</span>
@@ -17,42 +17,22 @@ import site from "../data/site.json";
       </div>
       <div class="prelaunch-note"><strong>Email Wayne directly</strong><br /><a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a></div>
     </div>
-    <div class="audit-form" data-audit data-email={site.contactEmail}></div>
+    <aside class="schedule-card" id="schedule" aria-labelledby="schedule-title">
+      <div class="schedule-card-top">
+        <span class="eyebrow">Calendly</span>
+        <span>30 minutes</span>
+      </div>
+      <h2 id="schedule-title">Schedule a focused meeting.</h2>
+      <p>Choose an available time to discuss your priorities, current marketing setup and the clearest next step.</p>
+      <div class="schedule-details">
+        <div><span>Format</span><strong>Online meeting</strong></div>
+        <div><span>Duration</span><strong>30 minutes</strong></div>
+        <div><span>Useful for</span><strong>Project fit · Priorities · Next steps</strong></div>
+      </div>
+      <a class="button primary" href={site.bookingUrl} target="_blank" rel="noopener noreferrer" aria-label="View available meeting times on Calendly (opens in a new tab)">
+        View available times <span aria-hidden="true">↗</span>
+      </a>
+      <p class="schedule-note">Your Calendly booking page will open in a new tab.</p>
+    </aside>
   </section>
-  <script>
-    const steps = [
-      { key: "goal", title: "What are you trying to improve?", choices: ["Generate more leads", "Build a better website", "Lower advertising costs", "Improve social presence", "Automate follow-up"] },
-      { key: "channels", title: "What is active today?", choices: ["Website only", "Paid advertising", "Organic social", "Email or CRM", "Starting fresh"] },
-      { key: "market", title: "Where are your customers?", choices: ["Malaysia", "Singapore", "Southeast Asia", "Multiple markets", "Not sure yet"] },
-    ];
-    const root = document.querySelector<HTMLElement>("[data-audit]");
-    let step = 0;
-    const answers: Record<string, string> = {};
-    const escapeHtml = (value: string) => value.replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[character] ?? character);
-    const render = () => {
-      if (!root) return;
-      if (step >= steps.length) {
-        const brief = `Wayne Omni growth brief\nGoal: ${answers.goal ?? "—"}\nCurrent setup: ${answers.channels ?? "—"}\nMarket: ${answers.market ?? "—"}`;
-        root.className = "audit-complete";
-        root.innerHTML = `<span class="eyebrow">Brief prepared</span><h3>A useful first conversation starts here.</h3><pre>${escapeHtml(brief)}</pre><div class="button-row"><a class="button primary" data-email-brief>Email brief to Wayne <span>↗</span></a><button class="button ghost" type="button" data-copy>Copy project brief</button></div><p class="form-note">Your email app will open with the project brief prepared. You can review it before sending.</p>`;
-        const emailLink = root.querySelector<HTMLAnchorElement>("[data-email-brief]");
-        if (emailLink) emailLink.href = `mailto:${root.dataset.email}?subject=${encodeURIComponent("Wayne Omni growth brief")}&body=${encodeURIComponent(brief)}`;
-        root.querySelector("[data-copy]")?.addEventListener("click", async (event) => {
-          await navigator.clipboard.writeText(brief);
-          (event.currentTarget as HTMLButtonElement).textContent = "Copied";
-        });
-        return;
-      }
-      const current = steps[step];
-      root.className = "audit-form";
-      root.innerHTML = `<div class="audit-progress"><span>0${step + 1} / 0${steps.length}</span><i style="width:${((step + 1) / steps.length) * 100}%"></i></div><h3>${escapeHtml(current.title)}</h3><div class="audit-choices">${current.choices.map((choice) => `<button type="button" data-choice="${escapeHtml(choice)}">${escapeHtml(choice)}<span>→</span></button>`).join("")}</div>${step > 0 ? '<button class="back-button" type="button" data-back>← Back</button>' : ""}`;
-      root.querySelectorAll<HTMLButtonElement>("[data-choice]").forEach((button) => button.addEventListener("click", () => {
-        answers[current.key] = button.dataset.choice ?? "";
-        step += 1;
-        render();
-      }));
-      root.querySelector("[data-back]")?.addEventListener("click", () => { step -= 1; render(); });
-    };
-    render();
-  </script>
 </BaseLayout>

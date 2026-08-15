@@ -230,17 +230,17 @@ button { color: inherit; }
 .contact-copy h2 { font: 500 clamp(2.7rem, 5vw, 5.4rem)/.94 var(--display); letter-spacing: -.06em; margin: 1.4rem 0; }
 .contact-copy p { color: var(--muted); max-width: 45ch; }
 .prelaunch-note { border-top: 1px solid var(--line); padding-top: 1.2rem; margin-top: 3rem; font-size: .7rem; color: var(--muted); }
-.audit-form, .audit-complete { background: var(--white); border: 1px solid var(--line); padding: clamp(1.5rem, 4vw, 3.5rem); min-height: 520px; }
-.audit-progress { font-size: .62rem; color: var(--muted); position: relative; padding-bottom: 1rem; border-bottom: 1px solid var(--line); }
-.audit-progress i { position: absolute; left: 0; bottom: -1px; height: 2px; background: var(--cobalt); transition: width .3s; }
-.audit-form h3, .audit-complete h3 { font: 500 clamp(2rem, 3.8vw, 4rem)/.98 var(--display); letter-spacing: -.05em; max-width: 11ch; margin: 2.5rem 0; }
-.audit-choices { display: grid; gap: .5rem; }
-.audit-choices button { border: 1px solid var(--line); padding: .95rem 1rem; background: transparent; cursor: pointer; display: flex; justify-content: space-between; text-align: left; font-size: .78rem; }
-.audit-choices button:hover { background: var(--ink); color: white; }
-.audit-choices button span { color: var(--cobalt); }
-.back-button { margin-top: 1rem; border: 0; background: transparent; color: var(--muted); font-size: .68rem; cursor: pointer; }
-.audit-complete pre { background: var(--paper); padding: 1.2rem; white-space: pre-wrap; font: .72rem/1.7 var(--body); margin-bottom: 1.5rem; }
-.form-note { font-size: .65rem; color: var(--muted); margin-top: 1rem; max-width: 50ch; }
+.schedule-card { background: var(--white); border: 1px solid var(--line); padding: clamp(1.5rem, 4vw, 3.5rem); min-height: 520px; display: flex; flex-direction: column; }
+.schedule-card-top { display: flex; justify-content: space-between; align-items: center; padding-bottom: 1rem; border-bottom: 1px solid var(--line); }
+.schedule-card-top > span:last-child { color: var(--muted); font-size: .65rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.schedule-card h2 { font: 500 clamp(2.4rem, 4.3vw, 4.8rem)/.94 var(--display); letter-spacing: -.06em; max-width: 10ch; margin: 2.5rem 0 1.2rem; }
+.schedule-card > p { color: var(--muted); max-width: 52ch; }
+.schedule-details { margin: auto 0 2rem; border-top: 1px solid var(--line); }
+.schedule-details div { display: grid; grid-template-columns: minmax(90px, .45fr) 1fr; gap: 1rem; padding: .85rem 0; border-bottom: 1px solid var(--line); }
+.schedule-details span { color: var(--muted); font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; }
+.schedule-details strong { font-size: .72rem; }
+.schedule-card > .button { width: 100%; }
+.schedule-card .schedule-note { margin: .9rem 0 0; font-size: .63rem; }
 .insight-grid { padding: var(--pad); display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--line); }
 .insight-card { background: var(--white); min-height: 430px; padding: 2rem; display: flex; flex-direction: column; }
 .insight-card span { color: var(--cobalt); font-size: .62rem; text-transform: uppercase; letter-spacing: .12em; }
@@ -456,10 +456,7 @@ body { background: var(--paper); }
 .created-grid { border: 2px solid var(--ink); gap: 2px; background: var(--ink); }
 .language-band { background: var(--cobalt); border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); }
 .language-band div { border-right: 2px solid var(--ink); }
-.audit-form, .audit-complete { border: 2px solid var(--ink); box-shadow: 10px 10px 0 var(--metal); }
-.audit-choices button { border: 2px solid var(--ink); font-weight: 700; }
-.audit-choices button:hover { background: var(--cobalt); }
-.audit-progress i { background: var(--cobalt); }
+.schedule-card { border: 2px solid var(--ink); box-shadow: 10px 10px 0 var(--metal); }
 .insight-grid { gap: 2px; background: var(--ink); }
 .insight-card { border: 0; }
 .insight-card span, .approved-metrics strong { color: var(--cobalt); }
@@ -491,12 +488,12 @@ body { background: var(--paper); }
 .whatsapp-float:focus-visible { background: var(--signal-red); color: white; transform: translate(-2px, -2px); box-shadow: 8px 8px 0 var(--ink); }
 
 /* Signal-red interaction states */
-:where(.button, .nav-cta, .menu-toggle, .filters button, .audit-choices button, .back-button, .console-tabs button) {
+:where(.button, .nav-cta, .menu-toggle, .filters button, .console-tabs button) {
   transition: color .18s ease, background-color .18s ease, border-color .18s ease, box-shadow .18s ease, transform .18s ease;
 }
 
-:where(.button, .nav-cta, .menu-toggle, .filters button, .audit-choices button):hover,
-:where(.button, .nav-cta, .menu-toggle, .filters button, .audit-choices button):focus-visible,
+:where(.button, .nav-cta, .menu-toggle, .filters button):hover,
+:where(.button, .nav-cta, .menu-toggle, .filters button):focus-visible,
 .personal-hero :where(.button.primary, .button.ghost):hover,
 .personal-hero :where(.button.primary, .button.ghost):focus-visible {
   background: var(--signal-red);
@@ -504,8 +501,8 @@ body { background: var(--paper); }
   color: white;
 }
 
-:where(.button, .nav-cta, .audit-choices button):hover,
-:where(.button, .nav-cta, .audit-choices button):focus-visible {
+:where(.button, .nav-cta):hover,
+:where(.button, .nav-cta):focus-visible {
   transform: translate(-2px, -2px);
   box-shadow: 6px 6px 0 var(--ink);
 }
@@ -515,8 +512,8 @@ body { background: var(--paper); }
   box-shadow: 6px 6px 0 white;
 }
 
-:where(.button, .nav-cta, .audit-choices button):hover span,
-:where(.button, .nav-cta, .audit-choices button):focus-visible span {
+:where(.button, .nav-cta):hover span,
+:where(.button, .nav-cta):focus-visible span {
   color: white;
 }
 
@@ -525,12 +522,6 @@ body { background: var(--paper); }
   color: white;
   border-color: var(--signal-red);
   background: linear-gradient(to top, rgba(255,40,40,.24), transparent);
-}
-
-.back-button:hover,
-.back-button:focus-visible {
-  color: var(--signal-red);
-  transform: translateX(-2px);
 }
 
 :where(a, button, input, textarea, select):focus-visible {
@@ -578,5 +569,5 @@ body { background: var(--paper); }
   .console-manifesto { min-height: 280px; padding: 1.4rem; box-shadow: 6px 6px 0 var(--metal); }
   .related-card:hover, .console-feature .console:hover { transform: none; }
   .page-hero::after { width: 58vw; top: 22%; right: -30vw; }
-  .audit-form, .audit-complete { box-shadow: 6px 6px 0 var(--metal); }
+  .schedule-card { box-shadow: 6px 6px 0 var(--metal); }
 }

@@ -11,11 +11,11 @@ import site from "../data/site.json";
       <h2>Choose the easiest way to start.</h2>
       <p>Schedule a 30-minute call for a focused conversation. If you have a quick question, message me directly on WhatsApp.</p>
       <div class="button-row">
-        <a class="button primary" href={site.whatsappUrl} target="_blank" rel="noopener noreferrer" aria-label="Message Wayne on WhatsApp (opens in a new tab)">
+        <a class="button primary" href={site.whatsappUrl} target="_blank" rel="noopener noreferrer" aria-label="Message Wayne on WhatsApp (opens in a new tab)" data-ga-event="contact_whatsapp" data-ga-method="whatsapp" data-ga-location="contact_page">
           Message on WhatsApp <span aria-hidden="true">↗</span>
         </a>
       </div>
-      <div class="prelaunch-note"><strong>Email Wayne directly</strong><br /><a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a></div>
+      <div class="prelaunch-note"><strong>Email Wayne directly</strong><br /><a href={`mailto:${site.contactEmail}`} data-ga-event="contact_email" data-ga-method="email" data-ga-location="contact_page">{site.contactEmail}</a></div>
     </div>
     <aside class="schedule-card" id="schedule" aria-labelledby="schedule-title">
       <div class="schedule-card-top">
@@ -29,7 +29,7 @@ import site from "../data/site.json";
         <div><span>Duration</span><strong>30 minutes</strong></div>
         <div><span>Useful for</span><strong>Project fit · Priorities · Next steps</strong></div>
       </div>
-      <a class="button primary" href={site.bookingUrl} target="_blank" rel="noopener noreferrer" aria-label="View available meeting times on Calendly (opens in a new tab)">
+      <a class="button primary" href={site.bookingUrl} target="_blank" rel="noopener noreferrer" aria-label="View available meeting times on Calendly (opens in a new tab)" data-ga-event="contact_calendly" data-ga-method="calendly" data-ga-location="contact_page">
         View available times <span aria-hidden="true">↗</span>
       </a>
       <p class="schedule-note">Your Calendly booking page will open in a new tab.</p>

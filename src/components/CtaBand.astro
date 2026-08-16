@@ -1,6 +1,51 @@
+---
+import site from "../data/site.json";
+
+interface Props {
+  eyebrow?: string;
+  title?: string;
+  copy?: string;
+  serviceId?: string;
+}
+
+const {
+  eyebrow = "Find the constraint",
+  title = "Your next campaign should begin with a system.",
+  copy = "Tell us where growth is getting stuck. We’ll start there.",
+  serviceId,
+} = Astro.props;
+const ctaLocation = serviceId ? `service_${serviceId}_final` : "site_cta";
+---
 <section class="cta-band">
-  <span class="eyebrow">Find the constraint</span>
-  <h2>Your next campaign should begin with a system.</h2>
-  <p>Tell us where growth is getting stuck. We’ll start there.</p>
-  <a class="button light-button" href="/contact">Start a project <span>↗</span></a>
+  <span class="eyebrow">{eyebrow}</span>
+  <h2>{title}</h2>
+  <p>{copy}</p>
+  {serviceId ? (
+    <div class="cta-actions">
+      <a
+        class="button light-button"
+        href={site.bookingUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-ga-event="contact_calendly"
+        data-ga-method="calendly"
+        data-ga-location={ctaLocation}
+      >
+        Schedule a 30-minute call <span>↗</span>
+      </a>
+      <a
+        class="button cta-secondary"
+        href={site.whatsappUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-ga-event="contact_whatsapp"
+        data-ga-method="whatsapp"
+        data-ga-location={ctaLocation}
+      >
+        Message on WhatsApp <span>↗</span>
+      </a>
+    </div>
+  ) : (
+    <a class="button light-button" href="/contact">Start a project <span>↗</span></a>
+  )}
 </section>

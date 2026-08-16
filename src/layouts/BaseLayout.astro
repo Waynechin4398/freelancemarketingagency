@@ -138,7 +138,7 @@ const structuredData = {
       syncHeader();
       window.addEventListener("scroll", syncHeader, { passive: true });
 
-      const revealTargets = document.querySelectorAll(".section-intro, .related-card, .service-list > a, .funnel-step, .principle-grid > article, .project-card, .insight-card, .story-row, .detail-grid");
+      const revealTargets = document.querySelectorAll(".section-intro, .service-index-intro, .constraint-grid > a, .related-card, .service-list > a, .funnel-step, .principle-grid > article, .project-card, .insight-card, .story-row, .detail-grid, .pain-grid > article, .solution-grid > article, .fit-list > li, .faq-list > details");
       if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         revealTargets.forEach((element, index) => {
           element.classList.add("reveal");

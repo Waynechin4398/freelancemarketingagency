@@ -4,37 +4,139 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import PageHero from "../../components/PageHero.astro";
 import RelatedWork from "../../components/RelatedWork.astro";
 import CtaBand from "../../components/CtaBand.astro";
+import site from "../../data/site.json";
 
 export async function getStaticPaths() {
   const services = await getCollection("services", ({ data }) => !data.draft);
   return services.map((service) => ({ params: { slug: service.id }, props: { service } }));
 }
+
 const { service } = Astro.props;
+const heroCtaLocation = `service_${service.id}_hero`;
 ---
 <BaseLayout title={service.data.title} description={service.data.intro}>
   <PageHero eyebrow={`${service.data.group} · ${service.data.number}`} title={service.data.title} intro={service.data.intro} />
-  <section class="service-detail">
+
+  <nav class="service-subnav" aria-label={`${service.data.title} page sections`}>
+    <div>
+      <a href="#problems">The problem</a>
+      <a href="#solutions">Solutions</a>
+      <a href="#process">Process</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <a
+      class="service-subnav-cta"
+      href={site.bookingUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      data-ga-event="contact_calendly"
+      data-ga-method="calendly"
+      data-ga-location={heroCtaLocation}
+    >
+      Discuss this service <span aria-hidden="true">↗</span>
+    </a>
+  </nav>
+
+  <section class="service-problem" id="problems" aria-labelledby="problem-heading">
+    <div class="service-section-heading">
+      <span class="eyebrow">Does this sound familiar?</span>
+      <h2 id="problem-heading">The visible problem is rarely the whole problem.</h2>
+      <p>Before recommending more activity, I look for the point where attention, experience and follow-up stop working together.</p>
+    </div>
+    <div class="pain-grid">
+      {service.data.painPoints.map((item: string, index: number) => (
+        <article>
+          <span>{String(index + 1).padStart(2, "0")}</span>
+          <p>{item}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="service-solutions dark-section" id="solutions" aria-labelledby="solutions-heading">
+    <div class="service-section-heading light">
+      <span class="eyebrow light">How Wayne Omni helps</span>
+      <h2 id="solutions-heading">Solve the system, not just the symptom.</h2>
+      <p>Each engagement connects strategy and execution, so the work fits the customer journey around it.</p>
+    </div>
+    <div class="solution-grid">
+      {service.data.solutions.map((solution: { title: string; description: string }, index: number) => (
+        <article>
+          <span>{String(index + 1).padStart(2, "0")}</span>
+          <h3>{solution.title}</h3>
+          <p>{solution.description}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="service-fit" aria-labelledby="fit-heading">
+    <div class="service-section-heading">
+      <span class="eyebrow">A useful fit</span>
+      <h2 id="fit-heading">Built for teams that need clarity before more complexity.</h2>
+    </div>
+    <ul class="fit-list">
+      {service.data.idealFor.map((item: string) => <li>{item}</li>)}
+    </ul>
+  </section>
+
+  <section class="service-detail" aria-labelledby="outcomes-heading">
     <div class="detail-grid">
-      <div><span class="eyebrow">Designed for outcomes</span></div>
+      <div><span class="eyebrow">What the engagement creates</span></div>
       <div>
-        <h2>{service.data.short}</h2>
+        <h2 id="outcomes-heading">{service.data.short}</h2>
         <div class="detail-columns">
-          <div><span class="eyebrow">What it should improve</span><ul class="detail-list">{service.data.outcomes.map((item: string) => <li>{item}</li>)}</ul></div>
-          <div><span class="eyebrow">Typical deliverables</span><ul class="detail-list">{service.data.deliverables.map((item: string) => <li>{item}</li>)}</ul></div>
+          <div>
+            <span class="eyebrow">What it should improve</span>
+            <ul class="detail-list">{service.data.outcomes.map((item: string) => <li>{item}</li>)}</ul>
+          </div>
+          <div>
+            <span class="eyebrow">Typical deliverables</span>
+            <ul class="detail-list">{service.data.deliverables.map((item: string) => <li>{item}</li>)}</ul>
+          </div>
         </div>
+        <p class="service-scope-note">The final scope is shaped around the constraint, current tools and the team responsible for maintaining the work.</p>
       </div>
     </div>
   </section>
-  <section class="service-detail dark-section">
+
+  <section class="service-process dark-section" id="process" aria-labelledby="process-heading">
     <div class="detail-grid">
-      <div><span class="eyebrow light">How the work moves</span></div>
-      <div><ol class="process-list">{service.data.process.map((item: string) => <li>{item}</li>)}</ol></div>
+      <div>
+        <span class="eyebrow light">How the work moves</span>
+        <h2 id="process-heading">Clear decisions at every stage.</h2>
+      </div>
+      <div>
+        <ol class="process-list detailed-process">
+          {service.data.process.map((step: { title: string; description: string }) => (
+            <li><strong>{step.title}</strong><p>{step.description}</p></li>
+          ))}
+        </ol>
+      </div>
     </div>
   </section>
+
+  <section class="service-faq" id="faq" aria-labelledby="faq-heading">
+    <div class="service-section-heading">
+      <span class="eyebrow">Before we start</span>
+      <h2 id="faq-heading">Questions worth answering early.</h2>
+    </div>
+    <div class="faq-list">
+      {service.data.faqs.map((faq: { question: string; answer: string }, index: number) => (
+        <details>
+          <summary><span>{String(index + 1).padStart(2, "0")}</span>{faq.question}<i aria-hidden="true">+</i></summary>
+          <p>{faq.answer}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+
   <section class="section related-section">
     <span class="eyebrow">Relevant experience</span>
     <h2 class="large-section-title">Related work</h2>
+    <p class="related-intro">See how connected strategy, experience and execution were applied in real project contexts. Results are only published where evidence and permission allow.</p>
     <RelatedWork slugs={service.data.related} />
   </section>
-  <CtaBand />
+
+  <CtaBand eyebrow="Start with the constraint" title={service.data.ctaTitle} copy={service.data.ctaCopy} serviceId={service.id} />
 </BaseLayout>

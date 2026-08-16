@@ -60,9 +60,30 @@ collections:
       - { label: Capability group, name: group, widget: select, options: [Build, Acquire, Engage, Automate] }
       - { label: Short line, name: short, widget: string }
       - { label: Introduction, name: intro, widget: text }
+      - { label: Buyer pain points, name: painPoints, widget: list, field: { label: Pain point, name: painPoint, widget: string } }
+      - label: Solutions
+        name: solutions
+        widget: list
+        fields:
+          - { label: Solution title, name: title, widget: string }
+          - { label: Solution description, name: description, widget: text }
+      - { label: Best suited for, name: idealFor, widget: list, field: { label: Fit, name: fit, widget: string } }
       - { label: Outcomes, name: outcomes, widget: list, field: { label: Outcome, name: outcome, widget: string } }
       - { label: Deliverables, name: deliverables, widget: list, field: { label: Deliverable, name: deliverable, widget: string } }
-      - { label: Process, name: process, widget: list, field: { label: Step, name: step, widget: string } }
+      - label: Process
+        name: process
+        widget: list
+        fields:
+          - { label: Step title, name: title, widget: string }
+          - { label: Step description, name: description, widget: text }
+      - label: FAQs
+        name: faqs
+        widget: list
+        fields:
+          - { label: Question, name: question, widget: string }
+          - { label: Answer, name: answer, widget: text }
+      - { label: CTA headline, name: ctaTitle, widget: string }
+      - { label: CTA copy, name: ctaCopy, widget: text }
       - { label: Related case-study slugs, name: related, widget: list, field: { label: Slug, name: slug, widget: string } }
       - { label: Display order, name: order, widget: number, value_type: int }
       - { label: Draft, name: draft, widget: boolean, default: true }

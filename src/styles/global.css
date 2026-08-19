@@ -284,6 +284,22 @@ button { color: inherit; }
 .language-band div { min-height: 220px; padding: 2rem; border-right: 1px solid rgba(255,255,255,.2); display: flex; flex-direction: column; justify-content: space-between; }
 .language-band strong { font: 500 2.2rem/1 var(--display); }
 .language-band span { font-size: .65rem; text-transform: uppercase; letter-spacing: .12em; color: rgba(255,255,255,.68); }
+.brief-section { padding: clamp(5rem, 9vw, 8rem) var(--pad); display: grid; grid-template-columns: minmax(0,.7fr) minmax(0,1.3fr); gap: 7vw; background: var(--white); border-bottom: 2px solid var(--ink); scroll-margin-top: 92px; }
+.brief-intro h2 { font: 500 clamp(2.7rem, 5vw, 5.4rem)/.94 var(--display); letter-spacing: -.06em; margin: 1.4rem 0; max-width: 10ch; }
+.brief-intro p { max-width: 47ch; color: var(--muted); line-height: 1.8; }
+.project-brief { padding: clamp(1.4rem, 3vw, 2.4rem); display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 1.25rem; align-self: start; background: var(--paper); border: 2px solid var(--ink); box-shadow: 10px 10px 0 var(--metal); }
+.form-field { display: flex; flex-direction: column; gap: .5rem; }
+.form-field-wide { grid-column: 1 / -1; }
+.form-field label { font-size: .7rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+.form-field label span { color: var(--cobalt); }
+.form-field input, .form-field textarea { width: 100%; padding: .85rem .9rem; color: var(--ink); background: var(--white); border: 2px solid var(--ink); border-radius: 0; }
+.form-field textarea { min-height: 180px; resize: vertical; }
+.form-field > p { margin: -.15rem 0 .2rem; color: var(--muted); font-size: .68rem; line-height: 1.6; }
+.form-actions { display: grid; gap: .75rem; }
+.form-actions .button { width: 100%; }
+.form-note, .form-status { margin: 0; color: var(--muted); font-size: .66rem; line-height: 1.6; }
+.form-note a { text-decoration: underline; text-underline-offset: 2px; }
+.form-status:empty { display: none; }
 .contact-layout { display: grid; grid-template-columns: .8fr 1.2fr; gap: 7vw; padding: clamp(5rem, 9vw, 8rem) var(--pad); }
 .contact-copy h2 { font: 500 clamp(2.7rem, 5vw, 5.4rem)/.94 var(--display); letter-spacing: -.06em; margin: 1.4rem 0; }
 .contact-copy p { color: var(--muted); max-width: 45ch; }
@@ -340,7 +356,7 @@ button { color: inherit; }
   .funnel-flow { grid-template-columns: 1fr; }
   .funnel-step { min-height: 160px; border-right: 0; border-bottom: 1px solid var(--line); }
   .funnel-step i { right: 50%; top: auto; bottom: -13px; transform: translateX(50%) rotate(90deg); }
-  .principles, .about-grid, .contact-layout, .case-hero { grid-template-columns: 1fr; }
+  .principles, .about-grid, .brief-section, .contact-layout, .case-hero { grid-template-columns: 1fr; }
   .case-art { aspect-ratio: 16/10; }
   .footer-main { grid-template-columns: 1fr; }
   .work-grid { grid-template-columns: 1fr; }
@@ -368,6 +384,8 @@ button { color: inherit; }
   .detail-columns, .created-grid { grid-template-columns: 1fr; }
   .language-band { grid-template-columns: 1fr; }
   .language-band div { min-height: 150px; border-right: 0; border-bottom: 1px solid rgba(255,255,255,.2); }
+  .project-brief { grid-template-columns: 1fr; box-shadow: 6px 6px 0 var(--metal); }
+  .form-field-wide { grid-column: auto; }
   .project-card { padding: 1.4rem; }
   .project-visual { height: 220px; }
   .case-hero h1 { font-size: clamp(3.6rem, 18vw, 6rem); }

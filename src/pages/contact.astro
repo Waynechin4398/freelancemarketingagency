@@ -5,7 +5,44 @@ import site from "../data/site.json";
 ---
 <BaseLayout title="Schedule a meeting" description="Book a focused 30-minute meeting with Wayne Omni.">
   <PageHero dark eyebrow="Start a conversation" title="Let’s talk about what growth needs next." intro="Book a focused 30-minute meeting or message Wayne directly on WhatsApp." />
-  <section class="contact-layout" id="audit">
+  <section class="brief-section" id="audit" aria-labelledby="brief-title">
+    <div class="brief-intro">
+      <span class="eyebrow">Guided project brief</span>
+      <h2 id="brief-title">Give the first conversation useful context.</h2>
+      <p>Share the business, website and growth problem you want to solve. This static website does not send your details to a form provider.</p>
+      <p>When you submit, your email app will open a pre-addressed draft. Review it, make any changes and press send from your email app.</p>
+    </div>
+    <form class="project-brief" data-project-brief data-contact-email={site.contactEmail}>
+      <div class="form-field">
+        <label for="brief-name">Your name <span aria-hidden="true">*</span></label>
+        <input id="brief-name" name="name" type="text" autocomplete="name" maxlength="120" required />
+      </div>
+      <div class="form-field">
+        <label for="brief-email">Email address <span aria-hidden="true">*</span></label>
+        <input id="brief-email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="254" required />
+      </div>
+      <div class="form-field">
+        <label for="brief-company">Company</label>
+        <input id="brief-company" name="company" type="text" autocomplete="organization" maxlength="160" />
+      </div>
+      <div class="form-field">
+        <label for="brief-site">Website</label>
+        <input id="brief-site" name="website" type="url" autocomplete="url" inputmode="url" placeholder="https://example.com" maxlength="300" />
+      </div>
+      <div class="form-field form-field-wide">
+        <label for="brief-details">What would you like to improve? <span aria-hidden="true">*</span></label>
+        <p id="brief-details-hint">Include the current situation, the outcome you want and any useful timing or constraints.</p>
+        <textarea id="brief-details" name="brief" rows="8" maxlength="1600" aria-describedby="brief-details-hint" required></textarea>
+      </div>
+      <div class="form-actions form-field-wide">
+        <button class="button primary" type="submit">Open email draft <span aria-hidden="true">↗</span></button>
+        <p class="form-note">Required fields are marked *. Nothing is sent until you review the draft and send it from your email app.</p>
+        <p class="form-status" data-form-status role="status" aria-live="polite"></p>
+        <noscript><p class="form-note">JavaScript is needed to compose the draft. You can instead email <a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a> directly.</p></noscript>
+      </div>
+    </form>
+  </section>
+  <section class="contact-layout">
     <div class="contact-copy">
       <span class="eyebrow">Direct contact</span>
       <h2>Choose the easiest way to start.</h2>
@@ -36,3 +73,37 @@ import site from "../data/site.json";
     </aside>
   </section>
 </BaseLayout>
+
+<script>
+  const projectBriefForm = document.querySelector<HTMLFormElement>("[data-project-brief]");
+
+  projectBriefForm?.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const contactEmail = projectBriefForm.dataset.contactEmail;
+    if (!contactEmail) return;
+
+    const formData = new FormData(projectBriefForm);
+    const readField = (name: string) => String(formData.get(name) ?? "").trim();
+    const name = readField("name");
+    const email = readField("email");
+    const company = readField("company");
+    const website = readField("website");
+    const brief = readField("brief");
+    const subject = company ? `Project brief from ${name} — ${company}` : `Project brief from ${name}`;
+    const body = [
+      `Name: ${name}`,
+      `Email: ${email}`,
+      `Company: ${company || "Not provided"}`,
+      `Website: ${website || "Not provided"}`,
+      "",
+      "Project brief:",
+      brief,
+    ].join("\n");
+
+    const formStatus = projectBriefForm.querySelector<HTMLElement>("[data-form-status]");
+    if (formStatus) formStatus.textContent = "Your email app should open now. Review the draft, then press send there.";
+
+    window.location.href = `mailto:${contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  });
+</script>

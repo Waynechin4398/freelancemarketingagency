@@ -1,0 +1,183 @@
+<canvas class="smooth-cursor" data-smooth-cursor aria-hidden="true"></canvas>
+
+<script>
+  interface TrailPoint {
+    x: number;
+    y: number;
+    vx: number;
+    vy: number;
+  }
+
+  const canvas = document.querySelector<HTMLCanvasElement>("[data-smooth-cursor]");
+  const precisePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  if (canvas) {
+    const context = canvas.getContext("2d");
+    const pointCount = 42;
+    const points: TrailPoint[] = Array.from({ length: pointCount }, () => ({ x: -100, y: -100, vx: 0, vy: 0 }));
+    const pointer = { x: -100, y: -100 };
+    let enabled = precisePointer.matches && !reducedMotion.matches;
+    let initialized = false;
+    let pointerVisible = false;
+    let trailOpacity = 0;
+    let animationFrame = 0;
+    let deviceScale = 1;
+
+    const resize = () => {
+      deviceScale = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.round(window.innerWidth * deviceScale);
+      canvas.height = Math.round(window.innerHeight * deviceScale);
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
+      context?.setTransform(deviceScale, 0, 0, deviceScale, 0, 0);
+    };
+
+    const clear = () => {
+      if (!context) return;
+      context.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    };
+
+    const drawTrail = () => {
+      if (!context) return;
+      clear();
+
+      const headSpeed = Math.hypot(points[0].vx, points[0].vy);
+      const velocityWidth = 1 + Math.min(headSpeed / 38, 0.9);
+      const drawPoints = [pointer, ...points];
+
+      context.save();
+      context.lineCap = "round";
+      context.lineJoin = "round";
+      context.shadowBlur = 7;
+
+      for (let index = 0; index < drawPoints.length - 2; index += 1) {
+        const current = drawPoints[index];
+        const next = drawPoints[index + 1];
+        const after = drawPoints[index + 2];
+        const progress = 1 - index / (drawPoints.length - 2);
+        const midpointX = (next.x + after.x) / 2;
+        const midpointY = (next.y + after.y) / 2;
+        const isLeadingAccent = index < 4;
+        const opacity = Math.pow(progress, 1.65) * 0.72 * trailOpacity;
+
+        context.beginPath();
+        context.moveTo(current.x, current.y);
+        context.quadraticCurveTo(next.x, next.y, midpointX, midpointY);
+        context.lineWidth = Math.max(0.35, progress * 2.6 * velocityWidth);
+        context.strokeStyle = isLeadingAccent
+          ? `rgba(255, 40, 40, ${opacity})`
+          : `rgba(2, 55, 255, ${opacity})`;
+        context.shadowColor = isLeadingAccent ? "rgba(255, 40, 40, .28)" : "rgba(2, 55, 255, .34)";
+        context.stroke();
+      }
+
+      context.restore();
+    };
+
+    const animate = () => {
+      animationFrame = 0;
+      if (!enabled || document.hidden) {
+        trailOpacity = 0;
+        clear();
+        return;
+      }
+
+      let leaderX = pointer.x;
+      let leaderY = pointer.y;
+      points.forEach((point, index) => {
+        const falloff = 1 - index / pointCount;
+        const spring = 0.28 + falloff * 0.12;
+        point.vx += (leaderX - point.x) * spring;
+        point.vy += (leaderY - point.y) * spring;
+        point.vx *= 0.5;
+        point.vy *= 0.5;
+        point.x += point.vx;
+        point.y += point.vy;
+        leaderX = point.x;
+        leaderY = point.y;
+      });
+
+      trailOpacity += ((pointerVisible ? 1 : 0) - trailOpacity) * (pointerVisible ? 0.22 : 0.08);
+      drawTrail();
+
+      const stillMoving = points.some((point, index) => {
+        const leader = index === 0 ? pointer : points[index - 1];
+        return Math.abs(point.vx) + Math.abs(point.vy) + Math.abs(leader.x - point.x) + Math.abs(leader.y - point.y) > 0.05;
+      });
+
+      if (pointerVisible || trailOpacity > 0.01 || stillMoving) {
+        animationFrame = window.requestAnimationFrame(animate);
+      }
+    };
+
+    const startAnimation = () => {
+      if (!animationFrame && enabled) animationFrame = window.requestAnimationFrame(animate);
+    };
+
+    const handlePointerMove = (event: PointerEvent) => {
+      if (!enabled || event.pointerType === "touch") return;
+      pointer.x = event.clientX;
+      pointer.y = event.clientY;
+      pointerVisible = true;
+
+      if (!initialized) {
+        points.forEach((point) => {
+          point.x = pointer.x;
+          point.y = pointer.y;
+        });
+        initialized = true;
+      }
+
+      startAnimation();
+    };
+
+    const handlePointerLeave = () => {
+      pointerVisible = false;
+      startAnimation();
+    };
+
+    const updatePreference = () => {
+      enabled = precisePointer.matches && !reducedMotion.matches;
+      canvas.toggleAttribute("data-enabled", enabled);
+      if (!enabled) {
+        window.cancelAnimationFrame(animationFrame);
+        animationFrame = 0;
+        trailOpacity = 0;
+        clear();
+      }
+    };
+
+    resize();
+    updatePreference();
+    window.addEventListener("resize", resize, { passive: true });
+    window.addEventListener("pointermove", handlePointerMove, { passive: true });
+    document.documentElement.addEventListener("mouseleave", handlePointerLeave);
+    window.addEventListener("blur", handlePointerLeave);
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) handlePointerLeave();
+      else startAnimation();
+    });
+    precisePointer.addEventListener("change", updatePreference);
+    reducedMotion.addEventListener("change", updatePreference);
+  }
+</script>
+
+<style>
+  .smooth-cursor {
+    position: fixed;
+    z-index: 100;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    display: none;
+    pointer-events: none;
+    contain: strict;
+  }
+
+  .smooth-cursor[data-enabled] { display: block; }
+
+  @media (pointer: coarse), (prefers-reduced-motion: reduce) {
+    .smooth-cursor { display: none !important; }
+  }
+</style>

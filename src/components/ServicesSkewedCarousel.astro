@@ -1,0 +1,637 @@
+---
+import type { CollectionEntry } from "astro:content";
+import SectionIntro from "./SectionIntro.astro";
+
+interface Props {
+  services: CollectionEntry<"services">[];
+}
+
+const { services } = Astro.props;
+---
+
+<section class="services-carousel-section section dark-section" aria-labelledby="services-carousel-title">
+  <div class="services-carousel-heading">
+    <SectionIntro
+      number="04"
+      eyebrow="Connected capabilities"
+      title="One marketing system. Not six disconnected services."
+      copy="Choose the part of your customer journey that needs to work harder. Each service connects strategy, execution and measurement to a clear next step."
+      light
+    />
+  </div>
+
+  <div class="skewed-carousel" data-skewed-carousel data-total={services.length}>
+    <div class="carousel-instructions">
+      <span><i aria-hidden="true"></i> Explore the system</span>
+      <span>Drag · swipe · use arrow keys</span>
+    </div>
+
+    <div
+      class="carousel-viewport"
+      data-carousel-viewport
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="Wayne Omni services"
+      tabindex="0"
+    >
+      <div class="carousel-stage">
+        {services.map((service, index) => (
+          <article
+            class="service-card"
+            data-carousel-card
+            data-index={index}
+            data-tone={index % 3}
+            aria-roledescription="slide"
+            aria-label={`${index + 1} of ${services.length}: ${service.data.title}`}
+            aria-hidden={index === 0 ? "false" : "true"}
+          >
+            <a href={`/services/${service.id}/`} tabindex={index === 0 ? 0 : -1}>
+              <div class="service-card-top">
+                <span>{service.data.number} / {service.data.group}</span>
+                <i aria-hidden="true">↗</i>
+              </div>
+
+              <div class="service-card-art" aria-hidden="true">
+                <span class="art-disc"></span>
+                <span class="art-plane"></span>
+                <span class="art-line"></span>
+                <b>{service.data.number}</b>
+              </div>
+
+              <div class="service-card-copy">
+                <h3>{service.data.title}</h3>
+                <p>{service.data.short}</p>
+                <span>See the solution <b>↗</b></span>
+              </div>
+            </a>
+          </article>
+        ))}
+      </div>
+    </div>
+
+    <div class="carousel-footer">
+      <div class="carousel-controls" aria-label="Carousel controls">
+        <button type="button" data-carousel-prev aria-label="Previous service"><span aria-hidden="true">←</span></button>
+        <span class="carousel-count" aria-live="polite" data-carousel-count>01 / {String(services.length).padStart(2, "0")}</span>
+        <button type="button" data-carousel-next aria-label="Next service"><span aria-hidden="true">→</span></button>
+      </div>
+
+      <div class="carousel-dots" role="tablist" aria-label="Choose a service">
+        {services.map((service, index) => (
+          <button
+            type="button"
+            data-carousel-dot
+            data-index={index}
+            role="tab"
+            aria-label={`Show ${service.data.title}`}
+            aria-selected={index === 0 ? "true" : "false"}
+            tabindex={index === 0 ? 0 : -1}
+          ><span></span></button>
+        ))}
+      </div>
+
+      <a class="all-services-link" href="/services/">View all services <span>↗</span></a>
+    </div>
+
+    <p class="sr-status" aria-live="polite" aria-atomic="true" data-carousel-status></p>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-skewed-carousel]").forEach((carousel) => {
+    const viewport = carousel.querySelector<HTMLElement>("[data-carousel-viewport]");
+    const cards = Array.from(carousel.querySelectorAll<HTMLElement>("[data-carousel-card]"));
+    const dots = Array.from(carousel.querySelectorAll<HTMLButtonElement>("[data-carousel-dot]"));
+    const previous = carousel.querySelector<HTMLButtonElement>("[data-carousel-prev]");
+    const next = carousel.querySelector<HTMLButtonElement>("[data-carousel-next]");
+    const count = carousel.querySelector<HTMLElement>("[data-carousel-count]");
+    const status = carousel.querySelector<HTMLElement>("[data-carousel-status]");
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    if (!viewport || cards.length === 0) return;
+
+    let activeIndex = 0;
+    let autoplayTimer = 0;
+    let isVisible = false;
+    let pointerStart = 0;
+    let pointerId: number | null = null;
+    let suppressClick = false;
+
+    const wrap = (index: number) => (index + cards.length) % cards.length;
+
+    const distanceFromActive = (index: number) => {
+      let distance = index - activeIndex;
+      if (distance > cards.length / 2) distance -= cards.length;
+      if (distance < -cards.length / 2) distance += cards.length;
+      return distance;
+    };
+
+    const update = (nextIndex: number, announce = true) => {
+      const oldIndex = activeIndex;
+      activeIndex = wrap(nextIndex);
+      const direction = activeIndex === oldIndex ? 0 : (wrap(oldIndex + 1) === activeIndex ? 1 : -1);
+      const spacing = Math.min(190, Math.max(108, viewport.clientWidth * 0.17));
+
+      carousel.style.setProperty("--travel-skew", `${direction * -2.2}deg`);
+      window.setTimeout(() => carousel.style.setProperty("--travel-skew", "0deg"), reducedMotion.matches ? 0 : 360);
+
+      cards.forEach((card, index) => {
+        const distance = distanceFromActive(index);
+        const depth = Math.abs(distance);
+        const isActive = distance === 0;
+        const link = card.querySelector<HTMLAnchorElement>("a");
+
+        card.style.setProperty("--card-x", `${distance * spacing}px`);
+        card.style.setProperty("--card-z", `${-depth * 105}px`);
+        card.style.setProperty("--card-rotate", `${distance * -58}deg`);
+        card.style.setProperty("--card-tilt", `${distance * -1.8}deg`);
+        card.style.setProperty("--card-scale", String(isActive ? 1 : Math.max(0.72, 0.87 - (depth - 1) * 0.06)));
+        card.style.setProperty("--card-opacity", String(depth > 2 ? 0 : isActive ? 1 : Math.max(0.28, 0.68 - (depth - 1) * 0.2)));
+        card.style.zIndex = String(cards.length - depth);
+        card.setAttribute("aria-hidden", String(!isActive));
+        card.toggleAttribute("data-active", isActive);
+        if (link) link.tabIndex = isActive ? 0 : -1;
+      });
+
+      dots.forEach((dot, index) => {
+        const isActive = index === activeIndex;
+        dot.setAttribute("aria-selected", String(isActive));
+        dot.tabIndex = isActive ? 0 : -1;
+      });
+
+      if (count) count.textContent = `${String(activeIndex + 1).padStart(2, "0")} / ${String(cards.length).padStart(2, "0")}`;
+      if (announce && status) {
+        const title = cards[activeIndex].querySelector("h3")?.textContent || "Service";
+        status.textContent = `${title}, slide ${activeIndex + 1} of ${cards.length}`;
+      }
+    };
+
+    const stopAutoplay = () => {
+      window.clearInterval(autoplayTimer);
+      autoplayTimer = 0;
+    };
+
+    const startAutoplay = () => {
+      stopAutoplay();
+      if (reducedMotion.matches || !isVisible || carousel.matches(":hover") || carousel.contains(document.activeElement)) return;
+      autoplayTimer = window.setInterval(() => update(activeIndex + 1, false), 4500);
+    };
+
+    previous?.addEventListener("click", () => {
+      update(activeIndex - 1);
+      startAutoplay();
+    });
+
+    next?.addEventListener("click", () => {
+      update(activeIndex + 1);
+      startAutoplay();
+    });
+
+    dots.forEach((dot, index) => {
+      dot.addEventListener("click", () => {
+        update(index);
+        startAutoplay();
+      });
+      dot.addEventListener("keydown", (event) => {
+        if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+        event.preventDefault();
+        const target = event.key === "Home" ? 0 : event.key === "End" ? dots.length - 1 : wrap(index + (event.key === "ArrowRight" ? 1 : -1));
+        dots[target].focus();
+        update(target);
+      });
+    });
+
+    viewport.addEventListener("keydown", (event) => {
+      if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+      event.preventDefault();
+      update(activeIndex + (event.key === "ArrowRight" ? 1 : -1));
+    });
+
+    viewport.addEventListener("pointerdown", (event) => {
+      pointerId = event.pointerId;
+      pointerStart = event.clientX;
+      suppressClick = false;
+      viewport.setPointerCapture(event.pointerId);
+      viewport.toggleAttribute("data-dragging", true);
+      stopAutoplay();
+    });
+
+    viewport.addEventListener("pointerup", (event) => {
+      if (pointerId !== event.pointerId) return;
+      const travelled = event.clientX - pointerStart;
+      viewport.releasePointerCapture(event.pointerId);
+      viewport.removeAttribute("data-dragging");
+      pointerId = null;
+      if (Math.abs(travelled) > 38) {
+        suppressClick = true;
+        update(activeIndex + (travelled < 0 ? 1 : -1));
+      }
+      startAutoplay();
+    });
+
+    viewport.addEventListener("click", (event) => {
+      if (!suppressClick) return;
+      event.preventDefault();
+      event.stopPropagation();
+      suppressClick = false;
+    }, true);
+
+    viewport.addEventListener("pointercancel", () => {
+      viewport.removeAttribute("data-dragging");
+      pointerId = null;
+      startAutoplay();
+    });
+
+    carousel.addEventListener("mouseenter", stopAutoplay);
+    carousel.addEventListener("mouseleave", startAutoplay);
+    carousel.addEventListener("focusin", stopAutoplay);
+    carousel.addEventListener("focusout", () => window.setTimeout(startAutoplay));
+    reducedMotion.addEventListener("change", startAutoplay);
+    window.addEventListener("resize", () => update(activeIndex, false));
+
+    const observer = new IntersectionObserver(([entry]) => {
+      isVisible = entry.isIntersecting;
+      if (isVisible) startAutoplay();
+      else stopAutoplay();
+    }, { threshold: 0.25 });
+
+    observer.observe(carousel);
+    update(0, false);
+  });
+</script>
+
+<style>
+  .services-carousel-section {
+    --travel-skew: 0deg;
+    padding-inline: 0;
+    overflow: hidden;
+    border-top: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .services-carousel-heading,
+  .carousel-instructions,
+  .carousel-footer {
+    margin-inline: var(--pad);
+  }
+
+  .carousel-instructions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: .9rem 0;
+    border-top: 2px solid #3a3a3a;
+    color: #92979e;
+    font-size: .58rem;
+    font-weight: 800;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+
+  .carousel-instructions span:first-child {
+    display: inline-flex;
+    align-items: center;
+    gap: .65rem;
+    color: white;
+  }
+
+  .carousel-instructions i {
+    width: 9px;
+    height: 9px;
+    display: inline-block;
+    border-radius: 50%;
+    background: var(--cobalt);
+    box-shadow: 0 0 0 5px rgba(2,55,255,.24);
+  }
+
+  .carousel-viewport {
+    min-height: clamp(470px, 56vw, 670px);
+    position: relative;
+    overflow: hidden;
+    cursor: grab;
+    touch-action: pan-y;
+    perspective: 1000px;
+    outline-offset: -5px;
+  }
+
+  .carousel-viewport[data-dragging] { cursor: grabbing; }
+
+  .carousel-stage {
+    position: absolute;
+    inset: 0;
+    transform: skewY(var(--travel-skew)) scale(.99);
+    transform-style: preserve-3d;
+    transition: transform .55s cubic-bezier(.2,.8,.2,1);
+  }
+
+  .carousel-stage::before {
+    content: "";
+    position: absolute;
+    width: min(44vw, 620px);
+    aspect-ratio: 1;
+    left: 50%;
+    top: 50%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 32% 28%, #ffffff, #adb3ba 30%, #5b6168 57%, #e7eaed 79%);
+    transform: translate(-50%, -50%);
+    opacity: .2;
+  }
+
+  .carousel-stage::after {
+    content: "WAYNE OMNI / CAPABILITIES";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    color: rgba(255,255,255,.035);
+    font: 900 clamp(5rem, 12vw, 13rem)/.72 var(--display);
+    letter-spacing: -.08em;
+    white-space: nowrap;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .service-card {
+    --card-x: 0px;
+    --card-z: 0px;
+    --card-rotate: 0deg;
+    --card-tilt: 0deg;
+    --card-scale: 1;
+    --card-opacity: 1;
+    width: clamp(270px, 29vw, 390px);
+    aspect-ratio: 4 / 5;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: 0;
+    opacity: var(--card-opacity);
+    transform: translate3d(calc(-50% + var(--card-x)), -50%, var(--card-z)) rotateY(var(--card-rotate)) rotateZ(var(--card-tilt)) scale(var(--card-scale));
+    transform-style: preserve-3d;
+    transition: transform .75s cubic-bezier(.2,.8,.2,1), opacity .5s ease, filter .5s ease;
+    will-change: transform;
+    pointer-events: none;
+    filter: saturate(.45) brightness(.72);
+  }
+
+  .service-card[data-active] {
+    pointer-events: auto;
+    filter: none;
+  }
+
+  .service-card > a {
+    height: 100%;
+    padding: clamp(1.1rem, 2vw, 1.65rem);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    background: var(--white);
+    color: var(--ink);
+    border: 2px solid white;
+    box-shadow: 12px 12px 0 var(--cobalt);
+  }
+
+  .service-card[data-tone="1"] > a {
+    background: linear-gradient(145deg, #f9fafb, #9198a1 48%, #edf0f3 72%, #697079);
+    box-shadow: 12px 12px 0 white;
+  }
+
+  .service-card[data-tone="2"] > a {
+    background: var(--cobalt);
+    color: white;
+    box-shadow: 12px 12px 0 var(--metal);
+  }
+
+  .service-card > a::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 8px solid transparent;
+    pointer-events: none;
+    transition: border-color .2s ease;
+  }
+
+  .service-card[data-active] > a:hover::after,
+  .service-card[data-active] > a:focus-visible::after { border-color: var(--signal-red); }
+
+  .service-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    font-size: .58rem;
+    font-weight: 900;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+
+  .service-card-top i {
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    background: var(--ink);
+    color: white;
+    font-style: normal;
+  }
+
+  [data-tone="2"] .service-card-top i { background: white; color: var(--ink); }
+
+  .service-card-art {
+    flex: 1;
+    min-height: 150px;
+    position: relative;
+    margin: 1rem 0;
+    isolation: isolate;
+  }
+
+  .service-card-art b {
+    position: absolute;
+    left: 0;
+    bottom: -.12em;
+    z-index: 3;
+    font: 900 clamp(6rem, 11vw, 10.5rem)/.72 var(--display);
+    letter-spacing: -.09em;
+    color: transparent;
+    -webkit-text-stroke: 2px currentColor;
+    opacity: .92;
+  }
+
+  .art-disc {
+    width: clamp(130px, 18vw, 220px);
+    aspect-ratio: 1;
+    position: absolute;
+    right: -11%;
+    top: 6%;
+    border-radius: 50%;
+    background: var(--cobalt);
+    border: 2px solid var(--ink);
+  }
+
+  [data-tone="1"] .art-disc { background: var(--ink); }
+  [data-tone="2"] .art-disc { background: white; }
+
+  .art-plane {
+    width: 42%;
+    height: 82%;
+    position: absolute;
+    left: 37%;
+    top: 2%;
+    background: var(--ink);
+    transform: rotate(15deg);
+    border: 2px solid currentColor;
+  }
+
+  [data-tone="1"] .art-plane { background: var(--cobalt); }
+  [data-tone="2"] .art-plane { background: var(--signal-red); }
+
+  .art-line {
+    width: 70%;
+    height: 2px;
+    position: absolute;
+    left: 4%;
+    bottom: 28%;
+    z-index: 2;
+    background: currentColor;
+    transform: rotate(-23deg);
+  }
+
+  .service-card-copy { position: relative; z-index: 4; }
+
+  .service-card-copy h3 {
+    max-width: 9ch;
+    margin: 0 0 .8rem;
+    font: 850 clamp(2rem, 3vw, 3.2rem)/.9 var(--display);
+    letter-spacing: -.06em;
+  }
+
+  .service-card-copy p {
+    min-height: 3.5em;
+    margin: 0;
+    color: #545960;
+    font-size: .7rem;
+    line-height: 1.6;
+  }
+
+  [data-tone="2"] .service-card-copy p { color: rgba(255,255,255,.76); }
+
+  .service-card-copy > span {
+    margin-top: 1.1rem;
+    padding-top: .8rem;
+    display: flex;
+    justify-content: space-between;
+    border-top: 2px solid currentColor;
+    font-size: .58rem;
+    font-weight: 900;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+
+  .service-card-copy > span b { color: var(--signal-red); }
+  [data-tone="2"] .service-card-copy > span b { color: white; }
+
+  .carousel-footer {
+    min-height: 70px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 2rem;
+    border-top: 2px solid #3a3a3a;
+  }
+
+  .carousel-controls { display: flex; align-items: center; gap: .7rem; }
+
+  .carousel-controls button {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border: 2px solid var(--metal-dark);
+    background: transparent;
+    color: white;
+    cursor: pointer;
+    font-weight: 900;
+  }
+
+  .carousel-controls button:hover,
+  .carousel-controls button:focus-visible { background: var(--signal-red); border-color: var(--signal-red); }
+
+  .carousel-count {
+    min-width: 62px;
+    color: var(--metal);
+    font-size: .58rem;
+    font-weight: 900;
+    letter-spacing: .12em;
+    text-align: center;
+  }
+
+  .carousel-dots { display: flex; align-items: center; gap: .35rem; }
+
+  .carousel-dots button {
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .carousel-dots button span {
+    width: 18px;
+    height: 3px;
+    display: block;
+    background: #51555b;
+    transition: width .2s ease, background .2s ease;
+  }
+
+  .carousel-dots button[aria-selected="true"] span { width: 28px; background: var(--cobalt); }
+
+  .all-services-link {
+    justify-self: end;
+    display: inline-flex;
+    gap: 1.4rem;
+    color: white;
+    font-size: .67rem;
+    font-weight: 900;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  .all-services-link span { color: var(--cobalt); }
+  .all-services-link:hover, .all-services-link:focus-visible { color: var(--signal-red); }
+
+  .sr-status {
+    width: 1px;
+    height: 1px;
+    position: absolute;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 720px) {
+    .carousel-instructions span:last-child { display: none; }
+    .carousel-viewport { min-height: 560px; }
+    .service-card { width: min(72vw, 300px); height: 430px; aspect-ratio: auto; }
+    .service-card > a { box-shadow: 8px 8px 0 var(--cobalt); }
+    .service-card[data-tone="1"] > a { box-shadow: 8px 8px 0 white; }
+    .service-card[data-tone="2"] > a { box-shadow: 8px 8px 0 var(--metal); }
+    .carousel-footer { grid-template-columns: 1fr auto; padding: 1rem 0; gap: 1rem; }
+    .carousel-dots { display: none; }
+    .all-services-link { font-size: .59rem; }
+  }
+
+  @media (max-width: 420px) {
+    .carousel-viewport { min-height: 545px; }
+    .service-card { width: min(75vw, 280px); height: 420px; }
+    .carousel-count { display: none; }
+    .carousel-controls { gap: .45rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .carousel-stage,
+    .service-card { transition: none; }
+  }
+</style>

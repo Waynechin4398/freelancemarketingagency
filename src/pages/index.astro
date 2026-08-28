@@ -6,6 +6,7 @@ import SectionIntro from "../components/SectionIntro.astro";
 import RelatedWork from "../components/RelatedWork.astro";
 import ProcessFlow from "../components/ProcessFlow.astro";
 import CtaBand from "../components/CtaBand.astro";
+import ServicesSkewedCarousel from "../components/ServicesSkewedCarousel.astro";
 import site from "../data/site.json";
 
 const services = (await getCollection("services", ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
@@ -66,18 +67,7 @@ const services = (await getCollection("services", ({ data }) => !data.draft)).so
     </div>
   </section>
 
-  <section class="services-home section dark-section">
-    <SectionIntro number="04" eyebrow="Connected capabilities" title="One marketing system. Not six disconnected services." copy="Strategy, creative, media and technology are designed around the same customer journey." light />
-    <div class="service-list">
-      {services.map((service) => (
-        <a href={`/services/${service.id}/`}>
-          <span>{service.data.number}</span>
-          <div><h3>{service.data.title}</h3><p>{service.data.short}</p></div>
-          <b>{service.data.group}</b><i>↗</i>
-        </a>
-      ))}
-    </div>
-  </section>
+  <ServicesSkewedCarousel services={services} />
 
   <section class="system-section section">
     <SectionIntro number="05" eyebrow="The growth operating system" title="See every handoff. Improve the whole journey." copy="The strongest gains often appear between channels—where an ad becomes a page visit, a form becomes a lead, and a lead becomes a timely conversation." />

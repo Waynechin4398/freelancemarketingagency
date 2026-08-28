@@ -78,11 +78,27 @@
   .stagger-text-mask {
     display: inline-block;
     overflow: visible;
-    vertical-align: bottom;
+    vertical-align: baseline;
   }
 
   .stagger-text-segment {
     display: inline-block;
+  }
+
+  .stagger-text .stagger-text-mask,
+  .stagger-text .stagger-text-segment {
+    width: auto;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background-color: transparent;
+    font: inherit;
+    color: inherit;
+    letter-spacing: inherit;
+    line-height: inherit;
+    text-decoration: inherit;
+    text-transform: inherit;
   }
 
   .stagger-text[data-stagger-text="ready"] .stagger-text-segment {

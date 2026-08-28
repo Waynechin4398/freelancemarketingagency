@@ -3,6 +3,7 @@ import "../styles/global.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import SmoothCursor from "../components/SmoothCursor.astro";
+import StaggeredText from "../components/StaggeredText.astro";
 import site from "../data/site.json";
 
 interface Props {
@@ -71,6 +72,7 @@ const structuredData = {
     <Header />
     <main id="main-content"><slot /></main>
     <Footer />
+    <StaggeredText />
     <a
       class="whatsapp-float"
       href={site.whatsappUrl}

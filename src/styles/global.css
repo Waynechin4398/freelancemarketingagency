@@ -431,7 +431,8 @@ body { background: var(--paper); }
 .personal-hero .eyebrow { color: rgba(255,255,255,.68); }
 .personal-hero .eyebrow::before { background: var(--cobalt); height: 3px; }
 .personal-hero h1 { max-width: 11ch; margin: 1.1rem 0 1.7rem; font-size: clamp(4.2rem, 7.6vw, 8.4rem); line-height: .82; }
-.personal-hero h1 > span { background: linear-gradient(105deg, #fff 10%, #858c95 42%, #f8fafb 66%, #8c939c 92%); color: transparent; background-clip: text; -webkit-background-clip: text; }
+.personal-hero h1 > span:not(.stagger-text-mask),
+.personal-hero h1 > span:not(.stagger-text-mask) .stagger-text-segment { background: linear-gradient(105deg, #fff 10%, #858c95 42%, #f8fafb 66%, #8c939c 92%); color: transparent; background-clip: text; -webkit-background-clip: text; }
 .personal-hero h1 em { color: var(--cobalt); font-family: var(--display); font-style: normal; font-weight: 800; }
 .personal-hero .hero-copy > p { color: rgba(255,255,255,.72); max-width: 620px; }
 .hero-roles { display: flex; flex-wrap: wrap; gap: 0; margin-top: 1.8rem; border-left: 1px solid #454545; }

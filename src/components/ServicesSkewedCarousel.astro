@@ -67,6 +67,8 @@ const { services } = Astro.props;
           </article>
         ))}
       </div>
+      <button class="side-card-target side-card-target-left" type="button" data-side-card="previous" tabindex="-1" aria-hidden="true"></button>
+      <button class="side-card-target side-card-target-right" type="button" data-side-card="next" tabindex="-1" aria-hidden="true"></button>
     </div>
 
     <div class="carousel-footer">
@@ -104,6 +106,8 @@ const { services } = Astro.props;
     const dots = Array.from(carousel.querySelectorAll<HTMLButtonElement>("[data-carousel-dot]"));
     const previous = carousel.querySelector<HTMLButtonElement>("[data-carousel-prev]");
     const next = carousel.querySelector<HTMLButtonElement>("[data-carousel-next]");
+    const sidePrevious = carousel.querySelector<HTMLButtonElement>("[data-side-card='previous']");
+    const sideNext = carousel.querySelector<HTMLButtonElement>("[data-side-card='next']");
     const count = carousel.querySelector<HTMLElement>("[data-carousel-count]");
     const status = carousel.querySelector<HTMLElement>("[data-carousel-status]");
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -188,6 +192,18 @@ const { services } = Astro.props;
       startAutoplay();
     });
 
+    sidePrevious?.addEventListener("click", () => {
+      if (suppressClick) return;
+      update(activeIndex - 1);
+      startAutoplay();
+    });
+
+    sideNext?.addEventListener("click", () => {
+      if (suppressClick) return;
+      update(activeIndex + 1);
+      startAutoplay();
+    });
+
     dots.forEach((dot, index) => {
       dot.addEventListener("click", () => {
         update(index);
@@ -221,7 +237,6 @@ const { services } = Astro.props;
       pointerId = event.pointerId;
       pointerStart = event.clientX;
       suppressClick = false;
-      viewport.setPointerCapture(event.pointerId);
       viewport.toggleAttribute("data-dragging", true);
       stopAutoplay();
     });
@@ -229,7 +244,6 @@ const { services } = Astro.props;
     viewport.addEventListener("pointerup", (event) => {
       if (pointerId !== event.pointerId) return;
       const travelled = event.clientX - pointerStart;
-      viewport.releasePointerCapture(event.pointerId);
       viewport.removeAttribute("data-dragging");
       pointerId = null;
       if (Math.abs(travelled) > 38) {
@@ -359,6 +373,39 @@ const { services } = Astro.props;
     transform: translate(-50%, -50%);
     pointer-events: none;
   }
+
+  .side-card-target {
+    width: calc(50% - clamp(135px, 14.5vw, 195px));
+    min-width: 42px;
+    position: absolute;
+    z-index: 30;
+    top: 0;
+    bottom: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .side-card-target-left { left: 0; }
+  .side-card-target-right { right: 0; }
+
+  .side-card-target::after {
+    position: absolute;
+    top: 50%;
+    color: var(--metal-light);
+    font-size: 1.2rem;
+    font-weight: 900;
+    opacity: .24;
+    transition: color .2s ease, opacity .2s ease, transform .2s ease;
+  }
+
+  .side-card-target-left::after { content: "←"; right: 1rem; }
+  .side-card-target-right::after { content: "→"; left: 1rem; }
+
+  .side-card-target:hover::after { color: var(--signal-red); opacity: 1; }
+  .side-card-target-left:hover::after { transform: translateX(-5px); }
+  .side-card-target-right:hover::after { transform: translateX(5px); }
 
   .service-card {
     --card-x: 0px;

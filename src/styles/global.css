@@ -32,7 +32,7 @@ button { color: inherit; }
 .brand > span:last-child { display: flex; flex-direction: column; line-height: 1; gap: .28rem; }
 .brand strong { font: 750 .92rem/1 var(--display); letter-spacing: -.02em; }
 .brand small { font-size: .57rem; color: var(--muted); letter-spacing: .05em; text-transform: uppercase; }
-.brand-logo { width: 46px; height: 46px; display: block; flex: 0 0 auto; object-fit: contain; }
+.brand-logo { width: 72px; height: 46px; display: block; flex: 0 0 auto; object-fit: cover; object-position: center; }
 .desktop-nav { display: flex; align-items: center; gap: clamp(1.2rem, 2.5vw, 2.8rem); font-size: .83rem; }
 .desktop-nav > a:not(.nav-cta) { position: relative; }
 .desktop-nav > a:not(.nav-cta)::after { content: ""; position: absolute; left: 0; right: 100%; bottom: -.4rem; height: 1px; background: var(--ink); transition: right .25s ease; }
@@ -152,7 +152,7 @@ button { color: inherit; }
 
 .site-footer { padding: clamp(4rem, 7vw, 6rem) var(--pad) 1.5rem; background: var(--ink); color: white; }
 .footer-main { display: grid; grid-template-columns: 1fr 1fr; gap: 5vw; padding-bottom: 5rem; }
-.footer-brand > img { width: clamp(78px, 8vw, 118px); height: auto; display: block; margin-bottom: 2rem; }
+.footer-brand > img { width: clamp(160px, 16vw, 230px); height: clamp(88px, 9vw, 128px); object-fit: cover; object-position: center; display: block; margin-bottom: 2rem; }
 .footer-main h2 { font: 500 clamp(3rem, 6vw, 6rem)/.88 var(--display); letter-spacing: -.065em; margin: 1.5rem 0 0; }
 .footer-links { display: grid; grid-template-columns: repeat(3,1fr); gap: 2rem; }
 .footer-links div { display: flex; flex-direction: column; gap: .7rem; font-size: .76rem; }

@@ -23,7 +23,7 @@ const { services } = Astro.props;
   <div class="skewed-carousel" data-skewed-carousel data-total={services.length}>
     <div class="carousel-instructions">
       <span><i aria-hidden="true"></i> Explore the system</span>
-      <span>Drag · swipe · use arrow keys</span>
+      <span>Click a side card · drag · swipe · use arrow keys</span>
     </div>
 
     <div
@@ -45,7 +45,7 @@ const { services } = Astro.props;
             aria-label={`${index + 1} of ${services.length}: ${service.data.title}`}
             aria-hidden={index === 0 ? "false" : "true"}
           >
-            <a href={`/services/${service.id}/`} tabindex={index === 0 ? 0 : -1}>
+            <a href={`/services/${service.id}/`} data-service-link tabindex={index === 0 ? 0 : -1} aria-label={`Open ${service.data.title} service page`}>
               <div class="service-card-top">
                 <span>{service.data.number} / {service.data.group}</span>
                 <i aria-hidden="true">↗</i>
@@ -61,7 +61,7 @@ const { services } = Astro.props;
               <div class="service-card-copy">
                 <h3>{service.data.title}</h3>
                 <p>{service.data.short}</p>
-                <span>See the solution <b>↗</b></span>
+                <span>Open service page <b>↗</b></span>
               </div>
             </a>
           </article>
@@ -150,6 +150,7 @@ const { services } = Astro.props;
         card.style.zIndex = String(cards.length - depth);
         card.setAttribute("aria-hidden", String(!isActive));
         card.toggleAttribute("data-active", isActive);
+        card.toggleAttribute("data-visible", depth <= 2);
         if (link) link.tabIndex = isActive ? 0 : -1;
       });
 
@@ -198,6 +199,15 @@ const { services } = Astro.props;
         const target = event.key === "Home" ? 0 : event.key === "End" ? dots.length - 1 : wrap(index + (event.key === "ArrowRight" ? 1 : -1));
         dots[target].focus();
         update(target);
+      });
+    });
+
+    cards.forEach((card, index) => {
+      card.addEventListener("click", (event) => {
+        if (index === activeIndex || suppressClick) return;
+        event.preventDefault();
+        update(index);
+        startAutoplay();
       });
     });
 
@@ -375,6 +385,15 @@ const { services } = Astro.props;
   .service-card[data-active] {
     pointer-events: auto;
     filter: none;
+  }
+
+  .service-card[data-visible]:not([data-active]) {
+    pointer-events: auto;
+    cursor: pointer;
+  }
+
+  .service-card[data-visible]:not([data-active]):hover {
+    filter: saturate(.75) brightness(.9);
   }
 
   .service-card > a {

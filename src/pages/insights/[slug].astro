@@ -9,12 +9,41 @@ export async function getStaticPaths() {
 }
 const { insight } = Astro.props;
 const { Content } = await render(insight);
+const canonicalUrl = Astro.site ? new URL(Astro.url.pathname, Astro.site).toString() : Astro.url.toString();
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: insight.data.title,
+  description: insight.data.seoDescription ?? insight.data.excerpt,
+  datePublished: insight.data.publishDate.toISOString(),
+  dateModified: (insight.data.updatedDate ?? insight.data.publishDate).toISOString(),
+  mainEntityOfPage: canonicalUrl,
+  author: {
+    "@type": "Person",
+    name: insight.data.authorName,
+    url: Astro.site ? new URL("/about/", Astro.site).toString() : "/about/",
+    jobTitle: insight.data.authorRole,
+  },
+  publisher: {
+    "@type": "Organization",
+    name: "Wayne Omni",
+    url: Astro.site?.toString(),
+  },
+};
 ---
 <BaseLayout title={insight.data.seoTitle ?? insight.data.title} description={insight.data.seoDescription ?? insight.data.excerpt}>
   <article class="legal article-content">
     <span class="eyebrow">{insight.data.category}</span>
     <h1>{insight.data.title}</h1>
+    <div class="article-meta" aria-label="Article details">
+      <p><strong>{insight.data.authorName}</strong><span>{insight.data.authorRole}</span></p>
+      <p>
+        <span>Published <time datetime={insight.data.publishDate.toISOString()}>{insight.data.publishDate.toLocaleDateString("en-MY", { day: "numeric", month: "long", year: "numeric" })}</time></span>
+        {insight.data.updatedDate && <span>Reviewed <time datetime={insight.data.updatedDate.toISOString()}>{insight.data.updatedDate.toLocaleDateString("en-MY", { day: "numeric", month: "long", year: "numeric" })}</time></span>}
+      </p>
+    </div>
     <Content />
   </article>
   <CtaBand />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(articleSchema)} />
 </BaseLayout>

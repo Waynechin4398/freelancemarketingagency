@@ -3,6 +3,9 @@ title: Why are Google Ads leads from the wrong location—even with Presence tar
 category: Paid Media & Measurement
 excerpt: A practical diagnosis for Malaysian service businesses still receiving out-of-area enquiries after changing their Google Ads location settings.
 publishDate: 2026-08-26
+updatedDate: 2026-08-29
+authorName: Wayne
+authorRole: Strategist and builder, Wayne Omni
 draft: false
 seoTitle: Google Ads Leads from Wrong Location
 seoDescription: Google Ads leads from the wrong location? Check Presence targeting, geographic reports, Search Partners and service-area qualification in Malaysia.

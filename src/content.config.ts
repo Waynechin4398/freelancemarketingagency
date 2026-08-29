@@ -68,6 +68,8 @@ const insights = defineCollection({
     excerpt: z.string(),
     publishDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
+    authorName: z.string().default("Wayne"),
+    authorRole: z.string().default("Strategist and builder, Wayne Omni"),
     draft: z.boolean().default(false),
     seoTitle: z.string().optional(),
     seoDescription: z.string().optional(),

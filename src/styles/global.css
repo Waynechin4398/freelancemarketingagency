@@ -328,6 +328,12 @@ button { color: inherit; }
 .large-section-title { font: 500 clamp(2.5rem,5vw,5rem)/.96 var(--display); letter-spacing: -.06em; max-width: 12ch; margin: 1.5rem 0 3rem; }
 .article-content :where(h2, h3) { font-family: var(--display); letter-spacing: -.035em; }
 .article-content blockquote { margin: 2rem 0; padding: 1rem 1.25rem; background: rgba(97,92,255,.08); border-left: 2px solid var(--cobalt); color: var(--muted); }
+.article-meta { display: flex; justify-content: space-between; gap: 2rem; margin: -1.5rem 0 3rem; padding: 1rem 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.article-meta p { margin: 0; display: flex; flex-direction: column; gap: .25rem; font-size: .72rem; }
+.article-meta p:last-child { text-align: right; }
+.article-meta strong { color: var(--ink); font-size: .82rem; }
+.article-meta time { color: var(--ink); }
+@media (max-width: 640px) { .article-meta { flex-direction: column; gap: .75rem; } .article-meta p:last-child { text-align: left; } }
 .approved-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); margin-top: 2rem; }
 .approved-metrics div { background: var(--white); padding: 1.5rem; }
 .approved-metrics strong, .approved-metrics span, .approved-metrics small { display: block; }

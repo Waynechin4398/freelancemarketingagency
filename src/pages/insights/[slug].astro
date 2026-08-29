@@ -9,6 +9,12 @@ export async function getStaticPaths() {
 }
 const { insight } = Astro.props;
 const { Content } = await render(insight);
+const categorySlug = insight.data.category
+  .normalize("NFKD")
+  .toLowerCase()
+  .replace(/&/g, " and ")
+  .replace(/[^a-z0-9]+/g, "-")
+  .replace(/(^-|-$)/g, "");
 const canonicalUrl = Astro.site ? new URL(Astro.url.pathname, Astro.site).toString() : Astro.url.toString();
 const articleSchema = {
   "@context": "https://schema.org",
@@ -33,7 +39,13 @@ const articleSchema = {
 ---
 <BaseLayout title={insight.data.seoTitle ?? insight.data.title} description={insight.data.seoDescription ?? insight.data.excerpt}>
   <article class="legal article-content">
-    <span class="eyebrow">{insight.data.category}</span>
+    <a
+      class="eyebrow article-category-link"
+      href={`/insights/?category=${categorySlug}`}
+      aria-label={`View all ${insight.data.category} insights`}
+    >
+      {insight.data.category}<b aria-hidden="true">↗</b>
+    </a>
     <h1>{insight.data.title}</h1>
     <div class="article-meta" aria-label="Article details">
       <p><strong>{insight.data.authorName}</strong><span>{insight.data.authorRole}</span></p>
@@ -47,3 +59,9 @@ const articleSchema = {
   <CtaBand />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(articleSchema)} />
 </BaseLayout>
+
+<style>
+  .article-category-link { transition: color .18s ease; }
+  .article-category-link b { color: var(--cobalt); font-size: .8rem; }
+  .article-category-link:hover { color: var(--signal-red); }
+</style>

@@ -317,7 +317,6 @@ button { color: inherit; }
 .schedule-card .schedule-note { margin: .9rem 0 0; font-size: .63rem; }
 .insight-grid { padding: var(--pad); display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--line); }
 .insight-card { background: var(--white); min-height: 430px; padding: 2rem; display: flex; flex-direction: column; }
-.insight-card > span { color: var(--cobalt); font-size: .62rem; text-transform: uppercase; letter-spacing: .12em; }
 .insight-card h2 { font: 500 clamp(1.8rem, 3vw, 3rem)/1 var(--display); letter-spacing: -.045em; margin: auto 0 1rem; }
 .insight-card p { color: var(--muted); font-size: .78rem; }
 .legal { max-width: 900px; margin: 0 auto; padding: clamp(5rem, 10vw, 9rem) var(--pad); }
@@ -542,7 +541,7 @@ body { background: var(--paper); }
 .schedule-card { border: 2px solid var(--ink); box-shadow: 10px 10px 0 var(--metal); }
 .insight-grid { gap: 2px; background: var(--ink); }
 .insight-card { border: 0; }
-.insight-card > span, .approved-metrics strong { color: var(--cobalt); }
+.approved-metrics strong { color: var(--cobalt); }
 
 .whatsapp-float {
   position: fixed;

@@ -24,6 +24,7 @@ This guide shows how to audit the path from impression to qualified outcome befo
 - [The short answer](#the-short-answer)
 - [Map the campaign as one operating system](#map-the-campaign-as-one-operating-system)
 - [Five handoffs to fix before scaling](#five-handoffs-to-fix-before-scaling)
+- [Create a scale decision scorecard](#create-a-scale-decision-scorecard)
 - [A practical readiness check](#a-practical-readiness-check)
 - [What marketers often get wrong](#what-marketers-often-get-wrong)
 - [Frequently asked questions](#frequently-asked-questions)
@@ -94,6 +95,22 @@ The advertising platform can see the events you send it. It cannot automatically
 Create a small set of mutually understood outcomes: for example, new, contacted, qualified, out of scope, duplicate, won and lost. Google describes qualified and converted lead goals for outcomes assessed in a CRM or internal system in its [offline conversion guidance](https://support.google.com/google-ads/answer/10029210?hl=en).
 
 The definitions matter more than the software. If one salesperson marks “qualified” after a reply and another waits for a confirmed budget, the report cannot support a reliable scaling decision.
+
+## Create a scale decision scorecard
+
+A scorecard turns a vague “the campaign looks ready” conversation into a repeatable decision. Rate each area from 0 to 2, where 0 means missing or untested, 1 means partially working, and 2 means working consistently:
+
+| Area | What a score of 2 looks like |
+| --- | --- |
+| Promise continuity | The audience, offer, conditions and action remain recognisable from ad to page. |
+| Lead capture | Every important form or message path has passed a controlled test on desktop and mobile. |
+| Routing and response | The correct owner receives useful context and responds within an agreed standard. |
+| Qualification | The team uses the same definitions and records rejection reasons consistently. |
+| Outcome feedback | Qualified and commercial outcomes can be reconciled with the campaign source. |
+
+The total is a prioritisation aid, not a universal benchmark. A serious failure in consent, lead delivery or ownership should block scaling even when other areas score well.
+
+When the foundations are reliable, consider whether privacy-safe first-party data can improve measurement. Google's [enhanced conversions for leads checklist](https://support.google.com/google-ads/answer/16782203?hl=en) covers prerequisites such as accurate conversion data, customer-data policies, secure hashing and suitable lead identifiers. Treat implementation as a data-governance project as well as a tracking task.
 
 ## A practical readiness check
 

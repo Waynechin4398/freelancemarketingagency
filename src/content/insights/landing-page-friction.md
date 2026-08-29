@@ -25,6 +25,7 @@ This guide covers five friction points that can be checked without pretending th
 - [3. Proof lacks context](#3-proof-lacks-context)
 - [4. The form asks before trust is built](#4-the-form-asks-before-trust-is-built)
 - [5. Mobile comparison is harder than desktop](#5-mobile-comparison-is-harder-than-desktop)
+- [Use page-experience metrics as diagnostics](#use-page-experience-metrics-as-diagnostics)
 - [A practical landing-page review](#a-practical-landing-page-review)
 - [Frequently asked questions](#frequently-asked-questions)
 
@@ -106,6 +107,20 @@ Test on a real phone and check:
 - the page loads acceptably on a normal mobile connection.
 
 Google Ads provides a [landing-page report](https://support.google.com/google-ads/answer/7543502?hl=en) for reviewing landing-page performance and mobile optimisation signals. Use it as one diagnostic input, then validate the actual journey and qualified outcomes.
+
+## Use page-experience metrics as diagnostics
+
+A visitor cannot evaluate the offer comfortably if the main content arrives late, the page ignores an interaction or the layout moves while they are trying to read. Core Web Vitals give those technical problems shared definitions.
+
+Google's current [Core Web Vitals guidance](https://web.dev/articles/vitals?hl=en) recommends evaluating the 75th percentile of page loads, separated by mobile and desktop. A “good” result is:
+
+- Largest Contentful Paint (LCP) at or below 2.5 seconds;
+- Interaction to Next Paint (INP) at or below 200 milliseconds; and
+- Cumulative Layout Shift (CLS) at or below 0.1.
+
+These thresholds are not conversion guarantees. They help distinguish technical friction from message, proof or offer problems. Review both field data—which reflects real visits when enough data exists—and controlled tests that help reproduce a specific issue.
+
+Keep the diagnosis connected to the customer journey. A slow hero image may delay the promise. An unresponsive menu may hide essential proof. A moving form can cause an accidental tap. Record the user-facing consequence alongside the technical metric so the fix is prioritised by impact, not only by a score.
 
 ## A practical landing-page review
 

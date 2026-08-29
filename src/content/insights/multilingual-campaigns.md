@@ -22,6 +22,7 @@ A reliable multilingual campaign keeps the business strategy consistent while gi
 - [The short answer](#the-short-answer)
 - [Keep one strategic source of truth](#keep-one-strategic-source-of-truth)
 - [Adapt meaning, not just words](#adapt-meaning-not-just-words)
+- [Turn the brief into a localisation matrix](#turn-the-brief-into-a-localisation-matrix)
 - [Localise the whole journey](#localise-the-whole-journey)
 - [Review with native fluency and market context](#review-with-native-fluency-and-market-context)
 - [Measure without hiding market differences](#measure-without-hiding-market-differences)
@@ -62,6 +63,23 @@ Ask the local reviewer to work from the campaign objective and audience problemâ
 For search campaigns, research how people actually express the need in each language. Do not assume a translated keyword has equivalent volume, commercial intent or ambiguity.
 
 Keep a terminology list for product names, regulated terms, service categories and words that must remain in English. Record the reason for each decision so later campaigns do not restart the same debate.
+
+## Turn the brief into a localisation matrix
+
+Before producing ads, place the main decisions for each language in one working matrix. The purpose is not to force identical copy. It is to make deliberate differences visible and reviewable.
+
+| Decision | Shared rule | Language-level decision |
+| --- | --- | --- |
+| Audience | Same qualification boundary | Natural description of the audience and problem |
+| Offer | Same price, eligibility and fulfilment conditions | Order and amount of explanation |
+| Claim | Same approved evidence and limitation | Idiom, tone and sentence structure |
+| Search intent | Same business objective | Actual queries, ambiguity and commercial language |
+| Destination | Same intended action | Page URL, metadata, form labels and confirmation copy |
+| Follow-up | Same ownership and outcome definitions | Available response language and opening message |
+
+Add columns for reviewer, approval status and unresolved risk. If one version needs a different promotion, proof point or qualification rule, treat it as a campaign decision that requires approvalâ€”not as a translator's silent adjustment.
+
+This matrix also improves learning. When a result differs by language, the team can see whether the offer stayed comparable or whether the destination, creative format, targeting or sales coverage also changed.
 
 ## Localise the whole journey
 

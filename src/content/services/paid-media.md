@@ -59,8 +59,8 @@ faqs:
 ctaTitle: Before increasing spend, find out what the campaign is really learning.
 ctaCopy: Bring your current ad account, funnel or launch goal. I’ll help identify whether the next move belongs in media, creative, the landing page or follow-up.
 related:
-  - sweetie-lending
-  - singapore-luxury-homes
+  - propertylab-webinar-acquisition
+  - kamidental-patient-acquisition
 order: 3
 draft: false
 ---

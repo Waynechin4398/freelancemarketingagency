@@ -60,7 +60,7 @@ ctaTitle: If a lead can disappear, the workflow is not finished.
 ctaCopy: Walk me through what happens after an enquiry. I’ll help map the gaps, ownership and first automation worth implementing.
 related:
   - singapore-luxury-homes
-  - sweetie-lending
+  - chatdaddy-saas-growth
 order: 6
 draft: false
 ---

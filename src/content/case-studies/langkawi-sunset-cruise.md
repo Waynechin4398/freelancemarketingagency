@@ -17,7 +17,7 @@ created:
 insight: In tourism, clarity does not reduce emotion—it creates the confidence to book.
 palette: sunset
 featured: true
-order: 2
+order: 6
 approvedMetrics: []
 draft: false
 ---

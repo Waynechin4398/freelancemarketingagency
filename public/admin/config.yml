@@ -116,9 +116,12 @@ collections:
     fields:
       - { label: Client, name: client, widget: string }
       - { label: Project label, name: label, widget: string }
+      - { label: Role, name: role, widget: string, required: false }
+      - { label: Project period, name: period, widget: string, required: false }
       - { label: Industry, name: industry, widget: string }
       - { label: Objective, name: objective, widget: string }
       - { label: Services, name: services, widget: list, field: { label: Service, name: service, widget: string } }
+      - { label: Tools and platforms, name: tools, widget: list, required: false, field: { label: Tool, name: tool, widget: string } }
       - { label: Summary, name: summary, widget: text }
       - { label: Challenge, name: challenge, widget: text }
       - { label: Strategy, name: strategy, widget: text }
@@ -137,6 +140,7 @@ collections:
           - { label: Label, name: label, widget: string }
           - { label: Measurement period, name: period, widget: string }
           - { label: Evidence reference, name: evidence, widget: string }
+      - { label: Public result context, name: resultContext, widget: text, required: false, hint: Explain the source and measurement limits of any published results. }
       - { label: Draft, name: draft, widget: boolean, default: true }
       - { label: Body, name: body, widget: markdown, required: false }
 

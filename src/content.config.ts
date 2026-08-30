@@ -39,9 +39,12 @@ const caseStudies = defineCollection({
   schema: z.object({
     client: z.string(),
     label: z.string(),
+    role: z.string().optional(),
+    period: z.string().optional(),
     industry: z.string(),
     objective: z.string(),
     services: z.array(z.string()),
+    tools: z.array(z.string()).default([]),
     summary: z.string(),
     challenge: z.string(),
     strategy: z.string(),
@@ -56,6 +59,7 @@ const caseStudies = defineCollection({
       period: z.string(),
       evidence: z.string(),
     })).default([]),
+    resultContext: z.string().optional(),
     draft: z.boolean().default(false),
   }),
 });

@@ -59,8 +59,8 @@ faqs:
 ctaTitle: Stop feeding the calendar. Start building brand memory.
 ctaCopy: Share your current channels, audience and content bottleneck. I’ll help turn scattered posting into a system your team can sustain.
 related:
+  - chatdaddy-saas-growth
   - singapore-luxury-homes
-  - langkawi-sunset-cruise
 order: 4
 draft: false
 ---

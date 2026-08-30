@@ -9,15 +9,30 @@ export async function getStaticPaths() {
   return projects.map((project) => ({ params: { slug: project.id }, props: { project, allProjects: projects } }));
 }
 const { project, allProjects } = Astro.props;
-const related = allProjects.filter((item: typeof project) => item.id !== project.id).map((item: typeof project) => item.id).slice(0, 2);
+const related = allProjects
+  .filter((item: typeof project) => item.id !== project.id)
+  .sort((a: typeof project, b: typeof project) => {
+    const aMatches = a.data.services.filter((service: string) => project.data.services.includes(service)).length;
+    const bMatches = b.data.services.filter((service: string) => project.data.services.includes(service)).length;
+    return bMatches - aMatches || a.data.order - b.data.order;
+  })
+  .map((item: typeof project) => item.id)
+  .slice(0, 2);
 ---
 <BaseLayout title={project.data.client} description={project.data.summary}>
   <section class="case-hero">
     <div>
       <span class="eyebrow light">{project.data.industry} · {project.data.label}</span>
-      <h1>{project.data.client}</h1>
+      <h1 class:list={{ "long-title": project.data.client.length > 24 }}>{project.data.client}</h1>
       <p>{project.data.summary}</p>
       <div class="case-meta">{project.data.services.map((service: string) => <span>{service}</span>)}</div>
+      {(project.data.role || project.data.period) && (
+        <dl class="case-facts">
+          {project.data.role && <div><dt>Role</dt><dd>{project.data.role}</dd></div>}
+          {project.data.period && <div><dt>Period</dt><dd>{project.data.period}</dd></div>}
+          <div><dt>Objective</dt><dd>{project.data.objective}</dd></div>
+        </dl>
+      )}
     </div>
     <div class:list={["case-art", project.data.palette]} aria-label={`Abstract project system visual for ${project.data.client}`}></div>
   </section>
@@ -34,8 +49,14 @@ const related = allProjects.filter((item: typeof project) => item.id !== project
       <span>03 · What was created</span>
       <div>
         <div class="created-grid">{project.data.created.map((item: string, index: number) => <div><span>0{index + 1}</span><strong>{item}</strong></div>)}</div>
+        {project.data.tools.length > 0 && (
+          <div class="case-tools"><span>Tools & platforms</span><div>{project.data.tools.map((tool: string) => <b>{tool}</b>)}</div></div>
+        )}
         {project.data.approvedMetrics.length > 0 ? (
-          <div class="approved-metrics">{project.data.approvedMetrics.map((metric: {value: string; label: string; period: string}) => <div><strong>{metric.value}</strong><span>{metric.label}</span><small>{metric.period}</small></div>)}</div>
+          <>
+            <div class="approved-metrics">{project.data.approvedMetrics.map((metric: {value: string; label: string; period: string}) => <div><strong>{metric.value}</strong><span>{metric.label}</span><small>{metric.period}</small></div>)}</div>
+            {project.data.resultContext && <p class="result-context"><strong>Result context</strong>{project.data.resultContext}</p>}
+          </>
         ) : (
           <p class="disclosure">No unsupported performance metric is published in this case study. Screenshots, measurement periods and approved results can be added after source evidence and client permission are supplied.</p>
         )}
@@ -53,3 +74,26 @@ const related = allProjects.filter((item: typeof project) => item.id !== project
   </section>
   <CtaBand />
 </BaseLayout>
+
+<style>
+  .case-facts { max-width: 760px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 2rem 0 0; border-block: 1px solid #34373e; }
+  .case-hero h1.long-title { max-width: 10ch; font-size: clamp(3.2rem, 6.4vw, 7rem); }
+  .story-row > div { min-width: 0; }
+  .case-facts div { padding: 1rem 1rem 1rem 0; }
+  .case-facts dt { color: #737780; font-size: .54rem; text-transform: uppercase; letter-spacing: .1em; }
+  .case-facts dd { margin: .35rem 0 0; color: #d8dae0; font-size: .65rem; line-height: 1.45; }
+  .case-tools { margin-top: 2rem; padding: 1.15rem 0; border-block: 1px solid var(--line); display: grid; grid-template-columns: .55fr 1.45fr; gap: 2rem; }
+  .case-tools > span { color: var(--muted); font-size: .58rem; text-transform: uppercase; letter-spacing: .1em; }
+  .case-tools > div { display: flex; flex-wrap: wrap; gap: .45rem; }
+  .case-tools b { padding: .46rem .6rem; border: 1px solid var(--line); font-size: .56rem; letter-spacing: .04em; }
+  .result-context { margin-top: 0 !important; padding: 1rem 1.2rem; background: #eceef2; border-left: 2px solid var(--cobalt); font-size: .68rem; }
+  .result-context strong { display: block; margin-bottom: .35rem; color: var(--ink); font-size: .57rem; text-transform: uppercase; letter-spacing: .1em; }
+  @media (max-width: 620px) {
+    .case-hero h1, .case-hero h1.long-title { max-width: 100%; font-size: clamp(2.8rem, 13vw, 4.4rem); }
+    .case-facts { grid-template-columns: 1fr; }
+    .case-facts div { border-bottom: 1px solid #34373e; }
+    .case-facts div:last-child { border-bottom: 0; }
+    .case-tools { grid-template-columns: 1fr; gap: 1rem; }
+    .approved-metrics { grid-template-columns: 1fr; }
+  }
+</style>

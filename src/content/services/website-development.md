@@ -59,8 +59,8 @@ faqs:
 ctaTitle: Your website should make the next decision easier.
 ctaCopy: Bring your current website, offer or launch plan to a focused 30-minute conversation. I’ll help identify the clearest improvement to make first.
 related:
-  - singapore-luxury-homes
-  - langkawi-sunset-cruise
+  - summercharter-summermarine
+  - kamidental-patient-acquisition
 order: 1
 draft: false
 ---

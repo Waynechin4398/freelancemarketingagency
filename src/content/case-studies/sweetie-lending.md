@@ -18,7 +18,7 @@ created:
 insight: Trust grows when the campaign, page and follow-up all make the same promise.
 palette: lime
 featured: true
-order: 3
+order: 7
 approvedMetrics: []
 draft: false
 ---

@@ -59,8 +59,8 @@ faqs:
 ctaTitle: Do not send another campaign to a page that leaks intent.
 ctaCopy: Share the campaign, audience and offer. I’ll help you identify whether the biggest constraint is the message, page experience, form or follow-up.
 related:
-  - sweetie-lending
-  - singapore-luxury-homes
+  - propertylab-webinar-acquisition
+  - chatdaddy-saas-growth
 order: 2
 draft: false
 ---

@@ -81,8 +81,15 @@
     display: inline-block;
     overflow: hidden;
     vertical-align: -.14em;
-    padding-block: .16em;
-    margin-block: -.16em;
+    /*
+     * Keep a transparent gutter around the glyphs while the word is clipped.
+     * Tight display line-height, negative tracking and italic/rounded glyphs can
+     * all paint outside their typographic advance box (notably g, y and the
+     * final character). Matching negative margins preserve the original text
+     * flow without letting the reveal mask crop that painted area.
+     */
+    padding: .18em .14em .32em;
+    margin: -.18em -.14em -.32em;
   }
 
   .stagger-text-segment {
@@ -93,8 +100,6 @@
   .stagger-text .stagger-text-segment {
     width: auto;
     height: auto;
-    margin: 0;
-    padding: 0;
     border: 0;
     background-color: transparent;
     font: inherit;
@@ -103,6 +108,11 @@
     line-height: inherit;
     text-decoration: inherit;
     text-transform: inherit;
+  }
+
+  .stagger-text .stagger-text-segment {
+    margin: 0;
+    padding: 0;
   }
 
   .stagger-text[data-stagger-text="ready"] .stagger-text-segment {

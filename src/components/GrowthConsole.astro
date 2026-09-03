@@ -22,7 +22,9 @@
     Social: ["Brand memory", "Idea → rhythm", "Repeatable formats that compound.", "pink"],
     Email: ["Lifecycle", "Lead → follow-up", "Timely messages tied to intent.", "amber"],
   };
-  document.querySelectorAll("[data-growth-console]").forEach((consoleElement) => {
+  const initializeGrowthConsoles = () => document.querySelectorAll<HTMLElement>("[data-growth-console]").forEach((consoleElement) => {
+    if (consoleElement.dataset.consoleReady === "true") return;
+    consoleElement.dataset.consoleReady = "true";
     const tabs = Array.from(consoleElement.querySelectorAll<HTMLButtonElement>("[data-channel]"));
     const activate = (button: HTMLButtonElement) => {
         const channel = button.dataset.channel as keyof typeof channelData;
@@ -31,8 +33,10 @@
           item.setAttribute("aria-selected", String(item === button));
           item.tabIndex = item === button ? 0 : -1;
         });
-        const stage = consoleElement.querySelector("[data-console-stage]");
-        if (stage) stage.className = `console-stage ${tone}`;
+        const stage = consoleElement.querySelector<HTMLElement>("[data-console-stage]");
+        stage?.classList.add("is-switching");
+        window.setTimeout(() => {
+          if (stage) stage.className = `console-stage ${tone}`;
         const labelEl = consoleElement.querySelector("[data-console-label]");
         const valueEl = consoleElement.querySelector("[data-console-value]");
         const detailEl = consoleElement.querySelector("[data-console-detail]");
@@ -40,7 +44,8 @@
         if (labelEl) labelEl.textContent = label;
         if (valueEl) valueEl.textContent = value;
         if (detailEl) detailEl.textContent = detail;
-        if (moduleEl) moduleEl.textContent = `Module ${String(tabs.indexOf(button) + 1).padStart(2, "0")} / 06`;
+          if (moduleEl) moduleEl.textContent = `Module ${String(tabs.indexOf(button) + 1).padStart(2, "0")} / 06`;
+        }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 190);
     };
     tabs.forEach((button, index) => {
       button.addEventListener("click", () => activate(button));
@@ -53,4 +58,6 @@
       });
     });
   });
+  document.addEventListener("astro:page-load", initializeGrowthConsoles);
+  if (document.readyState !== "loading") initializeGrowthConsoles();
 </script>

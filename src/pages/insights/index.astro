@@ -89,30 +89,44 @@ const dateFormatter = new Intl.DateTimeFormat("en-MY", {
 </BaseLayout>
 
 <script>
-  const browser = document.querySelector<HTMLElement>("[data-insights-browser]");
-
-  if (browser) {
+  const initializeInsightFilters = () => {
+    const browser = document.querySelector<HTMLElement>("[data-insights-browser]");
+    if (!browser || browser.dataset.filterReady === "true") return;
+    browser.dataset.filterReady = "true";
     const buttons = [...browser.querySelectorAll<HTMLButtonElement>("[data-insight-filter]")];
     const cards = [...browser.querySelectorAll<HTMLElement>("[data-insight-card]")];
     const grid = browser.querySelector<HTMLElement>("[data-insight-grid]");
     const status = browser.querySelector<HTMLElement>("[data-filter-status]");
     const validFilters = new Set(buttons.map((button) => button.dataset.insightFilter));
 
-    const applyFilter = (requestedFilter: string, updateHistory = false) => {
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const applyFilter = async (requestedFilter: string, updateHistory = false) => {
       const filter = validFilters.has(requestedFilter) ? requestedFilter : "all";
       const visibleCards = cards.filter((card) => filter === "all" || card.dataset.category === filter);
       const activeButton = buttons.find((button) => button.dataset.insightFilter === filter);
       const activeLabel = activeButton?.querySelector("span")?.textContent?.trim() ?? "All topics";
 
+      const outgoing = cards.filter((card) => !card.hidden && !visibleCards.includes(card));
+      if (updateHistory && !reduced.matches) await Promise.allSettled(outgoing.map((card) => card.animate([{ opacity: 1, transform: "scale(1)" }, { opacity: 0, transform: "scale(.96)" }], { duration: 150 }).finished));
+      const first = new Map(cards.filter((card) => !card.hidden).map((card) => [card, card.getBoundingClientRect()]));
       cards.forEach((card) => {
         const visible = visibleCards.includes(card);
         card.toggleAttribute("hidden", !visible);
         card.classList.remove("is-lead");
       });
       visibleCards[0]?.classList.add("is-lead");
+      if (updateHistory && !reduced.matches) visibleCards.forEach((card, index) => {
+        const before = first.get(card);
+        const after = card.getBoundingClientRect();
+        const dx = before ? before.left - after.left : 0;
+        const dy = before ? before.top - after.top : 18;
+        card.animate([{ opacity: before ? 1 : 0, transform: `translate(${dx}px,${dy}px)` }, { opacity: 1, transform: "none" }], { duration: 420, delay: index * 40, easing: "cubic-bezier(.22,1,.36,1)" });
+      });
 
       buttons.forEach((button) => {
-        button.setAttribute("aria-pressed", String(button.dataset.insightFilter === filter));
+        const selected = button.dataset.insightFilter === filter;
+        button.setAttribute("aria-pressed", String(selected));
+        button.classList.toggle("active", selected);
       });
 
       if (grid) grid.dataset.visibleCount = String(visibleCards.length);
@@ -135,15 +149,17 @@ const dateFormatter = new Intl.DateTimeFormat("en-MY", {
     };
 
     buttons.forEach((button) => {
-      button.addEventListener("click", () => applyFilter(button.dataset.insightFilter ?? "all", true));
+      button.addEventListener("click", () => void applyFilter(button.dataset.insightFilter ?? "all", true));
     });
 
     window.addEventListener("popstate", () => {
-      applyFilter(new URL(window.location.href).searchParams.get("category") ?? "all");
+      void applyFilter(new URL(window.location.href).searchParams.get("category") ?? "all");
     });
 
-    applyFilter(new URL(window.location.href).searchParams.get("category") ?? "all");
-  }
+    void applyFilter(new URL(window.location.href).searchParams.get("category") ?? "all");
+  };
+  document.addEventListener("astro:page-load", initializeInsightFilters);
+  if (document.readyState !== "loading") initializeInsightFilters();
 </script>
 
 <style>

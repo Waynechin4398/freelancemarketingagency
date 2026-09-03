@@ -1,0 +1,370 @@
+<div class="scroll-progress" data-scroll-progress aria-hidden="true"></div>
+
+<script>
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+  let pageController = new AbortController();
+  let revealObserver: IntersectionObserver | null = null;
+  let countObserver: IntersectionObserver | null = null;
+  let firstPageLoad = true;
+  let lastInitializedBody: HTMLElement | null = null;
+  let lastScrollY = window.scrollY;
+  let scrollFrame = 0;
+
+  const motionSelectors: Array<[string, string]> = [
+    [".page-hero > p, .hero-copy > p, .article-meta", "fade-up"],
+    [".work-proof > div, .constraint-grid > a, .service-list > a, .language-band > div", "fade-up"],
+    [".related-card, .project-card, .insight-card, .principle-grid > article", "fade-up"],
+    [".story-row, .service-section-heading, .detail-grid, .archive-list > article", "fade-up"],
+    [".legal h2, .legal-notice", "fade-up"],
+    [".pain-grid > article, .solution-grid > article, .fit-list > li, .detail-list > li", "fade-up"],
+    [".case-art, .portrait-stage", "clip-up"],
+    [".section-intro, .service-index-intro, .insights-browser-head", "fade-in"],
+  ];
+
+  const revealImmediately = (element: HTMLElement) => {
+    element.classList.remove("is-reveal-pending");
+    element.classList.add("revealed");
+  };
+
+  const setupReveals = () => {
+    const revealTargets = new Map<Element, HTMLElement[]>();
+    motionSelectors.forEach(([selector, variant]) => {
+      document.querySelectorAll<HTMLElement>(selector).forEach((element, index) => {
+        if (!element.dataset.reveal) element.dataset.reveal = variant;
+        if (!element.dataset.revealDelay) element.dataset.revealDelay = String((index % 6) * 60);
+      });
+    });
+
+    const elements = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
+    if (reduceMotion.matches || !("IntersectionObserver" in window)) {
+      elements.forEach(revealImmediately);
+      return;
+    }
+
+    revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        (revealTargets.get(entry.target) ?? [entry.target as HTMLElement]).forEach(revealImmediately);
+        revealObserver?.unobserve(entry.target);
+      });
+    }, { rootMargin: "0px 0px -12% 0px", threshold: 0.15 });
+
+    elements.forEach((element) => {
+      element.style.setProperty("--reveal-delay", `${element.dataset.revealDelay ?? 0}ms`);
+      element.classList.add("is-reveal-pending");
+      const observed = element.dataset.reveal === "clip-up" ? element.parentElement ?? element : element;
+      revealTargets.set(observed, [...(revealTargets.get(observed) ?? []), element]);
+      revealObserver?.observe(observed);
+    });
+  };
+
+  const setupCounters = () => {
+    const counters = Array.from(document.querySelectorAll<HTMLElement>("[data-count-to]"));
+    if (!counters.length || reduceMotion.matches || !("IntersectionObserver" in window)) return;
+
+    countObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const element = entry.target as HTMLElement;
+        const raw = element.dataset.countTo ?? element.textContent ?? "";
+        const match = raw.match(/^([^0-9]*)([0-9][0-9,.]*)(.*)$/);
+        if (!match) return;
+        const [, prefix, numeric, suffix] = match;
+        const target = Number(numeric.replaceAll(",", ""));
+        if (!Number.isFinite(target)) return;
+        const start = performance.now();
+        const duration = 1200;
+        const decimals = numeric.includes(".") ? numeric.split(".")[1].length : 0;
+        const tick = (now: number) => {
+          const progress = Math.min((now - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 4);
+          const value = target * eased;
+          element.textContent = `${prefix}${value.toLocaleString("en-MY", { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}${suffix}`;
+          if (progress < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+        countObserver?.unobserve(element);
+      });
+    }, { threshold: 0.55 });
+    counters.forEach((counter) => countObserver?.observe(counter));
+  };
+
+  const setupMagneticButtons = (signal: AbortSignal) => {
+    if (!finePointer.matches || reduceMotion.matches) return;
+    document.querySelectorAll<HTMLElement>(".button.primary, .nav-cta, .project-brief button[type='submit']").forEach((button) => {
+      let frame = 0;
+      let targetX = 0;
+      let targetY = 0;
+      let currentX = 0;
+      let currentY = 0;
+      const render = () => {
+        currentX += (targetX - currentX) * 0.18;
+        currentY += (targetY - currentY) * 0.18;
+        button.style.setProperty("--magnetic-x", `${currentX.toFixed(2)}px`);
+        button.style.setProperty("--magnetic-y", `${currentY.toFixed(2)}px`);
+        if (Math.abs(targetX - currentX) + Math.abs(targetY - currentY) > 0.05) frame = requestAnimationFrame(render);
+        else frame = 0;
+      };
+      const aim = (event: PointerEvent) => {
+        const rect = button.getBoundingClientRect();
+        const dx = event.clientX - (rect.left + rect.width / 2);
+        const dy = event.clientY - (rect.top + rect.height / 2);
+        const distance = Math.hypot(dx, dy);
+        const pull = Math.max(0, 1 - distance / Math.max(rect.width / 2 + 40, 80));
+        targetX = Math.max(-8, Math.min(8, dx * pull * 0.16));
+        targetY = Math.max(-8, Math.min(8, dy * pull * 0.16));
+        if (!frame) frame = requestAnimationFrame(render);
+      };
+      const release = () => {
+        targetX = 0;
+        targetY = 0;
+        if (!frame) frame = requestAnimationFrame(render);
+      };
+      button.addEventListener("pointermove", aim, { signal, passive: true });
+      button.addEventListener("pointerleave", release, { signal, passive: true });
+    });
+  };
+
+  const setupFilterPills = (signal: AbortSignal) => {
+    document.querySelectorAll<HTMLElement>(".filters, .insight-filters").forEach((filters) => {
+      let pill = filters.querySelector<HTMLElement>(".motion-filter-pill");
+      if (!pill) {
+        pill = document.createElement("i");
+        pill.className = "motion-filter-pill";
+        pill.setAttribute("aria-hidden", "true");
+        filters.prepend(pill);
+      }
+      const update = () => {
+        const active = filters.querySelector<HTMLElement>("button.active");
+        if (!active || !pill) return;
+        pill.style.setProperty("--pill-x", `${active.offsetLeft}px`);
+        pill.style.setProperty("--pill-y", `${active.offsetTop}px`);
+        pill.style.setProperty("--pill-w", `${active.offsetWidth}px`);
+        pill.style.setProperty("--pill-h", `${active.offsetHeight}px`);
+      };
+      update();
+      filters.addEventListener("click", () => requestAnimationFrame(update), { signal });
+      window.addEventListener("resize", update, { signal, passive: true });
+    });
+  };
+
+  const setupLinks = () => {
+    document.querySelectorAll<HTMLAnchorElement>("main a, .site-footer a").forEach((link) => {
+      if (link.matches(".button, .project-card, .related-card, .insight-card, .service-list a, .constraint-grid a, .service-card a")) return;
+      if (link.children.length <= 2) link.classList.add("motion-link");
+    });
+  };
+
+  const setupFaqs = (signal: AbortSignal) => {
+    document.querySelectorAll<HTMLDetailsElement>(".faq-list details").forEach((details) => {
+      const closeItem = (item: HTMLDetailsElement) => {
+        if (!item.open) return;
+        if (reduceMotion.matches) { item.open = false; return; }
+        item.classList.add("is-closing");
+        window.setTimeout(() => {
+          item.open = false;
+          item.classList.remove("is-closing");
+        }, 350);
+      };
+      details.querySelector("summary")?.addEventListener("click", (event) => {
+        event.preventDefault();
+        if (details.open) { closeItem(details); return; }
+        details.closest(".faq-list")?.querySelectorAll<HTMLDetailsElement>("details[open]").forEach((item) => closeItem(item));
+        details.open = true;
+      }, { signal });
+    });
+  };
+
+  const setupForm = (signal: AbortSignal) => {
+    const form = document.querySelector<HTMLFormElement>("[data-project-brief]");
+    if (!form) return;
+    const fields = Array.from(form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>("input, textarea"));
+    const syncField = (field: HTMLInputElement | HTMLTextAreaElement) => field.closest(".form-field")?.classList.toggle("has-value", Boolean(field.value.trim()));
+    fields.forEach((field) => {
+      syncField(field);
+      field.addEventListener("input", () => {
+        syncField(field);
+        field.closest(".form-field")?.classList.remove("is-invalid");
+        field.removeAttribute("aria-invalid");
+        const wrapper = field.closest(".form-field");
+        const errorId = wrapper?.querySelector<HTMLElement>(".field-error")?.id;
+        wrapper?.querySelector(".field-error")?.remove();
+        if (errorId) {
+          const describedBy = (field.getAttribute("aria-describedby") ?? "").split(" ").filter((id) => id && id !== errorId).join(" ");
+          if (describedBy) field.setAttribute("aria-describedby", describedBy);
+          else field.removeAttribute("aria-describedby");
+        }
+      }, { signal });
+      field.addEventListener("invalid", () => {
+        const wrapper = field.closest<HTMLElement>(".form-field");
+        if (!wrapper) return;
+        wrapper.classList.remove("is-invalid");
+        void wrapper.offsetWidth;
+        wrapper.classList.add("is-invalid");
+        field.setAttribute("aria-invalid", "true");
+        let error = wrapper.querySelector<HTMLElement>(".field-error");
+        if (!error) {
+          error = document.createElement("p");
+          error.className = "field-error";
+          error.id = `${field.id}-error`;
+          wrapper.append(error);
+        }
+        error.textContent = field.validationMessage;
+        field.setAttribute("aria-describedby", [field.getAttribute("aria-describedby"), error.id].filter(Boolean).join(" "));
+      }, { signal });
+    });
+    form.addEventListener("submit", () => {
+      const button = form.querySelector<HTMLButtonElement>("button[type='submit']");
+      if (!button || !form.checkValidity()) return;
+      button.classList.add("is-loading");
+      window.setTimeout(() => button.classList.remove("is-loading"), 900);
+    }, { signal, capture: true });
+  };
+
+  const setupMenu = (signal: AbortSignal) => {
+    const toggle = document.querySelector<HTMLButtonElement>("[data-menu-toggle]");
+    const nav = document.querySelector<HTMLElement>("#mobile-nav");
+    if (!toggle || !nav) return;
+    const preview = nav.querySelector<HTMLElement>("[data-menu-preview]");
+    const close = (restoreFocus = false) => {
+      toggle.setAttribute("aria-expanded", "false");
+      toggle.textContent = "Menu";
+      nav.classList.remove("open");
+      nav.setAttribute("aria-hidden", "true");
+      nav.inert = true;
+      document.body.classList.remove("menu-open");
+      if (restoreFocus) toggle.focus();
+    };
+    const open = () => {
+      toggle.setAttribute("aria-expanded", "true");
+      toggle.textContent = "Close";
+      nav.classList.add("open");
+      nav.setAttribute("aria-hidden", "false");
+      nav.inert = false;
+      document.body.classList.add("menu-open");
+      window.setTimeout(() => nav.querySelector<HTMLAnchorElement>("a")?.focus(), reduceMotion.matches ? 0 : 420);
+    };
+    close();
+    toggle.addEventListener("click", () => toggle.getAttribute("aria-expanded") === "true" ? close(true) : open(), { signal });
+    nav.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => close(), { signal }));
+    nav.querySelectorAll<HTMLElement>("[data-menu-label]").forEach((link) => {
+      link.addEventListener("pointerenter", () => {
+        if (preview) preview.dataset.label = link.dataset.menuLabel ?? "Wayne Omni";
+      }, { signal, passive: true });
+    });
+    nav.addEventListener("pointermove", (event) => {
+      if (!finePointer.matches || !preview) return;
+      preview.style.setProperty("--preview-x", `${event.clientX}px`);
+      preview.style.setProperty("--preview-y", `${event.clientY}px`);
+    }, { signal, passive: true });
+    document.addEventListener("keydown", (event) => {
+      if (toggle.getAttribute("aria-expanded") !== "true") return;
+      if (event.key === "Escape") {
+        event.preventDefault();
+        close(true);
+        return;
+      }
+      if (event.key !== "Tab") return;
+      const focusable = Array.from(nav.querySelectorAll<HTMLElement>("a[href], button:not([disabled])"));
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    }, { signal });
+  };
+
+  const setupProgressiveLines = () => {
+    document.querySelectorAll<HTMLElement>(".funnel-flow, .detailed-process").forEach((element) => element.dataset.progressLine = "true");
+  };
+
+  const syncActiveNav = () => {
+    const path = window.location.pathname;
+    document.querySelectorAll<HTMLAnchorElement>(".site-header a[href]").forEach((link) => {
+      const target = new URL(link.href).pathname;
+      const current = target !== "/" && (path === target || path.startsWith(`${target}/`));
+      if (current) link.setAttribute("aria-current", "page");
+      else link.removeAttribute("aria-current");
+    });
+  };
+
+  const updateScrollMotion = () => {
+    scrollFrame = 0;
+    const y = window.scrollY;
+    const max = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
+    const progress = Math.min(Math.max(y / max, 0), 1);
+    document.querySelector<HTMLElement>("[data-scroll-progress]")?.style.setProperty("--scroll-progress", String(progress));
+    const header = document.querySelector<HTMLElement>(".site-header");
+    header?.classList.toggle("scrolled", y > 40);
+    header?.classList.toggle("header-hidden", y > lastScrollY && y > 150 && !document.body.classList.contains("menu-open"));
+    lastScrollY = y;
+    const allowTransform = finePointer.matches && !reduceMotion.matches;
+    const hero = document.querySelector<HTMLElement>(".personal-hero");
+    hero?.style.setProperty("--hero-parallax", `${allowTransform ? Math.min(y * 0.15, 90) : 0}px`);
+    document.querySelectorAll<HTMLElement>(".page-hero").forEach((element) => element.style.setProperty("--sphere-parallax", `${allowTransform ? Math.min(y * 0.1, 48) : 0}px`));
+    document.querySelector<HTMLElement>("[data-footer-drift]")?.style.setProperty("--footer-drift", `${allowTransform ? Math.max(-45, -progress * 45) : 0}px`);
+    document.querySelectorAll<HTMLElement>("[data-progress-line]").forEach((element) => {
+      const rect = element.getBoundingClientRect();
+      const local = Math.min(Math.max((window.innerHeight * 0.78 - rect.top) / Math.max(rect.height, 1), 0), 1);
+      element.style.setProperty("--line-progress", String(local));
+    });
+    document.querySelector<HTMLElement>("[data-scroll-indicator]")?.style.setProperty("--scroll-fade", String(Math.max(0, 1 - y / 120)));
+  };
+
+  const requestScrollUpdate = () => {
+    if (!scrollFrame) scrollFrame = requestAnimationFrame(updateScrollMotion);
+  };
+
+  const initializePage = () => {
+    if (lastInitializedBody === document.body) return;
+    lastInitializedBody = document.body;
+    pageController.abort();
+    revealObserver?.disconnect();
+    countObserver?.disconnect();
+    pageController = new AbortController();
+    const { signal } = pageController;
+    setupLinks();
+    setupReveals();
+    setupCounters();
+    setupMagneticButtons(signal);
+    setupFaqs(signal);
+    setupForm(signal);
+    setupMenu(signal);
+    setupFilterPills(signal);
+    setupProgressiveLines();
+    syncActiveNav();
+    requestScrollUpdate();
+    if (!firstPageLoad) {
+      const analyticsWindow = window as Window & { gtag?: (...args: unknown[]) => void };
+      analyticsWindow.gtag?.("event", "page_view", {
+        page_title: document.title,
+        page_location: window.location.href,
+        page_path: window.location.pathname + window.location.search,
+      });
+    }
+    firstPageLoad = false;
+  };
+
+  window.addEventListener("scroll", requestScrollUpdate, { passive: true });
+  window.addEventListener("resize", requestScrollUpdate, { passive: true });
+  document.addEventListener("astro:page-load", initializePage);
+
+  document.addEventListener("click", (event) => {
+    const clickedElement = event.target as Element | null;
+    const trackedLink = clickedElement?.closest<HTMLAnchorElement>("a[data-ga-event]");
+    if (!trackedLink) return;
+    const analyticsWindow = window as Window & { gtag?: (command: "event", eventName: string, parameters: Record<string, string>) => void };
+    const eventName = trackedLink.dataset.gaEvent;
+    if (!eventName || typeof analyticsWindow.gtag !== "function") return;
+    analyticsWindow.gtag("event", eventName, {
+      contact_method: trackedLink.dataset.gaMethod ?? "unknown",
+      cta_location: trackedLink.dataset.gaLocation ?? "unknown",
+      link_url: trackedLink.href,
+      link_text: trackedLink.textContent?.trim().replace(/\s+/g, " ") ?? "",
+      transport_type: "beacon",
+    });
+  });
+
+  if (document.readyState !== "loading") initializePage();
+</script>

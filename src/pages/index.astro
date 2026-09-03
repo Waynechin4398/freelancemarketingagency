@@ -26,23 +26,22 @@ const services = (await getCollection("services", ({ data }) => !data.draft)).so
         <a class="button ghost" href="/contact/#audit">Request a growth audit</a>
       </div>
     </div>
-    <div class="portrait-stage" aria-label="Portrait of Wayne">
+    <div class="portrait-stage" aria-label="Portrait of Wayne" data-reveal="clip-up">
       <span class="portrait-letter" aria-hidden="true">W</span>
       <span class="metal-disc" aria-hidden="true"></span>
       <span class="blue-plane" aria-hidden="true"></span>
-      <img src="/images/wayne-portrait.png" width="1080" height="1350" alt="Wayne, founder of Wayne Omni" fetchpriority="high" />
+      <img src="/images/wayne-portrait.webp" width="850" height="1063" alt="Wayne, founder of Wayne Omni" fetchpriority="high" />
       <div class="portrait-nameplate"><b>WAYNE</b><span>Strategy / Build / Growth</span></div>
       <div class="portrait-coordinates" aria-hidden="true"><span>MY · 03.14°N</span><span>101.69°E</span></div>
     </div>
-    <div class="hero-side-note"><span>Scroll to see the system</span><i></i></div>
+    <div class="hero-side-note" data-scroll-indicator><span>Scroll to see the system</span><i></i></div>
   </section>
 
-  <section class="proof-strip" aria-label="Capabilities">
-    <span>Build</span><i></i>
-    <span>Acquire</span><i></i>
-    <span>Engage</span><i></i>
-    <span>Automate</span><i></i>
-    <span>Measure</span>
+  <section class="proof-strip motion-marquee" aria-label="Capabilities">
+    <div class="motion-marquee-track">
+      <div class="motion-marquee-item"><span>Build</span><i></i><span>Acquire</span><i></i><span>Engage</span><i></i><span>Automate</span><i></i><span>Measure</span><i></i></div>
+      <div class="motion-marquee-item" aria-hidden="true"><span>Build</span><i></i><span>Acquire</span><i></i><span>Engage</span><i></i><span>Automate</span><i></i><span>Measure</span><i></i></div>
+    </div>
   </section>
 
   <section class="console-feature section dark-section">

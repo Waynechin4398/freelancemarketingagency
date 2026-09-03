@@ -18,6 +18,8 @@ const related = allProjects
   })
   .map((item: typeof project) => item.id)
   .slice(0, 2);
+const orderedProjects = [...allProjects].sort((a: typeof project, b: typeof project) => a.data.order - b.data.order);
+const nextProject = orderedProjects[(orderedProjects.findIndex((item: typeof project) => item.id === project.id) + 1) % orderedProjects.length];
 ---
 <BaseLayout title={project.data.client} description={project.data.summary}>
   <section class="case-hero">
@@ -54,7 +56,7 @@ const related = allProjects
         )}
         {project.data.approvedMetrics.length > 0 ? (
           <>
-            <div class="approved-metrics">{project.data.approvedMetrics.map((metric: {value: string; label: string; period: string}) => <div><strong>{metric.value}</strong><span>{metric.label}</span><small>{metric.period}</small></div>)}</div>
+            <div class="approved-metrics">{project.data.approvedMetrics.map((metric: {value: string; label: string; period: string}) => <div><strong data-count-to={metric.value}>{metric.value}</strong><span>{metric.label}</span><small>{metric.period}</small></div>)}</div>
             {project.data.resultContext && <p class="result-context"><strong>Result context</strong>{project.data.resultContext}</p>}
           </>
         ) : (
@@ -72,6 +74,9 @@ const related = allProjects
     <h2 class="large-section-title">Related work</h2>
     <RelatedWork slugs={related} />
   </section>
+  <a class="next-project-link" href={`/work/${nextProject.id}/`}>
+    <span>Next case study</span><strong>{nextProject.data.client}</strong><i aria-hidden="true">↗</i>
+  </a>
   <CtaBand />
 </BaseLayout>
 
@@ -88,6 +93,19 @@ const related = allProjects
   .case-tools b { padding: .46rem .6rem; border: 1px solid var(--line); font-size: .56rem; letter-spacing: .04em; }
   .result-context { margin-top: 0 !important; padding: 1rem 1.2rem; background: #eceef2; border-left: 2px solid var(--cobalt); font-size: .68rem; }
   .result-context strong { display: block; margin-bottom: .35rem; color: var(--ink); font-size: .57rem; text-transform: uppercase; letter-spacing: .1em; }
+  .next-project-link { min-height: 180px; padding: 2rem var(--pad); display: grid; grid-template-columns: .4fr 1fr auto; gap: 2rem; align-items: center; border-block: 2px solid var(--ink); overflow: hidden; position: relative; isolation: isolate; }
+  .next-project-link::before { content: ""; position: absolute; z-index: -1; inset: 0; background: var(--ink); transform: scaleX(0); transform-origin: 100% 50%; }
+  .next-project-link span { font-size: .62rem; text-transform: uppercase; letter-spacing: .12em; }
+  .next-project-link strong { font: 800 clamp(2rem, 4vw, 4.5rem)/.9 var(--display); letter-spacing: -.05em; }
+  .next-project-link i { color: var(--cobalt); font-style: normal; font-size: 1.6rem; }
+  @media (prefers-reduced-motion: no-preference) {
+    .next-project-link { transition: color var(--dur-med) linear; }
+    .next-project-link::before { transition: transform var(--dur-med) var(--ease-out); }
+    .next-project-link i { transition: transform var(--dur-med) var(--ease-spring); }
+    .next-project-link:hover { color: white; }
+    .next-project-link:hover::before { transform: scaleX(1); transform-origin: 0 50%; }
+    .next-project-link:hover i { transform: translate3d(4px,-4px,0); }
+  }
   @media (max-width: 620px) {
     .case-hero h1, .case-hero h1.long-title { max-width: 100%; font-size: clamp(2.8rem, 13vw, 4.4rem); }
     .case-facts { grid-template-columns: 1fr; }
@@ -95,5 +113,7 @@ const related = allProjects
     .case-facts div:last-child { border-bottom: 0; }
     .case-tools { grid-template-columns: 1fr; gap: 1rem; }
     .approved-metrics { grid-template-columns: 1fr; }
+    .next-project-link { grid-template-columns: 1fr auto; }
+    .next-project-link span { grid-column: 1 / -1; }
   }
 </style>

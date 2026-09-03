@@ -1,7 +1,5 @@
 <script>
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const targets = document.querySelectorAll<HTMLElement>("main h1, main h2, .site-footer h2");
-
   const segmentText = (element: HTMLElement) => {
     if (element.dataset.staggerText || reducedMotion.matches) return;
 
@@ -37,7 +35,7 @@
         mask.className = "stagger-text-mask";
         segment.className = "stagger-text-segment";
         segment.textContent = part;
-        segment.style.setProperty("--stagger-delay", `${Math.min(segmentIndex * 42, 546)}ms`);
+        segment.style.setProperty("--stagger-delay", `${Math.min(segmentIndex * 80, 720)}ms`);
         mask.append(segment);
         fragment.append(mask);
         segmentIndex += 1;
@@ -51,11 +49,17 @@
     element.classList.add("stagger-text");
   };
 
-  targets.forEach(segmentText);
-
-  if (reducedMotion.matches) {
-    targets.forEach((target) => target.dataset.staggerText = "reduced-motion");
-  } else if ("IntersectionObserver" in window) {
+  const initializeStaggeredText = () => {
+    const targets = document.querySelectorAll<HTMLElement>("main h1, main h2, .site-footer h2");
+    targets.forEach(segmentText);
+    if (reducedMotion.matches) {
+      targets.forEach((target) => target.dataset.staggerText = "reduced-motion");
+      return;
+    }
+    if (!("IntersectionObserver" in window)) {
+      requestAnimationFrame(() => targets.forEach((target) => target.classList.add("stagger-text-visible")));
+      return;
+    }
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
@@ -63,22 +67,22 @@
         observer.unobserve(entry.target);
       });
     }, { threshold: 0.1, rootMargin: "0px 0px -5%" });
-
     targets.forEach((target) => {
       if (target.dataset.staggerText === "ready") observer.observe(target);
     });
-  } else {
-    requestAnimationFrame(() => {
-      targets.forEach((target) => target.classList.add("stagger-text-visible"));
-    });
-  }
+  };
+
+  document.addEventListener("astro:page-load", initializeStaggeredText);
+  if (document.readyState !== "loading") initializeStaggeredText();
 </script>
 
 <style is:global>
   .stagger-text-mask {
     display: inline-block;
-    overflow: visible;
-    vertical-align: baseline;
+    overflow: hidden;
+    vertical-align: -.14em;
+    padding-block: .16em;
+    margin-block: -.16em;
   }
 
   .stagger-text-segment {

@@ -7,9 +7,9 @@ const stages = [
   ["05", "Learning", "Reporting that changes the next move"],
 ];
 ---
-<div class="funnel-flow">
+<div class="funnel-flow" data-progress-line>
   {stages.map(([number, title, copy], index) => (
-    <div class="funnel-step">
+    <div class="funnel-step" data-reveal="fade-up" data-reveal-delay={index * 60}>
       <span>{number}</span>
       <div><strong>{title}</strong><p>{copy}</p></div>
       {index < stages.length - 1 && <i aria-hidden="true">→</i>}

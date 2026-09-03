@@ -138,12 +138,20 @@ const experience = [
   <CtaBand />
 
   <script>
-    const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-filter]"));
-    const cards = Array.from(document.querySelectorAll<HTMLElement>("[data-project]"));
-    const empty = document.querySelector<HTMLElement>("[data-empty]");
-    const status = document.querySelector<HTMLElement>("[data-filter-status]");
+    const initializeWorkFilters = () => {
+      const grid = document.querySelector<HTMLElement>("[data-work-grid]");
+      if (!grid || grid.dataset.filterReady === "true") return;
+      grid.dataset.filterReady = "true";
+      const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-filter]"));
+      const cards = Array.from(grid.querySelectorAll<HTMLElement>("[data-project]"));
+      const empty = document.querySelector<HTMLElement>("[data-empty]");
+      const status = document.querySelector<HTMLElement>("[data-filter-status]");
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-    const applyFilter = (active: string, updateUrl = true) => {
+      const applyFilter = async (active: string, updateUrl = true) => {
+        const outgoing = cards.filter((card) => !card.hidden && active !== "All" && !(JSON.parse(card.dataset.services ?? "[]") as string[]).includes(active));
+        if (updateUrl && !reduced.matches) await Promise.allSettled(outgoing.map((card) => card.animate([{ opacity: 1, transform: "scale(1)" }, { opacity: 0, transform: "scale(.96)" }], { duration: 150, easing: "ease-out" }).finished));
+        const first = new Map(cards.filter((card) => !card.hidden).map((card) => [card, card.getBoundingClientRect()]));
       let visible = 0;
       buttons.forEach((button) => {
         const selected = button.dataset.filter === active;
@@ -156,6 +164,13 @@ const experience = [
         card.hidden = !show;
         if (show) visible += 1;
       });
+      if (updateUrl && !reduced.matches) cards.filter((card) => !card.hidden).forEach((card, index) => {
+        const before = first.get(card);
+        const after = card.getBoundingClientRect();
+        const dx = before ? before.left - after.left : 0;
+        const dy = before ? before.top - after.top : 18;
+        card.animate([{ opacity: before ? 1 : 0, transform: `translate(${dx}px,${dy}px)` }, { opacity: 1, transform: "none" }], { duration: 420, delay: index * 40, easing: "cubic-bezier(.22,1,.36,1)" });
+      });
       if (empty) empty.hidden = visible > 0;
       if (status) status.textContent = active === "All"
         ? `Showing all ${visible} documented projects.`
@@ -167,16 +182,19 @@ const experience = [
         else url.searchParams.set("service", activeButton?.dataset.filterKey ?? "");
         window.history.replaceState({}, "", url);
       }
-    };
+      };
 
-    buttons.forEach((button) => button.addEventListener("click", () => applyFilter(button.dataset.filter ?? "All")));
-    const syncFromUrl = () => {
-      const requested = new URL(window.location.href).searchParams.get("service");
-      const match = buttons.find((button) => button.dataset.filterKey === requested);
-      applyFilter(match?.dataset.filter ?? "All", false);
+      buttons.forEach((button) => button.addEventListener("click", () => void applyFilter(button.dataset.filter ?? "All")));
+      const syncFromUrl = () => {
+        const requested = new URL(window.location.href).searchParams.get("service");
+        const match = buttons.find((button) => button.dataset.filterKey === requested);
+        void applyFilter(match?.dataset.filter ?? "All", false);
+      };
+      window.addEventListener("popstate", syncFromUrl);
+      syncFromUrl();
     };
-    window.addEventListener("popstate", syncFromUrl);
-    syncFromUrl();
+    document.addEventListener("astro:page-load", initializeWorkFilters);
+    if (document.readyState !== "loading") initializeWorkFilters();
   </script>
 </BaseLayout>
 

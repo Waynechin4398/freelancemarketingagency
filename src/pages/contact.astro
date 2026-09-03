@@ -75,9 +75,11 @@ import site from "../data/site.json";
 </BaseLayout>
 
 <script>
-  const projectBriefForm = document.querySelector<HTMLFormElement>("[data-project-brief]");
-
-  projectBriefForm?.addEventListener("submit", (event) => {
+  const initializeProjectBrief = () => {
+    const projectBriefForm = document.querySelector<HTMLFormElement>("[data-project-brief]");
+    if (!projectBriefForm || projectBriefForm.dataset.briefReady === "true") return;
+    projectBriefForm.dataset.briefReady = "true";
+    projectBriefForm.addEventListener("submit", (event) => {
     event.preventDefault();
 
     const contactEmail = projectBriefForm.dataset.contactEmail;
@@ -105,5 +107,8 @@ import site from "../data/site.json";
     if (formStatus) formStatus.textContent = "Your email app should open now. Review the draft, then press send there.";
 
     window.location.href = `mailto:${contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  });
+    });
+  };
+  document.addEventListener("astro:page-load", initializeProjectBrief);
+  if (document.readyState !== "loading") initializeProjectBrief();
 </script>

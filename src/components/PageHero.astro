@@ -2,7 +2,7 @@
 interface Props { eyebrow: string; title: string; intro: string; dark?: boolean; }
 const { eyebrow, title, intro, dark = false } = Astro.props;
 ---
-<section class:list={["page-hero", { dark }]}>
+<section class:list={["page-hero", { dark }]} data-page-hero>
   <span class:list={["eyebrow", { light: dark }]}>{eyebrow}</span>
   <h1>{title}</h1>
   <p>{intro}</p>

@@ -100,7 +100,9 @@ const { services } = Astro.props;
 </section>
 
 <script>
-  document.querySelectorAll<HTMLElement>("[data-skewed-carousel]").forEach((carousel) => {
+  const initializeServiceCarousels = () => document.querySelectorAll<HTMLElement>("[data-skewed-carousel]").forEach((carousel) => {
+    if (carousel.dataset.carouselReady === "true") return;
+    carousel.dataset.carouselReady = "true";
     const viewport = carousel.querySelector<HTMLElement>("[data-carousel-viewport]");
     const cards = Array.from(carousel.querySelectorAll<HTMLElement>("[data-carousel-card]"));
     const dots = Array.from(carousel.querySelectorAll<HTMLButtonElement>("[data-carousel-dot]"));
@@ -118,6 +120,10 @@ const { services } = Astro.props;
     let autoplayTimer = 0;
     let isVisible = false;
     let pointerStart = 0;
+    let pointerLast = 0;
+    let pointerLastTime = 0;
+    let velocity = 0;
+    let dragOffset = 0;
     let pointerId: number | null = null;
     let suppressClick = false;
 
@@ -236,20 +242,38 @@ const { services } = Astro.props;
     viewport.addEventListener("pointerdown", (event) => {
       pointerId = event.pointerId;
       pointerStart = event.clientX;
+      pointerLast = event.clientX;
+      pointerLastTime = event.timeStamp;
+      velocity = 0;
+      dragOffset = 0;
       suppressClick = false;
       viewport.toggleAttribute("data-dragging", true);
+      viewport.setPointerCapture(event.pointerId);
       stopAutoplay();
+    });
+
+    viewport.addEventListener("pointermove", (event) => {
+      if (pointerId !== event.pointerId) return;
+      const elapsed = Math.max(event.timeStamp - pointerLastTime, 8);
+      velocity = (event.clientX - pointerLast) / elapsed;
+      dragOffset = Math.max(-140, Math.min(140, event.clientX - pointerStart));
+      carousel.style.setProperty("--drag-x", `${dragOffset}px`);
+      pointerLast = event.clientX;
+      pointerLastTime = event.timeStamp;
     });
 
     viewport.addEventListener("pointerup", (event) => {
       if (pointerId !== event.pointerId) return;
       const travelled = event.clientX - pointerStart;
       viewport.removeAttribute("data-dragging");
+      viewport.releasePointerCapture(event.pointerId);
       pointerId = null;
-      if (Math.abs(travelled) > 38) {
+      const projected = travelled + velocity * 120;
+      if (Math.abs(projected) > 38) {
         suppressClick = true;
-        update(activeIndex + (travelled < 0 ? 1 : -1));
+        update(activeIndex + (projected < 0 ? 1 : -1));
       }
+      carousel.style.setProperty("--drag-x", "0px");
       startAutoplay();
     });
 
@@ -263,6 +287,7 @@ const { services } = Astro.props;
     viewport.addEventListener("pointercancel", () => {
       viewport.removeAttribute("data-dragging");
       pointerId = null;
+      carousel.style.setProperty("--drag-x", "0px");
       startAutoplay();
     });
 
@@ -282,11 +307,14 @@ const { services } = Astro.props;
     observer.observe(carousel);
     update(0, false);
   });
+  document.addEventListener("astro:page-load", initializeServiceCarousels);
+  if (document.readyState !== "loading") initializeServiceCarousels();
 </script>
 
 <style>
   .services-carousel-section {
     --travel-skew: 0deg;
+    --drag-x: 0px;
     padding-inline: 0;
     overflow: hidden;
     border-top: 2px solid var(--ink);
@@ -343,10 +371,11 @@ const { services } = Astro.props;
   .carousel-stage {
     position: absolute;
     inset: 0;
-    transform: skewY(var(--travel-skew)) scale(.99);
+    transform: translate3d(var(--drag-x), 0, 0) skewY(var(--travel-skew)) scale(.99);
     transform-style: preserve-3d;
-    transition: transform .55s cubic-bezier(.2,.8,.2,1);
+    transition: transform 500ms var(--ease-out);
   }
+  .carousel-viewport[data-dragging] .carousel-stage { transition: none; }
 
   .carousel-stage::before {
     content: "";
@@ -376,7 +405,7 @@ const { services } = Astro.props;
 
   .side-card-target {
     width: calc(50% - clamp(135px, 14.5vw, 195px));
-    min-width: 42px;
+    min-width: 44px;
     position: absolute;
     z-index: 30;
     top: 0;
@@ -423,7 +452,7 @@ const { services } = Astro.props;
     opacity: var(--card-opacity);
     transform: translate3d(calc(-50% + var(--card-x)), -50%, var(--card-z)) rotateY(var(--card-rotate)) rotateZ(var(--card-tilt)) scale(var(--card-scale));
     transform-style: preserve-3d;
-    transition: transform .75s cubic-bezier(.2,.8,.2,1), opacity .5s ease, filter .5s ease;
+    transition: transform 500ms var(--ease-out), opacity 500ms var(--ease-out), filter 500ms var(--ease-out);
     will-change: transform;
     pointer-events: none;
     filter: saturate(.45) brightness(.72);
@@ -433,6 +462,17 @@ const { services } = Astro.props;
     pointer-events: auto;
     filter: none;
   }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .service-card[data-active] .service-card-top,
+    .service-card[data-active] .service-card-copy > * { animation: card-copy-in 500ms var(--ease-out) both; }
+    .service-card[data-active] .service-card-copy > *:nth-child(2) { animation-delay: 60ms; }
+    .service-card[data-active] .service-card-copy > *:nth-child(3) { animation-delay: 120ms; }
+    .carousel-count { display: inline-block; animation: count-flip 300ms var(--ease-out); }
+  }
+
+  @keyframes card-copy-in { from { opacity: 0; transform: translateY(12px); } }
+  @keyframes count-flip { from { opacity: 0; transform: translateY(8px); } }
 
   .service-card[data-visible]:not([data-active]) {
     pointer-events: auto;

@@ -88,11 +88,11 @@ const heroCtaLocation = `service_${service.id}_hero`;
         <div class="detail-columns">
           <div>
             <span class="eyebrow">What it should improve</span>
-            <ul class="detail-list">{service.data.outcomes.map((item: string) => <li>{item}</li>)}</ul>
+            <ul class="detail-list">{service.data.outcomes.map((item: string, index: number) => <li data-reveal="fade-up" data-reveal-delay={index * 60}><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M2 9l4 4L16 3" /></svg><span>{item}</span></li>)}</ul>
           </div>
           <div>
             <span class="eyebrow">Typical deliverables</span>
-            <ul class="detail-list">{service.data.deliverables.map((item: string) => <li>{item}</li>)}</ul>
+            <ul class="detail-list">{service.data.deliverables.map((item: string, index: number) => <li data-reveal="fade-up" data-reveal-delay={index * 60}><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M2 9l4 4L16 3" /></svg><span>{item}</span></li>)}</ul>
           </div>
         </div>
         <p class="service-scope-note">The final scope is shaped around the constraint, current tools and the team responsible for maintaining the work.</p>
@@ -107,9 +107,9 @@ const heroCtaLocation = `service_${service.id}_hero`;
         <h2 id="process-heading">Clear decisions at every stage.</h2>
       </div>
       <div>
-        <ol class="process-list detailed-process">
-          {service.data.process.map((step: { title: string; description: string }) => (
-            <li><strong>{step.title}</strong><p>{step.description}</p></li>
+        <ol class="process-list detailed-process" data-progress-line>
+          {service.data.process.map((step: { title: string; description: string }, index: number) => (
+            <li data-reveal="fade-up" data-reveal-delay={index * 60}><strong>{step.title}</strong><p>{step.description}</p></li>
           ))}
         </ol>
       </div>
@@ -125,7 +125,7 @@ const heroCtaLocation = `service_${service.id}_hero`;
       {service.data.faqs.map((faq: { question: string; answer: string }, index: number) => (
         <details>
           <summary><span>{String(index + 1).padStart(2, "0")}</span>{faq.question}<i aria-hidden="true">+</i></summary>
-          <p>{faq.answer}</p>
+          <div class="faq-answer"><p>{faq.answer}</p></div>
         </details>
       ))}
     </div>

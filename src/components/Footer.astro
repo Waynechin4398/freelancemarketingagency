@@ -5,7 +5,7 @@ const year = new Date().getFullYear();
 <footer class="site-footer">
   <div class="footer-main">
     <div class="footer-brand">
-      <img src="/images/wayne-omni-brush-logo.png" width="2000" height="2000" alt="Wayne Omni brush logo" />
+      <img src="/images/wayne-omni-brush-logo.webp" width="460" height="460" alt="Wayne Omni brush logo" loading="lazy" />
       <span class="eyebrow light">{site.location}</span>
       <h2>{site.tagline}</h2>
     </div>
@@ -17,6 +17,8 @@ const year = new Date().getFullYear();
   </div>
   <div class="footer-bottom">
     <span>© {year} {site.legalName}. {site.ssmNumber ? `SSM ${site.ssmNumber}` : "SSM details to be inserted before public launch."}</span>
+    <a class="back-to-top" href="#main-content">Back to top <span aria-hidden="true">↑</span></a>
     <span>English · 中文 · Bahasa Melayu</span>
   </div>
+  <div class="footer-word" data-footer-drift aria-hidden="true">WAYNE OMNI</div>
 </footer>

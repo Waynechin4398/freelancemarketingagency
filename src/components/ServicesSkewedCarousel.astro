@@ -45,7 +45,7 @@ const { services } = Astro.props;
             aria-label={`${index + 1} of ${services.length}: ${service.data.title}`}
             aria-hidden={index === 0 ? "false" : "true"}
           >
-            <a href={`/services/${service.id}/`} data-service-link tabindex={index === 0 ? 0 : -1} aria-label={`Open ${service.data.title} service page`}>
+            <a href={`/services/${service.id}/`} data-service-link draggable="false" tabindex={index === 0 ? 0 : -1} aria-label={`Open ${service.data.title} service page`}>
               <div class="service-card-top">
                 <span>{service.data.number} / {service.data.group}</span>
                 <i aria-hidden="true">↗</i>
@@ -125,7 +125,9 @@ const { services } = Astro.props;
     let velocity = 0;
     let dragOffset = 0;
     let pointerId: number | null = null;
-    let suppressClick = false;
+    let isDragging = false;
+    let dragFrame = 0;
+    let suppressClickUntil = 0;
 
     const wrap = (index: number) => (index + cards.length) % cards.length;
 
@@ -136,14 +138,35 @@ const { services } = Astro.props;
       return distance;
     };
 
+    const getSpacing = () => Math.min(190, Math.max(108, viewport.clientWidth * 0.17));
+
+    const renderCardPositions = (dragProgress = 0) => {
+      const spacing = getSpacing();
+      cards.forEach((card, index) => {
+        const distance = distanceFromActive(index) + dragProgress;
+        const depth = Math.abs(distance);
+        const scale = depth < 1 ? 1 - (depth * .13) : Math.max(.72, .87 - ((depth - 1) * .06));
+        const opacity = depth < 1 ? 1 - (depth * .32) : Math.max(.18, .68 - ((depth - 1) * .2));
+
+        card.style.setProperty("--card-x", `${distance * spacing}px`);
+        card.style.setProperty("--card-z", `${-depth * 105}px`);
+        card.style.setProperty("--card-rotate", `${distance * -58}deg`);
+        card.style.setProperty("--card-tilt", `${distance * -1.8}deg`);
+        card.style.setProperty("--card-scale", String(scale));
+        card.style.setProperty("--card-opacity", String(depth > 2.6 ? 0 : opacity));
+        card.style.zIndex = String(Math.max(0, Math.round(cards.length - depth)));
+      });
+    };
+
     const update = (nextIndex: number, announce = true) => {
       const oldIndex = activeIndex;
       activeIndex = wrap(nextIndex);
       const direction = activeIndex === oldIndex ? 0 : (wrap(oldIndex + 1) === activeIndex ? 1 : -1);
-      const spacing = Math.min(190, Math.max(108, viewport.clientWidth * 0.17));
 
       carousel.style.setProperty("--travel-skew", `${direction * -2.2}deg`);
       window.setTimeout(() => carousel.style.setProperty("--travel-skew", "0deg"), reducedMotion.matches ? 0 : 360);
+
+      renderCardPositions();
 
       cards.forEach((card, index) => {
         const distance = distanceFromActive(index);
@@ -151,13 +174,6 @@ const { services } = Astro.props;
         const isActive = distance === 0;
         const link = card.querySelector<HTMLAnchorElement>("a");
 
-        card.style.setProperty("--card-x", `${distance * spacing}px`);
-        card.style.setProperty("--card-z", `${-depth * 105}px`);
-        card.style.setProperty("--card-rotate", `${distance * -58}deg`);
-        card.style.setProperty("--card-tilt", `${distance * -1.8}deg`);
-        card.style.setProperty("--card-scale", String(isActive ? 1 : Math.max(0.72, 0.87 - (depth - 1) * 0.06)));
-        card.style.setProperty("--card-opacity", String(depth > 2 ? 0 : isActive ? 1 : Math.max(0.28, 0.68 - (depth - 1) * 0.2)));
-        card.style.zIndex = String(cards.length - depth);
         card.setAttribute("aria-hidden", String(!isActive));
         card.toggleAttribute("data-active", isActive);
         card.toggleAttribute("data-visible", depth <= 2);
@@ -199,13 +215,13 @@ const { services } = Astro.props;
     });
 
     sidePrevious?.addEventListener("click", () => {
-      if (suppressClick) return;
+      if (performance.now() < suppressClickUntil) return;
       update(activeIndex - 1);
       startAutoplay();
     });
 
     sideNext?.addEventListener("click", () => {
-      if (suppressClick) return;
+      if (performance.now() < suppressClickUntil) return;
       update(activeIndex + 1);
       startAutoplay();
     });
@@ -226,68 +242,98 @@ const { services } = Astro.props;
 
     cards.forEach((card, index) => {
       card.addEventListener("click", (event) => {
-        if (index === activeIndex || suppressClick) return;
+        if (performance.now() < suppressClickUntil) return;
+        if (index === activeIndex) return;
         event.preventDefault();
         update(index);
         startAutoplay();
       });
     });
 
-    viewport.addEventListener("keydown", (event) => {
+    const handleDocumentKeydown = (event: KeyboardEvent) => {
       if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+      if (!isVisible || event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey) return;
+      const target = event.target as HTMLElement | null;
+      if (target?.matches("input, textarea, select, [contenteditable='true']") || document.body.classList.contains("menu-open")) return;
       event.preventDefault();
       update(activeIndex + (event.key === "ArrowRight" ? 1 : -1));
-    });
+      startAutoplay();
+    };
+    document.addEventListener("keydown", handleDocumentKeydown);
+    viewport.addEventListener("dragstart", (event) => event.preventDefault());
 
     viewport.addEventListener("pointerdown", (event) => {
+      if (!event.isPrimary || (event.pointerType === "mouse" && event.button !== 0)) return;
       pointerId = event.pointerId;
       pointerStart = event.clientX;
       pointerLast = event.clientX;
       pointerLastTime = event.timeStamp;
       velocity = 0;
       dragOffset = 0;
-      suppressClick = false;
-      viewport.toggleAttribute("data-dragging", true);
-      viewport.setPointerCapture(event.pointerId);
+      isDragging = false;
       stopAutoplay();
     });
 
     viewport.addEventListener("pointermove", (event) => {
       if (pointerId !== event.pointerId) return;
+      const travelled = event.clientX - pointerStart;
+      if (!isDragging && Math.abs(travelled) < 7) return;
+      if (!isDragging) {
+        isDragging = true;
+        viewport.toggleAttribute("data-dragging", true);
+        viewport.setPointerCapture(event.pointerId);
+      }
+      if (event.cancelable) event.preventDefault();
       const elapsed = Math.max(event.timeStamp - pointerLastTime, 8);
       velocity = (event.clientX - pointerLast) / elapsed;
-      dragOffset = Math.max(-140, Math.min(140, event.clientX - pointerStart));
-      carousel.style.setProperty("--drag-x", `${dragOffset}px`);
+      dragOffset = Math.max(-getSpacing() * 1.15, Math.min(getSpacing() * 1.15, travelled));
       pointerLast = event.clientX;
       pointerLastTime = event.timeStamp;
+      if (!dragFrame) {
+        dragFrame = window.requestAnimationFrame(() => {
+          dragFrame = 0;
+          renderCardPositions(dragOffset / getSpacing());
+        });
+      }
     });
 
     viewport.addEventListener("pointerup", (event) => {
       if (pointerId !== event.pointerId) return;
       const travelled = event.clientX - pointerStart;
-      viewport.removeAttribute("data-dragging");
-      viewport.releasePointerCapture(event.pointerId);
+      const wasDragging = isDragging;
+      if (dragFrame) window.cancelAnimationFrame(dragFrame);
+      dragFrame = 0;
+      if (viewport.hasPointerCapture(event.pointerId)) viewport.releasePointerCapture(event.pointerId);
       pointerId = null;
-      const projected = travelled + velocity * 120;
-      if (Math.abs(projected) > 38) {
-        suppressClick = true;
-        update(activeIndex + (projected < 0 ? 1 : -1));
+      isDragging = false;
+      viewport.removeAttribute("data-dragging");
+      if (!wasDragging) {
+        startAutoplay();
+        return;
       }
-      carousel.style.setProperty("--drag-x", "0px");
+      const projected = travelled + velocity * 120;
+      suppressClickUntil = performance.now() + 350;
+      if (Math.abs(projected) > 38) {
+        update(activeIndex + (projected < 0 ? 1 : -1));
+      } else {
+        renderCardPositions();
+      }
       startAutoplay();
     });
 
     viewport.addEventListener("click", (event) => {
-      if (!suppressClick) return;
+      if (performance.now() >= suppressClickUntil) return;
       event.preventDefault();
       event.stopPropagation();
-      suppressClick = false;
     }, true);
 
     viewport.addEventListener("pointercancel", () => {
+      if (dragFrame) window.cancelAnimationFrame(dragFrame);
+      dragFrame = 0;
       viewport.removeAttribute("data-dragging");
       pointerId = null;
-      carousel.style.setProperty("--drag-x", "0px");
+      isDragging = false;
+      renderCardPositions();
       startAutoplay();
     });
 
@@ -305,6 +351,12 @@ const { services } = Astro.props;
     }, { threshold: 0.25 });
 
     observer.observe(carousel);
+    document.addEventListener("astro:before-swap", () => {
+      document.removeEventListener("keydown", handleDocumentKeydown);
+      observer.disconnect();
+      stopAutoplay();
+      if (dragFrame) window.cancelAnimationFrame(dragFrame);
+    }, { once: true });
     update(0, false);
   });
   document.addEventListener("astro:page-load", initializeServiceCarousels);
@@ -362,6 +414,7 @@ const { services } = Astro.props;
     overflow: hidden;
     cursor: grab;
     touch-action: pan-y;
+    user-select: none;
     perspective: 1000px;
     outline-offset: -5px;
   }
@@ -376,6 +429,7 @@ const { services } = Astro.props;
     transition: transform 500ms var(--ease-out);
   }
   .carousel-viewport[data-dragging] .carousel-stage { transition: none; }
+  .carousel-viewport[data-dragging] .service-card { transition: none; }
 
   .carousel-stage::before {
     content: "";

@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import RelatedWork from "../../components/RelatedWork.astro";
 import CtaBand from "../../components/CtaBand.astro";
+import InteractiveExplorer from "../../components/InteractiveExplorer.astro";
 
 export async function getStaticPaths() {
   const projects = await getCollection("caseStudies", ({ data }) => !data.draft);
@@ -20,6 +21,12 @@ const related = allProjects
   .slice(0, 2);
 const orderedProjects = [...allProjects].sort((a: typeof project, b: typeof project) => a.data.order - b.data.order);
 const nextProject = orderedProjects[(orderedProjects.findIndex((item: typeof project) => item.id === project.id) + 1) % orderedProjects.length];
+const story = [
+  { label: "The challenge", title: "Understand the decision, not just the deliverable.", description: project.data.challenge, eyebrow: "The starting point" },
+  { label: "The strategy", title: "Make the journey feel connected.", description: project.data.strategy, eyebrow: "The thinking behind the work" },
+  { label: "What was created", title: "What was created", bullets: project.data.created, tags: project.data.tools, eyebrow: "Tools, platforms & deliverables" },
+  { label: "The insight", title: project.data.insight, eyebrow: "The takeaway" },
+];
 ---
 <BaseLayout title={project.data.client} description={project.data.summary}>
   <section class="case-hero">
@@ -39,34 +46,23 @@ const nextProject = orderedProjects[(orderedProjects.findIndex((item: typeof pro
     <div class:list={["case-art", project.data.palette]} aria-label={`Abstract project system visual for ${project.data.client}`}></div>
   </section>
   <section class="story-section">
-    <div class="story-row">
-      <span>01 · The challenge</span>
-      <div><h2>Understand the decision, not just the deliverable.</h2><p>{project.data.challenge}</p></div>
-    </div>
-    <div class="story-row">
-      <span>02 · The strategy</span>
-      <div><h2>Make the journey feel connected.</h2><p>{project.data.strategy}</p></div>
-    </div>
-    <div class="story-row">
-      <span>03 · What was created</span>
-      <div>
-        <div class="created-grid">{project.data.created.map((item: string, index: number) => <div><span>0{index + 1}</span><strong>{item}</strong></div>)}</div>
-        {project.data.tools.length > 0 && (
-          <div class="case-tools"><span>Tools & platforms</span><div>{project.data.tools.map((tool: string) => <b>{tool}</b>)}</div></div>
-        )}
+    <h2 class="case-walkthrough-heading" data-no-stagger>Inside the project</h2>
+    <InteractiveExplorer id="case-story" label="Explore the decisions behind the work" items={story} />
+    <div class="case-evidence">
+        <h2 data-no-stagger>Results & context</h2>
         {project.data.approvedMetrics.length > 0 ? (
           <>
-            <div class="approved-metrics">{project.data.approvedMetrics.map((metric: {value: string; label: string; period: string}) => <div><strong data-count-to={metric.value}>{metric.value}</strong><span>{metric.label}</span><small>{metric.period}</small></div>)}</div>
+            <div class="evidence-grid">{project.data.approvedMetrics.map((metric: {value: string; label: string; period: string; evidence: string}) => (
+              <details class="evidence-card">
+                <summary><strong>{metric.value}</strong><span>{metric.label}</span><small>{metric.period}</small><b class="evidence-toggle">Measurement context <i aria-hidden="true">+</i></b></summary>
+                <div class="evidence-source"><span>Source</span><p>{metric.evidence}</p><span>Measurement period</span><p>{metric.period}</p></div>
+              </details>
+            ))}</div>
             {project.data.resultContext && <p class="result-context"><strong>Result context</strong>{project.data.resultContext}</p>}
           </>
         ) : (
           <p class="disclosure">No unsupported performance metric is published in this case study. Screenshots, measurement periods and approved results can be added after source evidence and client permission are supplied.</p>
         )}
-      </div>
-    </div>
-    <div class="story-row">
-      <span>04 · The insight</span>
-      <div><h2>{project.data.insight}</h2></div>
     </div>
   </section>
   <section class="section related-section">
@@ -81,6 +77,29 @@ const nextProject = orderedProjects[(orderedProjects.findIndex((item: typeof pro
 </BaseLayout>
 
 <style>
+  .case-walkthrough-heading, .case-evidence h2 { font: 750 clamp(1.8rem, 3vw, 3rem)/1.15 var(--display); letter-spacing: -.045em; margin: 0 0 1.5rem; }
+  .case-evidence { margin-top: 4rem; }
+  .evidence-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line); border-left: 1px solid var(--line); align-items: start; }
+  .evidence-card { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: #fff; min-width: 0; }
+  .evidence-card summary { display: flex; flex-direction: column; min-height: 250px; padding: 1.5rem; list-style: none; cursor: pointer; }
+  .evidence-card summary::-webkit-details-marker { display: none; }
+  .evidence-card summary > strong { font: 750 clamp(2.5rem, 4vw, 4.5rem)/1.15 var(--display); letter-spacing: -.06em; color: var(--cobalt); }
+  .evidence-card summary > span { font-size: 1rem; margin: 1rem 0 .5rem; }
+  .evidence-card small { font-size: .875rem; color: #595b61; }
+  .evidence-toggle { display: flex; justify-content: space-between; gap: .5rem; margin-top: auto; padding-top: 1.5rem; font-size: .875rem; font-weight: 500; }
+  .evidence-toggle i { font-style: normal; color: var(--cobalt); }
+  .evidence-card[open] .evidence-toggle i { transform: rotate(45deg); }
+  .evidence-card summary:hover { background: #0237ff08; }
+  .evidence-card summary:focus-visible { outline: 2px solid var(--cobalt); outline-offset: -4px; }
+  .evidence-source { border-top: 1px solid var(--line); padding: 1.5rem; background: #f4f4f1; }
+  .evidence-source span { text-transform: uppercase; letter-spacing: .1em; font-size: .75rem; font-weight: 700; }
+  .evidence-source p { font-size: .875rem; line-height: 1.6; margin: .5rem 0 1rem; }
+  .evidence-source p:last-child { margin-bottom: 0; }
+  @media (prefers-reduced-motion: no-preference) {
+    .evidence-toggle i { transition: transform 200ms ease; }
+    .evidence-card summary { transition: background 200ms ease; }
+  }
+  @media (max-width: 760px) { .evidence-grid { grid-template-columns: 1fr; } .evidence-card summary { min-height: 220px; } }
   .case-facts { max-width: 760px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 2rem 0 0; border-block: 1px solid #34373e; }
   .case-hero h1.long-title { max-width: 10ch; font-size: clamp(3.2rem, 6.4vw, 7rem); }
   .story-row > div { min-width: 0; }
@@ -91,8 +110,8 @@ const nextProject = orderedProjects[(orderedProjects.findIndex((item: typeof pro
   .case-tools > span { color: var(--muted); font-size: .58rem; text-transform: uppercase; letter-spacing: .1em; }
   .case-tools > div { display: flex; flex-wrap: wrap; gap: .45rem; }
   .case-tools b { padding: .46rem .6rem; border: 1px solid var(--line); font-size: .56rem; letter-spacing: .04em; }
-  .result-context { margin-top: 0 !important; padding: 1rem 1.2rem; background: #eceef2; border-left: 2px solid var(--cobalt); font-size: .68rem; }
-  .result-context strong { display: block; margin-bottom: .35rem; color: var(--ink); font-size: .57rem; text-transform: uppercase; letter-spacing: .1em; }
+  .result-context { margin-top: 1.5rem !important; padding: 1rem 1.2rem; background: #eceef2; border-left: 2px solid var(--cobalt); font-size: .875rem; }
+  .result-context strong { display: block; margin-bottom: .35rem; color: var(--ink); font-size: .75rem; text-transform: uppercase; letter-spacing: .1em; }
   .next-project-link { min-height: 180px; padding: 2rem var(--pad); display: grid; grid-template-columns: .4fr 1fr auto; gap: 2rem; align-items: center; border-block: 2px solid var(--ink); overflow: hidden; position: relative; isolation: isolate; }
   .next-project-link::before { content: ""; position: absolute; z-index: -1; inset: 0; background: var(--ink); transform: scaleX(0); transform-origin: 100% 50%; }
   .next-project-link span { font-size: .62rem; text-transform: uppercase; letter-spacing: .12em; }

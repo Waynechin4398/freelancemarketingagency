@@ -43,6 +43,19 @@ Use `.motion-marquee` with a `.motion-marquee-track` containing two identical gr
 - The global controller reinitializes on `astro:page-load`; component scripts use a `data-*-ready` guard so View Transition navigation never double-binds events.
 - Keep `data-ga-event`, `data-ga-method`, and `data-ga-location` attributes on tracked links. The shared click listener reads them after every client navigation.
 
+## Interactive content explorers
+
+`InteractiveExplorer.astro` provides a shared, dependency-free walkthrough. Use a unique `id`, an accessible `label`, and `items` with `label`, `title`, and optional `description`, `eyebrow`, `bullets`, `tags`, `href`, and `linkLabel`. `variant="journey"` uses a horizontal stage map on desktop; `variant="finder"` uses a goal selector. `dark` switches to the near-black palette.
+
+- Home and About: selectable customer-journey stages with relevant service links.
+- Services index: six business goals matched to the existing service content, not an automated diagnosis or a promised result.
+- All six service detail pages: independent solution and process walkthroughs using the content collection as the source of truth.
+- All seven case studies: challenge / strategy / deliverables / insight walkthroughs. Reported results remain visible; native disclosure cards reveal their existing source and period. No synthetic time series or new performance claims.
+
+The navigation starts as ordinary fragment links, and every panel is server-rendered and visible without JavaScript. Enhancement adds tab semantics, a single keyboard tab stop, arrow/Home/End controls, previous/next buttons, and a **Read all** mode. Printed pages include all panels. No autoplay, timer, scroll trap, or required swipe. Controls are at least 44px high; text is never clipped by a reveal mask. Panel transitions use opacity/transform, with a single active-stage pulse, and respect reduced motion even when the preference changes during the visit.
+
+Listeners are scoped to an AbortController and rebound once per body after Astro client navigation. Existing SEO metadata, collection content, GA4 listeners, contact links and submission behavior are unchanged. To check the static output after `pnpm run build`, run `node scripts/explorer-check.mjs`.
+
 ## Form note
 
 The current project brief intentionally opens a `mailto:` draft. Its focus, filled, validation, shake, error, and loading states are animated, but it does not show a false server-success state because there is no submission endpoint. If a real endpoint is added later, the existing form can swap to a confirmation panel after a confirmed successful response.

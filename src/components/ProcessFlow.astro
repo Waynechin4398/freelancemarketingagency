@@ -1,18 +1,13 @@
 ---
+import InteractiveExplorer from "./InteractiveExplorer.astro";
+interface Props { dark?: boolean }
+const { dark = false } = Astro.props;
 const stages = [
-  ["01", "Attention", "Search, social and paid media"],
-  ["02", "Experience", "Website or focused landing page"],
-  ["03", "Action", "Enquiry, booking or purchase"],
-  ["04", "Follow-up", "CRM, email and human response"],
-  ["05", "Learning", "Reporting that changes the next move"],
+  { label: "Attention", title: "Search, social and paid media", description: "Start with the right audience and a relevant promise. Connect the campaign to the experience someone will find after the click.", eyebrow: "From discovery to a visit", href: "/services/paid-media/", linkLabel: "Explore paid media", bullets: ["Audience and intent", "Creative and message", "A clear destination"] },
+  { label: "Experience", title: "Website or focused landing page", description: "Make the offer easy to understand. Bring the message, proof and next step together so visitors can make an informed decision.", eyebrow: "From a visit to understanding", href: "/services/landing-pages/", linkLabel: "Explore landing pages", bullets: ["Message continuity", "Useful proof", "Mobile-first journeys"] },
+  { label: "Action", title: "Enquiry, booking or purchase", description: "Remove unnecessary friction from the next step. Give each page a clear job and measure the actions that matter to the business.", eyebrow: "From understanding to intent", href: "/services/website-development/", linkLabel: "Explore website development", bullets: ["Clear calls to action", "Simple enquiry paths", "Meaningful event tracking"] },
+  { label: "Follow-up", title: "CRM, email and human response", description: "Keep an enquiry moving after the form is submitted. Connect lead routing, relevant follow-up and the person responsible for the conversation.", eyebrow: "From intent to a conversation", href: "/services/crm-automation/", linkLabel: "Explore CRM & automation", bullets: ["Lead ownership", "Timely follow-up", "Connected customer context"] },
+  { label: "Learning", title: "Reporting that changes the next move", description: "Trace performance across the journey. Use the evidence to decide what to improve next, then bring that learning into the next campaign.", eyebrow: "From evidence to the next decision", href: "/services/paid-media/", linkLabel: "Explore measurement-led campaigns", bullets: ["Understand the handoffs", "Review meaningful actions", "Prioritise the next improvement"] },
 ];
 ---
-<div class="funnel-flow" data-progress-line>
-  {stages.map(([number, title, copy], index) => (
-    <div class="funnel-step" data-reveal="fade-up" data-reveal-delay={index * 60}>
-      <span>{number}</span>
-      <div><strong>{title}</strong><p>{copy}</p></div>
-      {index < stages.length - 1 && <i aria-hidden="true">→</i>}
-    </div>
-  ))}
-</div>
+<InteractiveExplorer id="growth-journey" label="Explore the customer journey" items={stages} variant="journey" dark={dark} />

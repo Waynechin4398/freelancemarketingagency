@@ -34,7 +34,7 @@ const services = (await getCollection("services", ({ data }) => !data.draft)).so
       <div class="portrait-nameplate"><b>WAYNE</b><span>Strategy / Build / Growth</span></div>
       <div class="portrait-coordinates" aria-hidden="true"><span>MY · 03.14°N</span><span>101.69°E</span></div>
     </div>
-    <div class="hero-side-note" data-scroll-indicator><span>Scroll to see the system</span><i></i></div>
+    <a class="hero-side-note" href="#growth-system" data-scroll-indicator><span>Explore the growth journey</span><i aria-hidden="true"></i></a>
   </section>
 
   <section class="proof-strip motion-marquee" aria-label="Capabilities">
@@ -68,7 +68,7 @@ const services = (await getCollection("services", ({ data }) => !data.draft)).so
 
   <ServicesSkewedCarousel services={services} />
 
-  <section class="system-section section">
+  <section class="system-section section" id="growth-system">
     <SectionIntro number="05" eyebrow="The growth operating system" title="See every handoff. Improve the whole journey." copy="The strongest gains often appear between channels—where an ad becomes a page visit, a form becomes a lead, and a lead becomes a timely conversation." />
     <ProcessFlow />
   </section>

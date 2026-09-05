@@ -4,6 +4,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import PageHero from "../../components/PageHero.astro";
 import RelatedWork from "../../components/RelatedWork.astro";
 import CtaBand from "../../components/CtaBand.astro";
+import InteractiveExplorer from "../../components/InteractiveExplorer.astro";
 import site from "../../data/site.json";
 
 export async function getStaticPaths() {
@@ -59,15 +60,7 @@ const heroCtaLocation = `service_${service.id}_hero`;
       <h2 id="solutions-heading">Solve the system, not just the symptom.</h2>
       <p>Each engagement connects strategy and execution, so the work fits the customer journey around it.</p>
     </div>
-    <div class="solution-grid">
-      {service.data.solutions.map((solution: { title: string; description: string }, index: number) => (
-        <article>
-          <span>{String(index + 1).padStart(2, "0")}</span>
-          <h3>{solution.title}</h3>
-          <p>{solution.description}</p>
-        </article>
-      ))}
-    </div>
+    <InteractiveExplorer id="service-solutions" label="Explore the solutions" dark items={service.data.solutions.map((solution: { title: string; description: string }) => ({ ...solution, label: solution.title, eyebrow: service.data.title }))} />
   </section>
 
   <section class="service-fit" aria-labelledby="fit-heading">
@@ -101,19 +94,11 @@ const heroCtaLocation = `service_${service.id}_hero`;
   </section>
 
   <section class="service-process dark-section" id="process" aria-labelledby="process-heading">
-    <div class="detail-grid">
-      <div>
+    <div class="service-section-heading light">
         <span class="eyebrow light">How the work moves</span>
         <h2 id="process-heading">Clear decisions at every stage.</h2>
-      </div>
-      <div>
-        <ol class="process-list detailed-process" data-progress-line>
-          {service.data.process.map((step: { title: string; description: string }, index: number) => (
-            <li data-reveal="fade-up" data-reveal-delay={index * 60}><strong>{step.title}</strong><p>{step.description}</p></li>
-          ))}
-        </ol>
-      </div>
     </div>
+    <InteractiveExplorer id="service-process" label="Walk through the engagement" dark items={service.data.process.map((step: { title: string; description: string }) => ({ ...step, label: step.title, eyebrow: "How the work moves" }))} />
   </section>
 
   <section class="service-faq" id="faq" aria-labelledby="faq-heading">

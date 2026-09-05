@@ -427,6 +427,7 @@ body { background: var(--paper); }
 .desktop-nav > a:not(.nav-cta)::after { height: 3px; bottom: -.65rem; background: var(--cobalt); }
 .desktop-nav > a[aria-current="page"] { color: var(--cobalt); }
 .nav-cta { background: var(--cobalt); color: white; border: 2px solid var(--ink); box-shadow: 5px 5px 0 var(--ink); }
+.desktop-nav > .nav-cta[aria-current="page"] { color: white; }
 .nav-cta span { color: white; }
 
 .personal-hero { min-height: calc(100svh - 84px); grid-template-columns: minmax(0,1.05fr) minmax(430px,.95fr); padding-top: clamp(3.5rem, 7vh, 6rem); background: var(--ink); color: white; overflow: hidden; }
@@ -805,6 +806,10 @@ body { background: var(--paper); }
   :where(.button, .nav-cta, .menu-toggle)::before { content: ""; position: absolute; z-index: -1; inset: 0; background: var(--cobalt); transform: scaleX(0); transform-origin: 100% 50%; transition: transform var(--dur-med) var(--ease-out); }
   :where(.button, .nav-cta, .menu-toggle):hover::before,
   :where(.button, .nav-cta, .menu-toggle):focus-visible::before { transform: scaleX(1); transform-origin: 0 50%; }
+  .nav-cta::before { background: var(--signal-red); transition: transform 480ms var(--ease-io); }
+  .nav-cta:hover,
+  .nav-cta:focus-visible,
+  .desktop-nav > .nav-cta[aria-current="page"] { background: var(--cobalt); color: white; }
   :where(.button, .nav-cta):hover { transform: translate3d(var(--magnetic-x), calc(var(--magnetic-y) - 2px), 0); }
   :where(.button, .nav-cta):active { transform: translate3d(var(--magnetic-x), var(--magnetic-y), 0) scale(.98); }
   :where(.button, .nav-cta) span { display: inline-block; transition: transform var(--dur-med) var(--ease-spring); }

@@ -1,0 +1,54 @@
+---
+import site from "../data/site.json";
+const nav = [
+  { href: "/work", label: "Work" },
+  { href: "/services", label: "Services" },
+  { href: "/about", label: "About" },
+  { href: "/insights", label: "Insights" },
+];
+const pathname = Astro.url.pathname;
+const isCurrent = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
+const menuItems = [...nav, { href: "/contact", label: "Start a project" }];
+---
+<header class="site-header" transition:persist="site-header">
+  <a class="brand" href="/" aria-label="Wayne Omni home">
+    <img class="brand-logo" src="/images/wayne-omni-brush-logo.webp" width="460" height="460" alt="" aria-hidden="true" />
+    <span><strong>{site.brand.toUpperCase()}</strong><small>{site.descriptor}</small></span>
+  </a>
+  <nav class="desktop-nav" aria-label="Main navigation">
+    {nav.map((item) => <a href={item.href} aria-current={isCurrent(item.href) ? "page" : undefined}>{item.label}</a>)}
+    <a class="nav-cta" href="/contact">Start a project <span>↗</span></a>
+  </nav>
+  <button class="menu-toggle" data-menu-toggle aria-expanded="false" aria-controls="mobile-nav">Menu</button>
+  <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile navigation" aria-hidden="true" inert>
+    <div class="mobile-nav-inner">
+      <div class="mobile-nav-links">
+        {menuItems.map((item, index) => (
+          <a href={item.href} aria-current={isCurrent(item.href) ? "page" : undefined} data-menu-label={item.label} style={`--menu-index:${index}`}>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <strong>{item.label}</strong>
+            <i aria-hidden="true">↗</i>
+          </a>
+        ))}
+      </div>
+      <div class="menu-preview" data-menu-preview data-label="Wayne Omni" aria-hidden="true"></div>
+      <div class="mobile-nav-bottom">
+        <div>
+          <span>Direct</span>
+          <a href={`mailto:${site.contactEmail}`} data-ga-event="contact_email" data-ga-method="email" data-ga-location="menu">{site.contactEmail}</a>
+        </div>
+        <div>
+          <span>Connect</span>
+          <a href={site.whatsappUrl} target="_blank" rel="noopener noreferrer" data-ga-event="contact_whatsapp" data-ga-method="whatsapp" data-ga-location="menu">WhatsApp</a>
+          <a href={site.bookingUrl} target="_blank" rel="noopener noreferrer" data-ga-event="contact_calendly" data-ga-method="calendly" data-ga-location="menu">Calendly</a>
+        </div>
+      </div>
+      <div class="motion-marquee menu-marquee" aria-label="Strategy, web, paid media and automation">
+        <div class="motion-marquee-track">
+          <span>STRATEGY — WEB — PAID MEDIA — AUTOMATION —</span>
+          <span aria-hidden="true">STRATEGY — WEB — PAID MEDIA — AUTOMATION —</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>

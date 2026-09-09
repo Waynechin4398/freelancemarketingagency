@@ -1,0 +1,32 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHero from "../../components/PageHero.astro";
+import CtaBand from "../../components/CtaBand.astro";
+import ServiceFinder from "../../components/ServiceFinder.astro";
+const services = (await getCollection("services", ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
+---
+<BaseLayout title="Services" description="Connected web, acquisition, engagement and automation capabilities.">
+  <PageHero dark eyebrow="Connected capabilities" title="The whole journey, designed to work together." intro="Build the experience, acquire the right attention, engage across the lifecycle and automate the handoffs that should never be left to chance." />
+  <section class="service-index">
+    <div class="service-index-intro">
+      <span class="eyebrow light">Choose by constraint</span>
+      <div>
+        <h2>Start with what is getting stuck.</h2>
+        <p>You do not need to diagnose the channel before contacting me. Start with the business problem you can see; we’ll trace the journey and find the part that needs to change first.</p>
+      </div>
+    </div>
+    <ServiceFinder services={services} />
+    <div class="service-index-label"><span class="eyebrow light">Explore every capability</span></div>
+    <div class="service-list">
+      {services.map((service) => (
+        <a href={`/services/${service.id}/`}>
+          <span>{service.data.number}</span>
+          <div><h3>{service.data.title}</h3><p>{service.data.short}</p></div>
+          <b>{service.data.group}</b><i>↗</i>
+        </a>
+      ))}
+    </div>
+  </section>
+  <CtaBand title="Not sure which service comes first?" copy="Tell me where growth is getting stuck. I’ll help trace the journey and identify the clearest next move." />
+</BaseLayout>

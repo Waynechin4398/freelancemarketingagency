@@ -1,0 +1,67 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CtaBand from "../../components/CtaBand.astro";
+
+export async function getStaticPaths() {
+  const insights = await getCollection("insights", ({ data }) => !data.draft);
+  return insights.map((insight) => ({ params: { slug: insight.id }, props: { insight } }));
+}
+const { insight } = Astro.props;
+const { Content } = await render(insight);
+const categorySlug = insight.data.category
+  .normalize("NFKD")
+  .toLowerCase()
+  .replace(/&/g, " and ")
+  .replace(/[^a-z0-9]+/g, "-")
+  .replace(/(^-|-$)/g, "");
+const canonicalUrl = Astro.site ? new URL(Astro.url.pathname, Astro.site).toString() : Astro.url.toString();
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: insight.data.title,
+  description: insight.data.seoDescription ?? insight.data.excerpt,
+  datePublished: insight.data.publishDate.toISOString(),
+  dateModified: (insight.data.updatedDate ?? insight.data.publishDate).toISOString(),
+  mainEntityOfPage: canonicalUrl,
+  author: {
+    "@type": "Person",
+    name: insight.data.authorName,
+    url: Astro.site ? new URL("/about/", Astro.site).toString() : "/about/",
+    jobTitle: insight.data.authorRole,
+  },
+  publisher: {
+    "@type": "Organization",
+    name: "Wayne Omni",
+    url: Astro.site?.toString(),
+  },
+};
+---
+<BaseLayout title={insight.data.seoTitle ?? insight.data.title} description={insight.data.seoDescription ?? insight.data.excerpt}>
+  <article class="legal article-content">
+    <a
+      class="eyebrow article-category-link"
+      href={`/insights/?category=${categorySlug}`}
+      aria-label={`View all ${insight.data.category} insights`}
+    >
+      {insight.data.category}<b aria-hidden="true">↗</b>
+    </a>
+    <h1>{insight.data.title}</h1>
+    <div class="article-meta" aria-label="Article details">
+      <p><strong>{insight.data.authorName}</strong><span>{insight.data.authorRole}</span></p>
+      <p>
+        <span>Published <time datetime={insight.data.publishDate.toISOString()}>{insight.data.publishDate.toLocaleDateString("en-MY", { day: "numeric", month: "long", year: "numeric" })}</time></span>
+        {insight.data.updatedDate && <span>Reviewed <time datetime={insight.data.updatedDate.toISOString()}>{insight.data.updatedDate.toLocaleDateString("en-MY", { day: "numeric", month: "long", year: "numeric" })}</time></span>}
+      </p>
+    </div>
+    <Content />
+  </article>
+  <CtaBand />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(articleSchema)} />
+</BaseLayout>
+
+<style>
+  .article-category-link { transition: color .18s ease; }
+  .article-category-link b { color: var(--cobalt); font-size: .8rem; }
+  .article-category-link:hover { color: var(--signal-red); }
+</style>

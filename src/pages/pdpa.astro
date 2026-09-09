@@ -1,0 +1,15 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import site from "../data/site.json";
+---
+<BaseLayout title="PDPA Notice" noindex>
+  <article class="legal">
+    <span class="eyebrow">Malaysia · Draft for review</span><h1>Personal Data Protection Notice</h1>
+    <p class="legal-notice">This draft should be reviewed against Wayne Omnipotent’s actual data practices and Malaysia’s applicable requirements before public launch.</p>
+    <h2>Purpose</h2><p>Personal data may be processed to respond to enquiries, assess and manage service engagements, communicate about projects, maintain business records and meet legal obligations.</p>
+    <h2>Data sources</h2><p>Data may be provided directly by you, generated through your use of the website, or supplied by an organisation that has authorised you to communicate on its behalf.</p>
+    <h2>Disclosure</h2><p>Data may be disclosed to authorised service providers, professional advisers or authorities where necessary for the stated purposes or required by law.</p>
+    <h2>Access and correction</h2><p>You may request access to or correction of personal data, subject to applicable exceptions, by emailing <a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a>.</p>
+    <h2>Consent and updates</h2><p>By providing personal data through the final website, you acknowledge this notice. Material changes should be reflected here with an updated effective date.</p>
+  </article>
+</BaseLayout>

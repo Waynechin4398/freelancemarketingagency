@@ -1,0 +1,58 @@
+---
+// AIM. BUILD. GROW. — the working principles as giant scroll-driven words
+// (Bike Bear's "Bigger / Bolder / Better" device, carrying Wayne Omni's existing principles).
+const values = [
+  { word: "Aim.", title: "Start with the constraint", copy: "Find the part of the journey holding growth back before prescribing a channel." },
+  { word: "Build.", title: "Design the handoffs", copy: "Make the transition from attention to action—and from lead to follow-up—deliberate." },
+  { word: "Grow.", title: "Build for learning", copy: "Use measurement to make the next decision clearer, not to decorate a report." },
+];
+---
+<section class="values-section" aria-labelledby="values-title" data-values>
+  <div class="values-head">
+    <span class="eyebrow light">How I work</span>
+    <h2 id="values-title" data-no-stagger>Clear before clever. Evidence before ego.</h2>
+  </div>
+  <ol class="values-list">
+    {values.map((value, index) => (
+      <li class="value-row">
+        <span class="value-word" data-value-word data-direction={index % 2 === 0 ? "1" : "-1"} aria-hidden="true">{value.word}</span>
+        <div class="value-copy" data-reveal="fade-up">
+          <b>{String(index + 1).padStart(2, "0")} — {value.word.replace(".", "")}</b>
+          <h3>{value.title}</h3>
+          <p>{value.copy}</p>
+        </div>
+      </li>
+    ))}
+  </ol>
+</section>
+
+<script>
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let controller: AbortController | null = null;
+
+  const init = () => {
+    controller?.abort();
+    const words = Array.from(document.querySelectorAll<HTMLElement>("[data-value-word]"));
+    if (!words.length || reduce.matches) return;
+    controller = new AbortController();
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const vh = window.innerHeight;
+      words.forEach((word) => {
+        const rect = word.getBoundingClientRect();
+        if (rect.bottom < -200 || rect.top > vh + 200) return;
+        const progress = (rect.top + rect.height / 2 - vh / 2) / vh; // -0.5 .. 0.5 around centre
+        const direction = Number(word.dataset.direction ?? 1);
+        word.style.setProperty("--shift", `${(progress * 18 * direction).toFixed(2)}vw`);
+      });
+    };
+    const request = () => { if (!frame) frame = requestAnimationFrame(update); };
+    window.addEventListener("scroll", request, { signal: controller.signal, passive: true });
+    window.addEventListener("resize", request, { signal: controller.signal, passive: true });
+    update();
+  };
+
+  document.addEventListener("astro:page-load", init);
+  if (document.readyState !== "loading") init();
+</script>

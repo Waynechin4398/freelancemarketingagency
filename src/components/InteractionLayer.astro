@@ -61,30 +61,6 @@ const onContact = Astro.url.pathname.startsWith("/contact");
     });
   };
 
-  // Hero layers drift with the pointer at different depths.
-  const setupHero = (signal: AbortSignal) => {
-    const hero = document.querySelector<HTMLElement>(".personal-hero");
-    if (!hero || !fine.matches || reduce.matches) return;
-    let frame = 0, tx = 0, ty = 0, cx = 0, cy = 0;
-    const render = () => {
-      cx += (tx - cx) * 0.08;
-      cy += (ty - cy) * 0.08;
-      hero.style.setProperty("--px", cx.toFixed(3));
-      hero.style.setProperty("--py", cy.toFixed(3));
-      frame = Math.abs(tx - cx) + Math.abs(ty - cy) > 0.001 ? requestAnimationFrame(render) : 0;
-    };
-    hero.addEventListener("pointermove", (event) => {
-      const rect = hero.getBoundingClientRect();
-      tx = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
-      ty = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
-      if (!frame) frame = requestAnimationFrame(render);
-    }, { signal, passive: true });
-    hero.addEventListener("pointerleave", () => {
-      tx = 0; ty = 0;
-      if (!frame) frame = requestAnimationFrame(render);
-    }, { signal, passive: true });
-  };
-
   // Sticky mobile bar: appears after the hero, steps aside near the CTA band and footer.
   const setupMobileBar = (signal: AbortSignal) => {
     const bar = document.querySelector<HTMLElement>("[data-mobile-bar]");
@@ -114,7 +90,6 @@ const onContact = Astro.url.pathname.startsWith("/contact");
     barObserver?.disconnect();
     controller = new AbortController();
     setupCards(controller.signal);
-    setupHero(controller.signal);
     setupMobileBar(controller.signal);
   };
 

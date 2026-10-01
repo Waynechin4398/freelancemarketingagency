@@ -7,48 +7,76 @@ import RelatedWork from "../components/RelatedWork.astro";
 import ProcessFlow from "../components/ProcessFlow.astro";
 import CtaBand from "../components/CtaBand.astro";
 import ResultsStrip from "../components/ResultsStrip.astro";
-import ServicesSkewedCarousel from "../components/ServicesSkewedCarousel.astro";
+import HeroCharacter from "../components/HeroCharacter.astro";
+import SignalValues from "../components/SignalValues.astro";
+import ServiceRows from "../components/ServiceRows.astro";
 import site from "../data/site.json";
 
 const services = (await getCollection("services", ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
+const featuredWork = ["singapore-luxury-homes", "propertylab-webinar-acquisition", "summercharter-summermarine"];
+const portfolio = (await getCollection("caseStudies", ({ data }) => !data.draft))
+  .sort((a, b) => a.data.order - b.data.order);
 ---
 <BaseLayout>
-  <section class="hero personal-hero">
-    <div class="hero-copy">
-      <div class="hero-index"><span>01</span><span>Who I am</span></div>
-      <span class="eyebrow">Independent growth partner · Malaysia</span>
-      <h1><span>I’m Wayne.</span><br />I build the systems<br />behind <em>growth.</em></h1>
-      <p>{site.heroIntro}</p>
-      <div class="hero-roles" aria-label="Core capabilities">
-        <span>Strategy</span><span>Web</span><span>Paid media</span><span>Automation</span>
+  <section class="signal-hero" aria-labelledby="hero-title">
+    <span class="eyebrow">Hi, I’m Wayne · Growth partner, Malaysia</span>
+    <h1 id="hero-title" class="signal-hero-title" data-no-stagger>
+      <span class="sr-only">Growth, on target. </span>
+      <span class="signal-hero-display" aria-hidden="true">
+        <span class="line">Growth,</span>
+        <span class="line"><HeroCharacter />n target.</span>
+      </span>
+    </h1>
+    <div class="signal-hero-bottom">
+      <div>
+        <p>{site.heroIntro}</p>
+        <div class="button-row">
+          <a class="button primary" href="/contact">Start a project <span aria-hidden="true">↗</span></a>
+          <a class="button ghost" href="/work/">See the work <span aria-hidden="true">↗</span></a>
+        </div>
       </div>
-      <div class="button-row">
-        <a class="button primary" href="/work/">Explore our work <span>↗</span></a>
-        <a class="button ghost" href="/contact/#audit">Request a growth audit</a>
-      </div>
+      <a class="hero-sticker" href="#growth-check" aria-label="Take the 30-second growth check">
+        <svg viewBox="0 0 160 160" aria-hidden="true">
+          <defs><path id="sticker-ring" d="M80,80 m-58,0 a58,58 0 1,1 116,0 a58,58 0 1,1 -116,0"></path></defs>
+          <circle class="sticker-bg" cx="80" cy="80" r="77"></circle>
+          <g class="sticker-spin"><text><textPath href="#sticker-ring" textLength="360" lengthAdjust="spacing">30-second growth check ◎ take it now ◎</textPath></text></g>
+        </svg>
+        <b aria-hidden="true">↗</b>
+      </a>
     </div>
-    <div class="portrait-stage" aria-label="Portrait of Wayne" data-reveal="clip-up">
-      <span class="portrait-letter" aria-hidden="true">W</span>
-      <span class="metal-disc" aria-hidden="true"></span>
-      <span class="blue-plane" aria-hidden="true"></span>
-      <img src="/images/wayne-portrait.webp" width="850" height="1063" alt="Wayne, founder of Wayne Omni" fetchpriority="high" />
-      <div class="portrait-nameplate"><b>WAYNE</b><span>Strategy / Build / Growth</span></div>
-      <div class="portrait-coordinates" aria-hidden="true"><span>MY · 03.14°N</span><span>101.69°E</span></div>
-    </div>
-    <a class="hero-side-note" href="#growth-system" data-scroll-indicator><span>Explore the growth journey</span><i aria-hidden="true"></i></a>
   </section>
 
-  <section class="proof-strip motion-marquee" aria-label="Capabilities">
+  <section class="proof-strip motion-marquee" aria-label="What Wayne Omni connects">
     <div class="motion-marquee-track">
-      <div class="motion-marquee-item"><span>Build</span><i></i><span>Acquire</span><i></i><span>Engage</span><i></i><span>Automate</span><i></i><span>Measure</span><i></i></div>
-      <div class="motion-marquee-item" aria-hidden="true"><span>Build</span><i></i><span>Acquire</span><i></i><span>Engage</span><i></i><span>Automate</span><i></i><span>Measure</span><i></i></div>
+      <div class="motion-marquee-item"><span>Websites, ads &amp; follow-up that actually talk to each other</span><i></i><span>Build</span><i></i><span>Acquire</span><i></i><span>Engage</span><i></i><span>Automate</span><i></i><span>Measure</span><i></i></div>
+      <div class="motion-marquee-item" aria-hidden="true"><span>Websites, ads &amp; follow-up that actually talk to each other</span><i></i><span>Build</span><i></i><span>Acquire</span><i></i><span>Engage</span><i></i><span>Automate</span><i></i><span>Measure</span><i></i></div>
     </div>
   </section>
 
   <ResultsStrip />
 
+  <SignalValues />
+
+  <ServiceRows
+    services={services}
+    copy="Pick the part of your customer journey that needs to work harder. Each service links strategy, execution and measurement to one clear next step."
+    showAllLink
+  />
+
+  <section class="work-preview section">
+    <SectionIntro number="03" eyebrow="Selected work" title="Proof, not promises." copy="Documented project contexts, the role I played, the systems created and—where the measurement context is available—the reported result." />
+    <RelatedWork slugs={featuredWork} />
+    <div class="client-chips">
+      <span>In the portfolio</span>
+      <ul>
+        {portfolio.map((project) => <li><a href={`/work/${project.id}/`}>{project.data.client}</a></li>)}
+      </ul>
+      <a class="button ghost" href="/work/">View all work <span aria-hidden="true">↗</span></a>
+    </div>
+  </section>
+
   <section class="console-feature section dark-section">
-    <SectionIntro number="02" eyebrow="How I work" title="One operator across the whole customer journey." copy="I work where strategy, design, media and technology meet—so the promise in the ad still makes sense on the page, in the CRM and during follow-up." light />
+    <SectionIntro number="04" eyebrow="How I work" title="One brain. The whole journey." copy="I work where strategy, design, media and technology meet—so the promise in the ad still makes sense on the page, in the CRM and during follow-up." light />
     <div class="console-feature-grid">
       <div class="console-manifesto">
         <span>WAYNE OMNI / SYSTEM 01</span>
@@ -59,30 +87,10 @@ const services = (await getCollection("services", ({ data }) => !data.draft)).so
     </div>
   </section>
 
-  <section class="work-preview section">
-    <SectionIntro number="03" eyebrow="Selected experience" title="The work behind the thinking." copy="Documented project contexts, the role I played, the systems created and—where the measurement context is available—the reported result." />
-    <RelatedWork slugs={["singapore-luxury-homes", "propertylab-webinar-acquisition", "summercharter-summermarine"]} />
-    <div class="section-foot">
-      <span>More documented work</span>
-      <div><span><b>KamiDental</b> · Healthcare</span><span><b>CHATDADDY</b> · SaaS</span></div>
-      <a href="/work/">View all work ↗</a>
-    </div>
-  </section>
-
-  <ServicesSkewedCarousel services={services} />
-
   <section class="system-section section" id="growth-system">
-    <SectionIntro number="05" eyebrow="The growth operating system" title="See every handoff. Improve the whole journey." copy="The strongest gains often appear between channels—where an ad becomes a page visit, a form becomes a lead, and a lead becomes a timely conversation." />
+    <SectionIntro number="05" eyebrow="The growth operating system" title="Every handoff, on target." copy="The strongest gains often appear between channels—where an ad becomes a page visit, a form becomes a lead, and a lead becomes a timely conversation." />
     <ProcessFlow />
   </section>
 
-  <section class="principles section">
-    <div class="principles-lead"><span class="eyebrow">How we work</span><h2>Clear before clever.<br />Evidence before ego.</h2></div>
-    <div class="principle-grid">
-      <article><span>01</span><h3>Start with the constraint</h3><p>Find the part of the journey holding growth back before prescribing a channel.</p></article>
-      <article><span>02</span><h3>Design the handoffs</h3><p>Make the transition from attention to action—and from lead to follow-up—deliberate.</p></article>
-      <article><span>03</span><h3>Build for learning</h3><p>Use measurement to make the next decision clearer, not to decorate a report.</p></article>
-    </div>
-  </section>
   <CtaBand growthCheck />
 </BaseLayout>

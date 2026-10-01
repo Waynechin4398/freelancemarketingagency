@@ -5,9 +5,15 @@ import ProcessFlow from "../components/ProcessFlow.astro";
 import CtaBand from "../components/CtaBand.astro";
 ---
 <BaseLayout title="About" description="Wayne Omni connects strategy, creative, media and technology.">
-  <PageHero eyebrow="Wayne Omnipotent · Malaysia" title="One partner across the growth journey." intro="Wayne Omni is the public-facing name of Wayne Omnipotent: a Malaysia-registered marketing business bringing web development, acquisition, content and automation into one connected practice." />
+  <PageHero eyebrow="Wayne Omnipotent · Malaysia" title="One partner. Zero silos." intro="Wayne Omni is the public-facing name of Wayne Omnipotent: a Malaysia-registered marketing business bringing web development, acquisition, content and automation into one connected practice." />
   <section class="about-grid">
-    <div><h2>Built for businesses that have outgrown disconnected execution.</h2></div>
+    <div>
+      <h2>Built for businesses that have outgrown disconnected execution.</h2>
+      <figure class="about-portrait" data-reveal="clip-up">
+        <div class="about-portrait-frame"><img src="/images/wayne-portrait.webp" width="850" height="1063" alt="Wayne, founder of Wayne Omni" loading="lazy" /></div>
+        <figcaption>Wayne · Founder, Wayne Omni</figcaption>
+      </figure>
+    </div>
     <div class="about-copy">
       <p>Many businesses do not have a channel problem. They have a handoff problem: the ad makes one promise, the page tells another story, the form lacks context and the follow-up arrives too late.</p>
       <p>Wayne Omni works across that whole path. Experience includes website development, landing pages, Meta, Google, TikTok and LinkedIn advertising, Facebook, Instagram and Redbook content, email marketing, CRM workflows and measurement.</p>
@@ -16,7 +22,7 @@ import CtaBand from "../components/CtaBand.astro";
   </section>
   <section class="section dark-section">
     <span class="eyebrow light">A connected practice</span>
-    <h2 class="large-section-title">From first attention to the next decision.</h2>
+    <h2 class="large-section-title">From first glance to the next big decision.</h2>
     <ProcessFlow dark />
   </section>
   <section class="language-band">

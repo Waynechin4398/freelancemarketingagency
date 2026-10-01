@@ -504,6 +504,26 @@ body:has(.filters, .service-subnav, .insight-filter-shell) .site-header.scrolled
 .form-field label { font: 500 .74rem/1.2 var(--mono); }
 .form-field input, .form-field textarea { border-radius: 16px; border: 2px solid var(--ink); }
 .form-field label span { color: var(--ink); }
+.brief-shell { align-self: start; min-width: 0; }
+.form-hp { position: absolute !important; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+.form-consent { display: grid; grid-template-columns: auto 1fr; gap: .75rem; align-items: start; font-size: .82rem; line-height: 1.55; color: var(--ink); cursor: pointer; }
+.form-consent input { appearance: none; width: 22px; height: 22px; margin: .1rem 0 0; border: 2px solid var(--ink); border-radius: 7px; background: var(--white); display: grid; place-content: center; cursor: pointer; transition: background-color 160ms linear; }
+.form-consent input::after { content: ""; width: 10px; height: 6px; border: solid var(--ink); border-width: 0 0 2.5px 2.5px; transform: rotate(-45deg) translate(1px, -1px) scale(0); transition: transform 160ms var(--ease-out, ease-out); }
+.form-consent input:checked { background: var(--lime); }
+.form-consent input:checked::after { transform: rotate(-45deg) translate(1px, -1px) scale(1); }
+.form-consent input:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+.form-consent a { text-decoration: underline; text-underline-offset: .2em; }
+.form-turnstile:empty { display: none; }
+.form-status a { color: var(--ink); font-weight: 600; text-decoration: underline; text-underline-offset: .2em; }
+.brief-success { position: relative; padding: clamp(1.8rem, 4vw, 3rem); background: var(--lime); border: 2px solid var(--ink); border-radius: var(--radius); box-shadow: 10px 10px 0 var(--ink); outline: none; animation: brief-success-in 520ms cubic-bezier(.2, .9, .25, 1.2) both; }
+.brief-success[hidden] { display: none; }
+.brief-success h3 { margin: .9rem 0 .8rem; font: 800 clamp(1.9rem, 3.4vw, 3.2rem)/1 var(--display); letter-spacing: -.04em; max-width: 14ch; }
+.brief-success p { max-width: 44ch; line-height: 1.7; margin: 0 0 1.6rem; }
+.brief-success-mark { position: absolute; top: clamp(1.2rem, 3vw, 2rem); right: clamp(1.2rem, 3vw, 2rem); width: 58px; height: 58px; display: grid; place-content: center; border-radius: 50%; background: var(--ink); color: var(--lime); font-size: 1.6rem; font-weight: 800; }
+.brief-success .button.primary { background: var(--ink); color: var(--lime); }
+@keyframes brief-success-in { from { opacity: 0; transform: translateY(18px) scale(.97); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .brief-success { animation: none; } }
+@media (max-width: 600px) { .brief-success-mark { position: static; width: 48px; height: 48px; margin-bottom: 1rem; } .brief-success { box-shadow: 6px 6px 0 var(--ink); } }
 .schedule-card { border: 2px solid var(--ink); border-radius: var(--radius); box-shadow: 10px 10px 0 var(--lime), 10px 10px 0 2px var(--ink); }
 .schedule-card h2 { font-size: clamp(2.2rem, 3.8vw, 4rem); }
 .brief-intro h2, .contact-copy h2 { font-size: clamp(2.1rem, 3.6vw, 3.9rem); }

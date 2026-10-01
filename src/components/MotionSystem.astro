@@ -215,6 +215,7 @@
       }, { signal });
     });
     form.addEventListener("submit", () => {
+      if (form.hasAttribute("data-async")) return; // the form's own handler manages its loading state
       const button = form.querySelector<HTMLButtonElement>("button[type='submit']");
       if (!button || !form.checkValidity()) return;
       button.classList.add("is-loading");

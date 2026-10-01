@@ -9,6 +9,8 @@
   "contactEmail": "waynegtcfx@gmail.com",
   "whatsappUrl": "https://wa.me/601123394398?text=Hi%20Wayne%2C%20I%20found%20Wayne%20Omni%20and%20would%20like%20to%20discuss%20a%20project.",
   "bookingUrl": "https://calendly.com/waynegtcfx/30min",
+  "leadEndpoint": "/api/lead",
+  "turnstileSiteKey": "",
   "ssmNumber": "202303064098 (CT0118753-P)",
   "businessAddress": "",
   "analytics": {

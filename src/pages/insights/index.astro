@@ -315,6 +315,7 @@ const dateFormatter = new Intl.DateTimeFormat("en-MY", {
 
   @media (max-width: 900px) {
     .insight-filter-shell { top: 76px; }
+    .insight-card h2, .insight-card.is-lead h2 { font-size: clamp(1.35rem, 6.2vw, 1.9rem); overflow-wrap: break-word; }
     .insights-browser-head { grid-template-columns: 1fr; align-items: start; }
     .insight-grid { grid-template-columns: 1fr 1fr; }
     .insight-card.is-lead { grid-column: 1 / -1; }
@@ -328,7 +329,7 @@ const dateFormatter = new Intl.DateTimeFormat("en-MY", {
     .insight-grid { grid-template-columns: 1fr; }
     .insight-card, .insight-card.is-lead { grid-column: 1; min-height: 430px; }
     .insight-card.is-lead { min-height: 510px; }
-    .insight-card.is-lead h2 { font-size: clamp(2.7rem, 13vw, 4rem); }
+    .insight-card.is-lead h2 { font-size: clamp(1.6rem, 7.4vw, 2.3rem); }
   }
 
   @media (prefers-reduced-motion: reduce) {

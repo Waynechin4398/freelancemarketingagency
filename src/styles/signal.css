@@ -28,7 +28,7 @@
   --metal: #dad8d0;
   --metal-light: #eceae3;
   --metal-dark: #77756e;
-  --display: "Syne Variable", "Arial Black", "Helvetica Neue", sans-serif;
+  --display: "Unbounded Variable", "Arial Black", "Helvetica Neue", sans-serif;
   --body: "Instrument Sans Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "DM Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   --pill: 999px;
@@ -458,6 +458,7 @@ body:has(.filters, .service-subnav, .insight-filter-shell) .site-header.scrolled
 .dark-section .process-list li::before, .service-process .process-list li::before { color: var(--lime); }
 .detailed-process li { border-color: rgba(242,241,236,.16); }
 .detailed-process p { color: #b4b2aa; font-size: .98rem; }
+.service-faq .service-section-heading h2 { font-size: clamp(2.1rem, 3.3vw, 3.7rem); }
 .faq-list summary span { font-family: var(--mono); font-weight: 500; color: var(--ink); }
 .faq-list summary i { width: 2.2rem; height: 2.2rem; display: grid; place-items: center; border-radius: 50%; background: var(--lime); border: 2px solid var(--ink); font-size: 1.1rem; }
 .faq-list .faq-answer p { font-size: .98rem; }

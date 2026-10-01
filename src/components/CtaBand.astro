@@ -1,11 +1,13 @@
 ---
 import site from "../data/site.json";
+import GrowthCheck from "./GrowthCheck.astro";
 
 interface Props {
   eyebrow?: string;
   title?: string;
   copy?: string;
   serviceId?: string;
+  growthCheck?: boolean;
 }
 
 const {
@@ -13,10 +15,12 @@ const {
   title = "Your next campaign should begin with a system.",
   copy = "Tell us where growth is getting stuck. We’ll start there.",
   serviceId,
+  growthCheck = false,
 } = Astro.props;
 const ctaLocation = serviceId ? `service_${serviceId}_final` : "site_cta";
 ---
-<section class="cta-band">
+<section class:list={["cta-band", { "has-growth-check": growthCheck }]}>
+  <div class="cta-copy">
   <span class="eyebrow">{eyebrow}</span>
   <h2>{title}</h2>
   <p>{copy}</p>
@@ -48,4 +52,6 @@ const ctaLocation = serviceId ? `service_${serviceId}_final` : "site_cta";
   ) : (
     <a class="button light-button" href="/contact">Start a project <span>↗</span></a>
   )}
+  </div>
+  {growthCheck && <GrowthCheck location="growth_check_cta" />}
 </section>

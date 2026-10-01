@@ -59,3 +59,11 @@ Listeners are scoped to an AbortController and rebound once per body after Astro
 ## Form note
 
 The current project brief intentionally opens a `mailto:` draft. Its focus, filled, validation, shake, error, and loading states are animated, but it does not show a false server-success state because there is no submission endpoint. If a real endpoint is added later, the existing form can swap to a confirmation panel after a confirmed successful response.
+
+## UX refresh (October 2026)
+
+Styles live in `src/styles/enhancements.css` (loaded after `global.css`); behaviour lives in the components below. Everything respects reduced motion and fine-pointer checks.
+
+- `ResultsStrip.astro` (home): count-up figures read directly from `approvedMetrics` in the case-study collection, each linking to its case study. Edit the `picks` list to change which metrics appear; never hardcode a number here.
+- `GrowthCheck.astro`: three-question "where is growth stuck?" picker rendered inside `CtaBand` when `growthCheck` is set (home, about, work index). Pointer picks auto-advance; keyboard users select with arrows and press Enter/Next. The result recommends a service from the collection and pre-fills a WhatsApp message with the visitor's own answers. It sends a `growth_check_complete` GA4 event with only the answer keys and recommended service id — no personal data. The mapping lives in `recommend()`.
+- `InteractionLayer.astro` (BaseLayout): card spotlight and gentle tilt on `.related-card`, `.project-card`, `.insight-card` and `[data-card-fx]`; pointer parallax on the home hero layers (`--px`/`--py`); and the sticky mobile action bar (≤620px), which replaces the floating WhatsApp button on phones and steps aside over the CTA band, contact brief and footer.

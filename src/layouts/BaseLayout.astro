@@ -1,10 +1,12 @@
 ---
 import "../styles/global.css";
+import "../styles/enhancements.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import SmoothCursor from "../components/SmoothCursor.astro";
 import StaggeredText from "../components/StaggeredText.astro";
 import MotionSystem from "../components/MotionSystem.astro";
+import InteractionLayer from "../components/InteractionLayer.astro";
 import { ClientRouter } from "astro:transitions";
 import site from "../data/site.json";
 
@@ -85,6 +87,7 @@ const structuredData = {
     <main id="main-content"><slot /></main>
     <Footer />
     <StaggeredText />
+    <InteractionLayer />
     <a
       class="whatsapp-float"
       href={site.whatsappUrl}

@@ -1,0 +1,338 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHero from "../../components/PageHero.astro";
+import CtaBand from "../../components/CtaBand.astro";
+
+const insights = (await getCollection("insights", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
+
+const categorySlug = (category: string) => category
+  .normalize("NFKD")
+  .toLowerCase()
+  .replace(/&/g, " and ")
+  .replace(/[^a-z0-9]+/g, "-")
+  .replace(/(^-|-$)/g, "");
+
+const categoryCounts = insights.reduce((counts, insight) => {
+  counts.set(insight.data.category, (counts.get(insight.data.category) ?? 0) + 1);
+  return counts;
+}, new Map<string, number>());
+
+const categories = [...categoryCounts.entries()]
+  .sort(([categoryA, countA], [categoryB, countB]) => countB - countA || categoryA.localeCompare(categoryB))
+  .map(([label, count]) => ({ label, count, slug: categorySlug(label) }));
+
+const dateFormatter = new Intl.DateTimeFormat("en-MY", {
+  day: "2-digit",
+  month: "short",
+  year: "numeric",
+});
+---
+<BaseLayout title="Insights" description="Practical notes on connected marketing systems, paid media, conversion, CRM and multilingual campaigns.">
+  <PageHero
+    eyebrow="Notes from the system"
+    title="Useful thinking for better marketing decisions."
+    intro="Choose a topic or browse the latest practical perspectives on acquisition, conversion and the handoffs between them."
+  />
+
+  <section class="insights-browser" aria-labelledby="insights-browser-title" data-insights-browser>
+    <header class="insights-browser-head">
+      <div>
+        <span class="eyebrow">Knowledge index</span>
+        <h2 id="insights-browser-title">Start with the decision you need to make.</h2>
+      </div>
+      <p>Every note is written to help you diagnose a real marketing problem—not to add more jargon to your reading list.</p>
+    </header>
+
+    <div class="insight-filter-shell">
+      <div class="insight-filter-meta">
+        <strong>Filter by category</strong>
+        <span aria-live="polite" data-filter-status>{insights.length} articles · All topics</span>
+      </div>
+      <div class="insight-filters" role="group" aria-label="Filter insights by category">
+        <button type="button" aria-pressed="true" data-insight-filter="all">
+          <span>All topics</span><b>{String(insights.length).padStart(2, "0")}</b>
+        </button>
+        {categories.map((category) => (
+          <button type="button" aria-pressed="false" data-insight-filter={category.slug}>
+            <span>{category.label}</span><b>{String(category.count).padStart(2, "0")}</b>
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <div class="insight-grid" id="insight-grid" data-insight-grid data-visible-count={insights.length}>
+      {insights.map((insight, index) => (
+        <a
+          class:list={["insight-card", { "is-lead": index === 0 }]}
+          href={`/insights/${insight.id}/`}
+          data-insight-card
+          data-category={categorySlug(insight.data.category)}
+        >
+          <div class="insight-card-top">
+            <span>{insight.data.category}</span>
+            <b>{String(index + 1).padStart(2, "0")}</b>
+          </div>
+          <div class="insight-card-copy">
+            <time datetime={insight.data.publishDate.toISOString()}>{dateFormatter.format(insight.data.publishDate)}</time>
+            <h2>{insight.data.title}</h2>
+            <p>{insight.data.excerpt}</p>
+          </div>
+          <span class="insight-card-link">Read insight <b aria-hidden="true">↗</b></span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <CtaBand />
+</BaseLayout>
+
+<script>
+  const initializeInsightFilters = () => {
+    const browser = document.querySelector<HTMLElement>("[data-insights-browser]");
+    if (!browser || browser.dataset.filterReady === "true") return;
+    browser.dataset.filterReady = "true";
+    const buttons = [...browser.querySelectorAll<HTMLButtonElement>("[data-insight-filter]")];
+    const cards = [...browser.querySelectorAll<HTMLElement>("[data-insight-card]")];
+    const grid = browser.querySelector<HTMLElement>("[data-insight-grid]");
+    const status = browser.querySelector<HTMLElement>("[data-filter-status]");
+    const validFilters = new Set(buttons.map((button) => button.dataset.insightFilter));
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const applyFilter = async (requestedFilter: string, updateHistory = false) => {
+      const filter = validFilters.has(requestedFilter) ? requestedFilter : "all";
+      const visibleCards = cards.filter((card) => filter === "all" || card.dataset.category === filter);
+      const activeButton = buttons.find((button) => button.dataset.insightFilter === filter);
+      const activeLabel = activeButton?.querySelector("span")?.textContent?.trim() ?? "All topics";
+
+      const outgoing = cards.filter((card) => !card.hidden && !visibleCards.includes(card));
+      if (updateHistory && !reduced.matches) await Promise.allSettled(outgoing.map((card) => card.animate([{ opacity: 1, transform: "scale(1)" }, { opacity: 0, transform: "scale(.96)" }], { duration: 150 }).finished));
+      const first = new Map(cards.filter((card) => !card.hidden).map((card) => [card, card.getBoundingClientRect()]));
+      cards.forEach((card) => {
+        const visible = visibleCards.includes(card);
+        card.toggleAttribute("hidden", !visible);
+        card.classList.remove("is-lead");
+      });
+      visibleCards[0]?.classList.add("is-lead");
+      if (updateHistory && !reduced.matches) visibleCards.forEach((card, index) => {
+        const before = first.get(card);
+        const after = card.getBoundingClientRect();
+        const dx = before ? before.left - after.left : 0;
+        const dy = before ? before.top - after.top : 18;
+        card.animate([{ opacity: before ? 1 : 0, transform: `translate(${dx}px,${dy}px)` }, { opacity: 1, transform: "none" }], { duration: 420, delay: index * 40, easing: "cubic-bezier(.22,1,.36,1)" });
+      });
+
+      buttons.forEach((button) => {
+        const selected = button.dataset.insightFilter === filter;
+        button.setAttribute("aria-pressed", String(selected));
+        button.classList.toggle("active", selected);
+      });
+
+      if (grid) grid.dataset.visibleCount = String(visibleCards.length);
+      if (status) status.textContent = `${visibleCards.length} ${visibleCards.length === 1 ? "article" : "articles"} · ${activeLabel}`;
+
+      if (updateHistory) {
+        const url = new URL(window.location.href);
+        if (filter === "all") url.searchParams.delete("category");
+        else url.searchParams.set("category", filter);
+        window.history.pushState({ insightCategory: filter }, "", url);
+
+        const analyticsWindow = window as Window & {
+          gtag?: (command: "event", eventName: string, parameters: Record<string, string | number>) => void;
+        };
+        analyticsWindow.gtag?.("event", "insights_filter", {
+          insight_category: filter,
+          visible_articles: visibleCards.length,
+        });
+      }
+    };
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => void applyFilter(button.dataset.insightFilter ?? "all", true));
+    });
+
+    window.addEventListener("popstate", () => {
+      void applyFilter(new URL(window.location.href).searchParams.get("category") ?? "all");
+    });
+
+    void applyFilter(new URL(window.location.href).searchParams.get("category") ?? "all");
+  };
+  document.addEventListener("astro:page-load", initializeInsightFilters);
+  if (document.readyState !== "loading") initializeInsightFilters();
+</script>
+
+<style>
+  .insights-browser { background: var(--paper); }
+  .insights-browser-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(280px, .7fr);
+    gap: clamp(2rem, 8vw, 8rem);
+    align-items: end;
+    padding: clamp(4rem, 8vw, 7rem) var(--pad);
+    border-bottom: 2px solid var(--ink);
+  }
+  .insights-browser-head h2 {
+    max-width: 12ch;
+    margin: 1.2rem 0 0;
+    font: 800 clamp(2.7rem, 5.4vw, 5.8rem)/.92 var(--display);
+    letter-spacing: -.065em;
+  }
+  .insights-browser-head > p { max-width: 47ch; margin: 0; color: var(--muted); }
+
+  .insight-filter-shell {
+    position: sticky;
+    z-index: 20;
+    top: 84px;
+    padding: 1rem var(--pad);
+    background: rgba(244, 244, 241, .94);
+    border-bottom: 2px solid var(--ink);
+    backdrop-filter: blur(16px);
+  }
+  .insight-filter-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: .75rem;
+    font-size: .59rem;
+    font-weight: 800;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+  .insight-filter-meta span { color: var(--muted); }
+  .insight-filters { display: flex; gap: .5rem; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+  .insight-filters::-webkit-scrollbar { display: none; }
+  .insight-filters button {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 1.5rem;
+    min-height: 44px;
+    padding: .65rem .8rem;
+    border: 2px solid var(--ink);
+    background: var(--white);
+    color: var(--ink);
+    cursor: pointer;
+    font: 800 .62rem/1 var(--body);
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    transition: color .18s ease, background .18s ease, transform .18s ease;
+  }
+  .insight-filters button b { color: var(--cobalt); font-size: .56rem; }
+  .insight-filters button:hover { transform: translateY(-2px); color: var(--signal-red); }
+  .insight-filters button[aria-pressed="true"] { background: var(--cobalt); color: white; }
+  .insight-filters button[aria-pressed="true"] b { color: white; }
+
+  .insight-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2px;
+    padding: var(--pad);
+    background: var(--ink);
+  }
+  .insight-card {
+    position: relative;
+    isolation: isolate;
+    min-height: 460px;
+    overflow: hidden;
+    padding: clamp(1.4rem, 2.5vw, 2rem);
+    background: var(--white);
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    transition: color .25s ease, background .25s ease, transform .25s ease;
+  }
+  .insight-card[hidden] { display: none; }
+  .insight-card:hover { z-index: 2; background: var(--metal-light); transform: translateY(-4px); }
+  .insight-card::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    width: 180px;
+    aspect-ratio: 1;
+    right: -95px;
+    top: -95px;
+    border: 2px solid var(--ink);
+    border-radius: 50%;
+    background: radial-gradient(circle at 32% 28%, #fff, #a1a8b0 34%, #555c65 60%, #e4e8eb 82%);
+    transition: transform .4s cubic-bezier(.2, .8, .2, 1);
+  }
+  .insight-card:hover::after { transform: translate(-12px, 12px) rotate(12deg); }
+  .insight-card-top { display: flex; justify-content: space-between; gap: 1rem; }
+  .insight-card-top span,
+  .insight-card-top b,
+  .insight-card time {
+    font-size: .58rem;
+    font-weight: 800;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+  .insight-card-top span { max-width: 22ch; color: var(--cobalt); }
+  .insight-card-top b, .insight-card time { color: var(--muted); }
+  .insight-card-copy { margin: auto 0 2rem; }
+  .insight-card h2 {
+    max-width: 12ch;
+    margin: .9rem 0 1rem;
+    font: 800 clamp(1.75rem, 2.8vw, 3rem)/.98 var(--display);
+    letter-spacing: -.05em;
+  }
+  .insight-card p { max-width: 48ch; margin: 0; color: var(--muted); font-size: .78rem; }
+  .insight-card-link {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid currentColor;
+    font-size: .64rem;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .insight-card-link b { color: var(--cobalt); }
+
+  .insight-card.is-lead { grid-column: span 2; min-height: 560px; background: var(--ink); color: white; }
+  .insight-card.is-lead::before {
+    content: "Latest thinking";
+    position: absolute;
+    z-index: -1;
+    right: -1rem;
+    bottom: 4.2rem;
+    color: rgba(255, 255, 255, .045);
+    font: 900 clamp(4rem, 8vw, 8rem)/.78 var(--display);
+    letter-spacing: -.08em;
+    text-transform: uppercase;
+    transform: rotate(-8deg);
+  }
+  .insight-card.is-lead::after { width: 290px; right: -90px; top: -120px; border-color: white; }
+  .insight-card.is-lead:hover { background: #0d0d0d; }
+  .insight-card.is-lead .insight-card-top span,
+  .insight-card.is-lead .insight-card-link b { color: var(--signal-red); }
+  .insight-card.is-lead .insight-card-top b,
+  .insight-card.is-lead time,
+  .insight-card.is-lead p { color: rgba(255, 255, 255, .68); }
+  .insight-card.is-lead h2 { max-width: 15ch; font-size: clamp(2.8rem, 5.5vw, 6rem); line-height: .9; }
+  .insight-grid[data-visible-count="1"] .insight-card.is-lead { grid-column: 1 / -1; }
+
+  @media (max-width: 900px) {
+    .insight-filter-shell { top: 76px; }
+    .insights-browser-head { grid-template-columns: 1fr; align-items: start; }
+    .insight-grid { grid-template-columns: 1fr 1fr; }
+    .insight-card.is-lead { grid-column: 1 / -1; }
+  }
+
+  @media (max-width: 620px) {
+    .insights-browser-head { padding-block: 4rem; }
+    .insight-filter-meta { align-items: end; }
+    .insight-filter-meta span { max-width: 16ch; text-align: right; }
+    .insight-filters { margin-inline: calc(-1 * var(--pad)); padding-inline: var(--pad); }
+    .insight-grid { grid-template-columns: 1fr; }
+    .insight-card, .insight-card.is-lead { grid-column: 1; min-height: 430px; }
+    .insight-card.is-lead { min-height: 510px; }
+    .insight-card.is-lead h2 { font-size: clamp(2.7rem, 13vw, 4rem); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .insight-card, .insight-card::after, .insight-filters button { transition: none; }
+    .insight-card:hover, .insight-filters button:hover { transform: none; }
+  }
+</style>

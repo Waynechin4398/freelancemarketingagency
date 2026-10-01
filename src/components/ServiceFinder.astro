@@ -1,0 +1,24 @@
+---
+import type { CollectionEntry } from "astro:content";
+import InteractiveExplorer from "./InteractiveExplorer.astro";
+interface Props { services: CollectionEntry<"services">[] }
+const { services } = Astro.props;
+const goals: Record<string, string> = {
+  "website-development": "Make my website work harder",
+  "landing-pages": "Turn more clicks into enquiries",
+  "paid-media": "Reach the right customers",
+  "social-media": "Build a stronger social presence",
+  "email-marketing": "Reconnect with my audience",
+  "crm-automation": "Stop losing leads in the handoff",
+};
+const options = services.map(({ id, data }) => ({
+  label: goals[id] ?? data.title,
+  title: data.title,
+  eyebrow: `${data.group} / A useful starting point`,
+  description: data.painPoints[0],
+  bullets: data.outcomes,
+  href: `/services/${id}/`,
+  linkLabel: "See the approach & scope",
+}));
+---
+<InteractiveExplorer id="service-finder" label="What would you like to improve?" items={options} variant="finder" dark />

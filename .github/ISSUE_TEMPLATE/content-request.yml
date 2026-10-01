@@ -1,0 +1,43 @@
+name: Content request
+description: Start an evidence-aware article or case-study workflow.
+title: "[Content] "
+labels: ["content"]
+body:
+  - type: dropdown
+    id: content_type
+    attributes:
+      label: Content type
+      options:
+        - Insight article
+        - Case study
+        - Service page update
+    validations:
+      required: true
+  - type: textarea
+    id: audience
+    attributes:
+      label: Audience and decision
+      description: Who is this for, and what decision should it help them make?
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: Approved source material
+      description: Add source links, internal evidence references and client-permission notes. Do not paste secrets.
+    validations:
+      required: true
+  - type: textarea
+    id: claims
+    attributes:
+      label: Claims and restrictions
+      description: List claims that may be made, claims that need verification, and topics that must not be stated.
+    validations:
+      required: true
+  - type: textarea
+    id: languages
+    attributes:
+      label: Market and language
+      placeholder: Malaysia; English, Chinese, Bahasa Melayu
+    validations:
+      required: true

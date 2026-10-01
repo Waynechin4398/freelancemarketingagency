@@ -1,0 +1,146 @@
+<script>
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const segmentText = (element: HTMLElement) => {
+    if (element.dataset.staggerText || reducedMotion.matches) return;
+
+    const textNodes: Text[] = [];
+    const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, {
+      acceptNode(node) {
+        if (!node.textContent?.trim()) return NodeFilter.FILTER_REJECT;
+        if (node.parentElement?.closest("[data-no-stagger]")) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      },
+    });
+
+    let currentNode = walker.nextNode();
+    while (currentNode) {
+      textNodes.push(currentNode as Text);
+      currentNode = walker.nextNode();
+    }
+
+    let segmentIndex = 0;
+    textNodes.forEach((textNode) => {
+      const fragment = document.createDocumentFragment();
+      const parts = textNode.data.split(/(\s+)/);
+
+      parts.forEach((part) => {
+        if (!part) return;
+        if (/^\s+$/.test(part)) {
+          fragment.append(document.createTextNode(part));
+          return;
+        }
+
+        const mask = document.createElement("span");
+        const segment = document.createElement("span");
+        mask.className = "stagger-text-mask";
+        segment.className = "stagger-text-segment";
+        segment.textContent = part;
+        segment.style.setProperty("--stagger-delay", `${Math.min(segmentIndex * 80, 720)}ms`);
+        mask.append(segment);
+        fragment.append(mask);
+        segmentIndex += 1;
+      });
+
+      textNode.replaceWith(fragment);
+    });
+
+    if (!segmentIndex) return;
+    element.dataset.staggerText = "ready";
+    element.classList.add("stagger-text");
+  };
+
+  const initializeStaggeredText = () => {
+    const targets = document.querySelectorAll<HTMLElement>("main h1, main h2, .site-footer h2");
+    targets.forEach(segmentText);
+    if (reducedMotion.matches) {
+      targets.forEach((target) => target.dataset.staggerText = "reduced-motion");
+      return;
+    }
+    if (!("IntersectionObserver" in window)) {
+      requestAnimationFrame(() => targets.forEach((target) => target.classList.add("stagger-text-visible")));
+      return;
+    }
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("stagger-text-visible");
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.1, rootMargin: "0px 0px -5%" });
+    targets.forEach((target) => {
+      if (target.dataset.staggerText === "ready") observer.observe(target);
+    });
+  };
+
+  document.addEventListener("astro:page-load", initializeStaggeredText);
+  if (document.readyState !== "loading") initializeStaggeredText();
+</script>
+
+<style is:global>
+  .stagger-text-mask {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: -.14em;
+    /*
+     * Keep a transparent gutter around the glyphs while the word is clipped.
+     * Tight display line-height, negative tracking and italic/rounded glyphs can
+     * all paint outside their typographic advance box (notably g, y and the
+     * final character). Matching negative margins preserve the original text
+     * flow without letting the reveal mask crop that painted area.
+     */
+    padding: .18em .14em .32em;
+    margin: -.18em -.14em -.32em;
+  }
+
+  .stagger-text-segment {
+    display: inline-block;
+  }
+
+  .stagger-text .stagger-text-mask,
+  .stagger-text .stagger-text-segment {
+    width: auto;
+    height: auto;
+    border: 0;
+    background-color: transparent;
+    font: inherit;
+    color: inherit;
+    letter-spacing: inherit;
+    line-height: inherit;
+    text-decoration: inherit;
+    text-transform: inherit;
+  }
+
+  .stagger-text .stagger-text-segment {
+    margin: 0;
+    padding: 0;
+  }
+
+  .stagger-text[data-stagger-text="ready"] .stagger-text-segment {
+    opacity: 0;
+    filter: blur(7px);
+    transform: translate3d(0, 1.05em, 0) rotate(1.2deg);
+    transform-origin: 0 100%;
+    transition:
+      opacity .68s cubic-bezier(.16, 1, .3, 1),
+      filter .68s cubic-bezier(.16, 1, .3, 1),
+      transform .78s cubic-bezier(.16, 1, .3, 1);
+    transition-delay: var(--stagger-delay, 0ms);
+    will-change: opacity, filter, transform;
+  }
+
+  .stagger-text[data-stagger-text="ready"].stagger-text-visible .stagger-text-segment {
+    opacity: 1;
+    filter: blur(0);
+    transform: translate3d(0, 0, 0) rotate(0);
+    will-change: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce), print {
+    .stagger-text-segment {
+      opacity: 1 !important;
+      filter: none !important;
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+</style>

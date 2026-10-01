@@ -1,0 +1,244 @@
+---
+interface Item {
+  label: string;
+  title: string;
+  description?: string;
+  eyebrow?: string;
+  bullets?: string[];
+  tags?: string[];
+  href?: string;
+  linkLabel?: string;
+}
+interface Props {
+  id: string;
+  label: string;
+  items: Item[];
+  variant?: "journey" | "finder" | "steps";
+  dark?: boolean;
+}
+const { id, label, items, variant = "steps", dark = false } = Astro.props;
+const count = (n: number) => String(n).padStart(2, "0");
+---
+<div class:list={["explorer", `explorer--${variant}`, { "explorer--dark": dark }]} data-explorer>
+  <div class="explorer-topline">
+    <span>{label}</span>
+    <button class="explorer-view" type="button" data-explorer-all hidden aria-pressed="false">Read all</button>
+  </div>
+  <div class="explorer-layout">
+    <nav class="explorer-nav" aria-label={label} data-explorer-nav>
+      {items.map((item, i) => (
+        <a id={`${id}-tab-${i}`} href={`#${id}-panel-${i}`} class="explorer-choice" data-explorer-tab>
+          <span class="explorer-index">{count(i + 1)}</span>
+          <strong>{item.label}</strong>
+          <span class="explorer-choice-arrow" aria-hidden="true">↗</span>
+        </a>
+      ))}
+    </nav>
+    <div class="explorer-body">
+      {items.map((item, i) => (
+        <section id={`${id}-panel-${i}`} class="explorer-panel" data-explorer-panel aria-labelledby={`${id}-title-${i}`}>
+          <div class="explorer-visual" aria-hidden="true">
+            <span class="explorer-stage-number">{count(i + 1)}</span>
+            <div class="explorer-circuit">
+              {items.map((_, node) => <span class:list={["explorer-node", { "is-current": node === i, "is-past": node < i }]}><i></i></span>)}
+            </div>
+            <span class="explorer-total">/ {count(items.length)}</span>
+          </div>
+          <div class="explorer-copy">
+            {item.eyebrow && <span class="explorer-eyebrow">{item.eyebrow}</span>}
+            <h3 id={`${id}-title-${i}`}>{item.title}</h3>
+            {item.description && <p>{item.description}</p>}
+            {item.bullets && <ul>{item.bullets.map((bullet) => <li>{bullet}</li>)}</ul>}
+            {item.tags && <div class="explorer-tags" aria-label="Tools and platforms">{item.tags.map((tag) => <span>{tag}</span>)}</div>}
+            {item.href && <a class="explorer-link" href={item.href}>{item.linkLabel ?? "Explore this service"}<span aria-hidden="true">↗</span></a>}
+          </div>
+        </section>
+      ))}
+      <div class="explorer-controls" data-explorer-controls hidden>
+        <p data-explorer-status aria-live="polite" aria-atomic="true">{count(1)} / {count(items.length)} — {items[0]?.label}</p>
+        <div>
+          <button type="button" data-explorer-prev aria-label="Previous step"><span aria-hidden="true">←</span></button>
+          <button type="button" data-explorer-next aria-label="Next step"><span aria-hidden="true">→</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let explorerController = new AbortController();
+  let initializedBody: HTMLElement | null = null;
+  const initExplorers = () => {
+    if (initializedBody === document.body) return;
+    initializedBody = document.body;
+    explorerController.abort();
+    explorerController = new AbortController();
+    const { signal } = explorerController;
+    document.querySelectorAll<HTMLElement>("[data-explorer]").forEach((root) => {
+      const tabs = Array.from(root.querySelectorAll<HTMLAnchorElement>("[data-explorer-tab]"));
+      const panels = Array.from(root.querySelectorAll<HTMLElement>("[data-explorer-panel]"));
+      const nav = root.querySelector<HTMLElement>("[data-explorer-nav]")!;
+      const all = root.querySelector<HTMLButtonElement>("[data-explorer-all]")!;
+      const controls = root.querySelector<HTMLElement>("[data-explorer-controls]")!;
+      const previous = root.querySelector<HTMLButtonElement>("[data-explorer-prev]")!;
+      const next = root.querySelector<HTMLButtonElement>("[data-explorer-next]")!;
+      const status = root.querySelector<HTMLElement>("[data-explorer-status]")!;
+      let active = Math.max(0, panels.findIndex((panel) => `#${panel.id}` === location.hash));
+      let expanded = false;
+      let animation: Animation | undefined;
+      let circuitAnimation: Animation | undefined;
+      const wideScreen = window.matchMedia("(min-width: 901px)");
+      const syncOrientation = () => {
+        if (expanded) nav.removeAttribute("aria-orientation");
+        else nav.setAttribute("aria-orientation", root.classList.contains("explorer--journey") && wideScreen.matches ? "horizontal" : "vertical");
+      };
+      const select = (index: number, animate = true) => {
+        active = (index + tabs.length) % tabs.length;
+        nav.setAttribute("role", expanded ? "navigation" : "tablist");
+        syncOrientation();
+        tabs.forEach((tab, i) => {
+          tab.classList.toggle("is-selected", i === active);
+          tab.tabIndex = expanded || i === active ? 0 : -1;
+          if (expanded) {
+            tab.removeAttribute("role");
+            tab.removeAttribute("aria-selected");
+            tab.removeAttribute("aria-controls");
+          } else {
+            tab.setAttribute("role", "tab");
+            tab.setAttribute("aria-selected", String(i === active));
+            tab.setAttribute("aria-controls", panels[i].id);
+          }
+          panels[i].hidden = !expanded && i !== active;
+          panels[i].setAttribute("role", expanded ? "region" : "tabpanel");
+          panels[i].setAttribute("aria-labelledby", expanded ? panels[i].querySelector("h3")!.id : tab.id);
+          panels[i].tabIndex = 0;
+        });
+        root.classList.toggle("is-expanded", expanded);
+        all.textContent = expanded ? "Step-by-step view" : "Read all";
+        all.setAttribute("aria-pressed", String(expanded));
+        controls.hidden = expanded;
+        status.textContent = `${String(active + 1).padStart(2, "0")} / ${String(tabs.length).padStart(2, "0")} — ${tabs[active].querySelector("strong")?.textContent}`;
+        animation?.cancel();
+        circuitAnimation?.cancel();
+        if (animate && !expanded && !motionPreference.matches) {
+          animation = panels[active].animate([{ opacity: 0.35, transform: "translateY(10px)" }, { opacity: 1, transform: "none" }], { duration: 320, easing: "cubic-bezier(.22,1,.36,1)" });
+          const node = panels[active].querySelector<HTMLElement>(".is-current i");
+          circuitAnimation = node?.animate([{ transform: "scale(.65)" }, { transform: "scale(1.4)", offset: .5 }, { transform: "scale(1)" }], { duration: 500, easing: "ease-out" });
+        }
+      };
+      tabs.forEach((tab, index) => {
+        tab.addEventListener("click", (event) => {
+          if (expanded || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+          event.preventDefault();
+          select(index);
+        }, { signal });
+        tab.addEventListener("keydown", (event) => {
+          if (expanded || !["ArrowDown", "ArrowUp", "ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+          event.preventDefault();
+          const index = event.key === "Home" ? 0 : event.key === "End" ? tabs.length - 1 : active + (["ArrowDown", "ArrowRight"].includes(event.key) ? 1 : -1);
+          select(index);
+          tabs[active].focus({ preventScroll: true });
+        }, { signal });
+      });
+      previous.addEventListener("click", () => select(active - 1), { signal });
+      next.addEventListener("click", () => select(active + 1), { signal });
+      all.addEventListener("click", () => { expanded = !expanded; select(active, false); }, { signal });
+      window.addEventListener("hashchange", () => {
+        const index = panels.findIndex((panel) => `#${panel.id}` === location.hash);
+        if (index >= 0) select(index);
+      }, { signal });
+      signal.addEventListener("abort", () => { animation?.cancel(); circuitAnimation?.cancel(); }, { once: true });
+      motionPreference.addEventListener("change", () => { if (motionPreference.matches) { animation?.cancel(); circuitAnimation?.cancel(); } }, { signal });
+      wideScreen.addEventListener("change", syncOrientation, { signal });
+      root.classList.add("is-enhanced");
+      all.hidden = false;
+      select(active, false);
+    });
+  };
+  initExplorers();
+  document.addEventListener("astro:page-load", initExplorers);
+  document.addEventListener("astro:before-swap", () => { explorerController.abort(); initializedBody = null; });
+</script>
+
+<style>
+  .explorer { --ex-bg: #f4f4f1; --ex-panel: #fff; --ex-ink: #050505; --ex-muted: #595b61; --ex-line: #c9cbd0; background: var(--ex-bg); color: var(--ex-ink); border: 1px solid var(--ex-line); }
+  .explorer--dark { --ex-bg: #101114; --ex-panel: #191b20; --ex-ink: #fff; --ex-muted: #b6b8c0; --ex-line: #41434a; }
+  .explorer-topline { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem; min-height: 64px; padding: .5rem 1.5rem; border-bottom: 1px solid var(--ex-line); }
+  .explorer-topline > span, .explorer-eyebrow { font-size: .75rem; text-transform: uppercase; letter-spacing: .1em; font-weight: 700; }
+  .explorer-view { border: 0; border-bottom: 1px solid currentColor; padding: .6rem 0; min-height: 44px; background: none; color: var(--ex-ink); cursor: pointer; font-size: .875rem; }
+  .explorer-layout { display: grid; grid-template-columns: minmax(220px, .8fr) minmax(0, 1.5fr); }
+  .explorer-nav { padding: 1.25rem; display: flex; flex-direction: column; gap: .5rem; border-right: 1px solid var(--ex-line); }
+  .explorer .explorer-choice { display: grid; grid-template-columns: 2rem 1fr 1rem; align-items: center; gap: .8rem; min-height: 72px; padding: 1rem; border: 1px solid transparent; color: var(--ex-ink); background: transparent; text-decoration: none; }
+  .explorer-choice::after { display: none; }
+  .explorer-choice strong { font-size: 1rem; line-height: 1.4; font-weight: 600; }
+  .explorer-index { font-size: .8rem; font-variant-numeric: tabular-nums; color: var(--ex-muted); }
+  .explorer .explorer-choice:hover { border-color: var(--cobalt); }
+  .explorer .explorer-choice.is-selected { background: var(--cobalt); color: white; border-color: var(--cobalt); }
+  .explorer-choice.is-selected .explorer-index { color: white; }
+  .explorer-choice-arrow { opacity: .5; }
+  .explorer-choice.is-selected .explorer-choice-arrow { opacity: 1; }
+  .explorer-body { min-width: 0; background: var(--ex-panel); display: flex; flex-direction: column; }
+  .explorer-panel { padding: clamp(1.5rem, 3vw, 3rem); flex: 1; scroll-margin-top: 140px; }
+  .explorer-panel + .explorer-panel { border-top: 1px solid var(--ex-line); }
+  .explorer.is-enhanced:not(.is-expanded) .explorer-panel { border-top: 0; }
+  .explorer-visual { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--ex-line); }
+  .explorer-stage-number { font: 800 clamp(3rem, 6vw, 5rem)/1 var(--display); letter-spacing: -.07em; color: var(--cobalt); }
+  .explorer--dark .explorer-stage-number { color: #abbcff; }
+  .explorer-total { font-size: .85rem; color: var(--ex-muted); white-space: nowrap; }
+  .explorer-circuit { display: flex; align-items: center; flex: 1; }
+  .explorer-node { display: flex; align-items: center; flex: 1; }
+  .explorer-node:not(:last-child)::after { content: ""; height: 2px; flex: 1; background: var(--ex-line); }
+  .explorer-node:last-child { flex: 0; }
+  .explorer-node i { display: block; width: 12px; height: 12px; border: 1px solid var(--ex-muted); border-radius: 50%; flex: none; }
+  .explorer-node.is-past::after, .explorer-node.is-past i { background: var(--cobalt); border-color: var(--cobalt); }
+  .explorer-node.is-current i { background: var(--cobalt); border-color: var(--cobalt); box-shadow: 0 0 0 5px #0237ff25; }
+  .explorer-copy h3 { margin: .5rem 0 1rem; max-width: 23ch; font: 750 clamp(1.7rem, 2.9vw, 3rem)/1.13 var(--display); letter-spacing: -.045em; overflow-wrap: break-word; }
+  .explorer-copy p { color: var(--ex-muted); font-size: 1rem; line-height: 1.75; max-width: 65ch; margin: 0; }
+  .explorer-copy ul { list-style: none; padding: 0; margin: 1.5rem 0; }
+  .explorer-copy li { display: flex; align-items: baseline; gap: .75rem; padding: .65rem 0; font-size: 1rem; line-height: 1.5; border-bottom: 1px solid var(--ex-line); }
+  .explorer-copy li::before { content: "↗"; color: var(--cobalt); }
+  .explorer-tags { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.5rem; }
+  .explorer-tags span { font-size: .875rem; padding: .4rem .6rem; border: 1px solid var(--ex-line); }
+  .explorer .explorer-link { min-height: 48px; display: inline-flex; align-items: center; justify-content: space-between; gap: 2rem; margin-top: 1.5rem; padding: .8rem 1rem; font-weight: 650; font-size: .9rem; background: var(--cobalt); color: white; }
+  .explorer .explorer-link:hover { background: var(--signal-red, #ff2828); }
+  .explorer-link::after { display: none; }
+  .explorer-controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem; padding: 1rem 1.5rem; border-top: 1px solid var(--ex-line); }
+  .explorer-controls p { font-size: .875rem; color: var(--ex-muted); margin: 0; }
+  .explorer-controls > div { display: flex; gap: .5rem; }
+  .explorer-controls button { min-width: 48px; min-height: 48px; border: 1px solid var(--ex-line); background: transparent; cursor: pointer; font-size: 1.2rem; }
+  .explorer-controls button:hover { background: var(--cobalt); border-color: var(--cobalt); color: white; }
+  .explorer :is(a, button, [tabindex]):focus-visible { outline: 2px solid var(--cobalt); outline-offset: 3px; }
+  .explorer--dark :is(a, button, [tabindex]):focus-visible { outline-color: #abbcff; }
+  @media (min-width: 901px) {
+    .explorer.is-enhanced:not(.is-expanded) .explorer-body { min-height: 480px; }
+    .explorer--finder.is-enhanced:not(.is-expanded) .explorer-body { min-height: 650px; }
+    .explorer--journey .explorer-layout { grid-template-columns: 1fr; }
+    .explorer--journey .explorer-nav { flex-direction: row; border-right: 0; border-bottom: 1px solid var(--ex-line); padding: 1rem; }
+    .explorer--journey .explorer-choice { flex: 1; grid-template-columns: auto 1fr; gap: .65rem; padding: .8rem; min-width: 0; border-color: var(--ex-line); }
+    .explorer--journey .explorer-choice-arrow { display: none; }
+    .explorer--journey .explorer-panel { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 4rem; align-items: center; }
+    .explorer--journey .explorer-visual { margin: 0; padding-block: 3rem; }
+    .explorer--journey .explorer-stage-number { font-size: clamp(5rem, 9vw, 9rem); }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .explorer-choice, .explorer-link, .explorer-controls button { transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease; }
+    .explorer-choice-arrow { transition: transform 250ms var(--ease-out); }
+    .explorer-choice:hover .explorer-choice-arrow { transform: translate(2px, -2px); }
+  }
+  @media (max-width: 900px) {
+    .explorer-layout { grid-template-columns: 1fr; }
+    .explorer-nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .4rem; padding: .75rem; border-right: 0; border-bottom: 1px solid var(--ex-line); }
+    .explorer .explorer-choice { grid-template-columns: 1.4rem 1fr; gap: .45rem; min-height: 60px; padding: .7rem; border-color: var(--ex-line); }
+    .explorer-choice strong { font-size: .875rem; }
+    .explorer-choice-arrow { display: none; }
+    .explorer-panel { padding: 1.5rem; }
+    .explorer-visual { margin-bottom: 1.5rem; gap: 1rem; }
+    .explorer-controls { padding: 1rem; }
+  }
+  @media print {
+    .explorer [data-explorer-panel][hidden] { display: block !important; }
+    .explorer-nav, .explorer-controls, .explorer-view, .explorer-visual { display: none !important; }
+    .explorer-layout { display: block; }
+  }
+</style>

@@ -1,0 +1,11 @@
+{
+  "industries": [
+    { "name": "Real Estate", "slug": "real-estate", "publishable": true },
+    { "name": "Tourism", "slug": "tourism", "publishable": true },
+    { "name": "Finance", "slug": "finance", "publishable": true },
+    { "name": "Healthcare", "slug": "healthcare", "publishable": false },
+    { "name": "Marine", "slug": "marine", "publishable": false },
+    { "name": "SaaS & Technology", "slug": "saas-technology", "publishable": false },
+    { "name": "Professional Services", "slug": "professional-services", "publishable": false }
+  ]
+}

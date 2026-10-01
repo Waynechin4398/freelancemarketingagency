@@ -1,0 +1,16 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import site from "../data/site.json";
+---
+<BaseLayout title="Terms & Conditions" noindex>
+  <article class="legal">
+    <span class="eyebrow">Legal · Draft for review</span><h1>Terms & Conditions</h1>
+    <p class="legal-notice">This is a pre-launch content draft, not legal advice. Final commercial terms and governing details must still be reviewed before public launch.</p>
+    <h2>Business identity</h2><p>This website is operated by {site.legalName}, registered in Malaysia under SSM number {site.ssmNumber}. Enquiries may be directed to <a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a>.</p>
+    <h2>Website information</h2><p>Content on this website is provided for general information about Wayne Omni services. It does not constitute a guarantee of marketing, financial or business outcomes.</p>
+    <h2>Project engagements</h2><p>Any paid engagement will be governed by a separate written proposal or agreement describing scope, fees, responsibilities, timing, intellectual property and acceptance criteria.</p>
+    <h2>Portfolio content</h2><p>Project descriptions are intended to explain relevant experience. Client assets, names and results should only be published with appropriate rights and permission.</p>
+    <h2>Availability and changes</h2><p>The website and its content may be changed, suspended or withdrawn without notice. Reasonable care will be taken, but uninterrupted availability is not guaranteed.</p>
+    <h2>Third-party services</h2><p>Links or integrations may lead to third-party services governed by their own terms and privacy practices.</p>
+  </article>
+</BaseLayout>

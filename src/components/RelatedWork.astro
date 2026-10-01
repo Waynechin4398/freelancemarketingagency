@@ -1,0 +1,20 @@
+---
+import { getCollection } from "astro:content";
+
+interface Props { slugs: string[]; }
+const { slugs } = Astro.props;
+const allProjects = await getCollection("caseStudies", ({ data }) => !data.draft);
+const projects = slugs
+  .map((slug) => allProjects.find((project) => project.id === slug))
+  .filter((project) => project !== undefined);
+---
+<div class="related-grid">
+  {projects.map((project) => (
+    <a href={`/work/${project.id}/`} class:list={["related-card", project.data.palette]}>
+      <span>{project.data.industry}</span>
+      <h3>{project.data.client}</h3>
+      <p>{project.data.summary}</p>
+      <b>View case study ↗</b>
+    </a>
+  ))}
+</div>

@@ -151,7 +151,7 @@
 
   const setupLinks = () => {
     document.querySelectorAll<HTMLAnchorElement>("main a, .site-footer a").forEach((link) => {
-      if (link.matches(".button, .project-card, .related-card, .insight-card, .service-list a, .constraint-grid a, .service-card a")) return;
+      if (link.matches(".button, .project-card, .related-card, .insight-card, .service-list a, .constraint-grid a, .service-card a, .service-row, .client-chips a, .hero-sticker, .result-card, .footer-word a")) return;
       if (link.children.length <= 2) link.classList.add("motion-link");
     });
   };

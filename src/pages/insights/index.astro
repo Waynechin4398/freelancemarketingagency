@@ -32,7 +32,7 @@ const dateFormatter = new Intl.DateTimeFormat("en-MY", {
 <BaseLayout title="Insights" description="Practical notes on connected marketing systems, paid media, conversion, CRM and multilingual campaigns.">
   <PageHero
     eyebrow="Notes from the system"
-    title="Useful thinking for better marketing decisions."
+    title="Smart notes for sharper marketing."
     intro="Choose a topic or browse the latest practical perspectives on acquisition, conversion and the handoffs between them."
   />
 
@@ -183,9 +183,9 @@ const dateFormatter = new Intl.DateTimeFormat("en-MY", {
   .insight-filter-shell {
     position: sticky;
     z-index: 20;
-    top: 84px;
+    top: 88px;
     padding: 1rem var(--pad);
-    background: rgba(244, 244, 241, .94);
+    background: rgba(242, 241, 236, .94);
     border-bottom: 2px solid var(--ink);
     backdrop-filter: blur(16px);
   }
@@ -219,9 +219,9 @@ const dateFormatter = new Intl.DateTimeFormat("en-MY", {
     transition: color .18s ease, background .18s ease, transform .18s ease;
   }
   .insight-filters button b { color: var(--cobalt); font-size: .56rem; }
-  .insight-filters button:hover { transform: translateY(-2px); color: var(--signal-red); }
-  .insight-filters button[aria-pressed="true"] { background: var(--cobalt); color: white; }
-  .insight-filters button[aria-pressed="true"] b { color: white; }
+  .insight-filters button:hover { transform: translateY(-2px); background: var(--lime); }
+  .insight-filters button[aria-pressed="true"] { background: var(--ink); color: var(--lime); }
+  .insight-filters button[aria-pressed="true"] b { color: var(--lime); }
 
   .insight-grid {
     display: grid;
@@ -243,7 +243,7 @@ const dateFormatter = new Intl.DateTimeFormat("en-MY", {
     transition: color .25s ease, background .25s ease, transform .25s ease;
   }
   .insight-card[hidden] { display: none; }
-  .insight-card:hover { z-index: 2; background: var(--metal-light); transform: translateY(-4px); }
+  .insight-card:hover { z-index: 2; background: var(--lime); transform: translateY(-4px); }
   .insight-card::after {
     content: "";
     position: absolute;
@@ -254,7 +254,7 @@ const dateFormatter = new Intl.DateTimeFormat("en-MY", {
     top: -95px;
     border: 2px solid var(--ink);
     border-radius: 50%;
-    background: radial-gradient(circle at 32% 28%, #fff, #a1a8b0 34%, #555c65 60%, #e4e8eb 82%);
+    background: radial-gradient(circle, var(--lime) 0 22%, var(--ink) 23% 31%, transparent 32% 52%, var(--ink) 53% 68%, transparent 69%);
     transition: transform .4s cubic-bezier(.2, .8, .2, 1);
   }
   .insight-card:hover::after { transform: translate(-12px, 12px) rotate(12deg); }
@@ -273,7 +273,7 @@ const dateFormatter = new Intl.DateTimeFormat("en-MY", {
   .insight-card h2 {
     max-width: 12ch;
     margin: .9rem 0 1rem;
-    font: 800 clamp(1.75rem, 2.8vw, 3rem)/.98 var(--display);
+    font: 700 clamp(1.45rem, 2.1vw, 2.3rem)/1.06 var(--display);
     letter-spacing: -.05em;
   }
   .insight-card p { max-width: 48ch; margin: 0; color: var(--muted); font-size: .78rem; }
@@ -304,17 +304,18 @@ const dateFormatter = new Intl.DateTimeFormat("en-MY", {
     transform: rotate(-8deg);
   }
   .insight-card.is-lead::after { width: 290px; right: -90px; top: -120px; border-color: white; }
-  .insight-card.is-lead:hover { background: #0d0d0d; }
+  .insight-card.is-lead:hover { background: #1b1b19; }
   .insight-card.is-lead .insight-card-top span,
-  .insight-card.is-lead .insight-card-link b { color: var(--signal-red); }
+  .insight-card.is-lead .insight-card-link b { color: var(--lime); }
   .insight-card.is-lead .insight-card-top b,
   .insight-card.is-lead time,
   .insight-card.is-lead p { color: rgba(255, 255, 255, .68); }
-  .insight-card.is-lead h2 { max-width: 15ch; font-size: clamp(2.8rem, 5.5vw, 6rem); line-height: .9; }
+  .insight-card.is-lead h2 { max-width: 20ch; font-size: clamp(2rem, 3.4vw, 3.6rem); line-height: 1; }
   .insight-grid[data-visible-count="1"] .insight-card.is-lead { grid-column: 1 / -1; }
 
   @media (max-width: 900px) {
     .insight-filter-shell { top: 76px; }
+    .insight-card h2, .insight-card.is-lead h2 { font-size: clamp(1.35rem, 6.2vw, 1.9rem); overflow-wrap: break-word; }
     .insights-browser-head { grid-template-columns: 1fr; align-items: start; }
     .insight-grid { grid-template-columns: 1fr 1fr; }
     .insight-card.is-lead { grid-column: 1 / -1; }
@@ -328,7 +329,7 @@ const dateFormatter = new Intl.DateTimeFormat("en-MY", {
     .insight-grid { grid-template-columns: 1fr; }
     .insight-card, .insight-card.is-lead { grid-column: 1; min-height: 430px; }
     .insight-card.is-lead { min-height: 510px; }
-    .insight-card.is-lead h2 { font-size: clamp(2.7rem, 13vw, 4rem); }
+    .insight-card.is-lead h2 { font-size: clamp(1.6rem, 7.4vw, 2.3rem); }
   }
 
   @media (prefers-reduced-motion: reduce) {

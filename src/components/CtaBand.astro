@@ -11,15 +11,15 @@ interface Props {
 }
 
 const {
-  eyebrow = "Find the constraint",
-  title = "Your next campaign should begin with a system.",
-  copy = "Tell us where growth is getting stuck. We’ll start there.",
+  eyebrow = "Start a project",
+  title = "Hello. Let’s grow.",
+  copy = "Tell me where growth is getting stuck. I’ll start there.",
   serviceId,
   growthCheck = false,
 } = Astro.props;
 const ctaLocation = serviceId ? `service_${serviceId}_final` : "site_cta";
 ---
-<section class:list={["cta-band", { "has-growth-check": growthCheck }]}>
+<section class:list={["cta-band", { "has-growth-check": growthCheck }]} id={growthCheck ? "growth-check" : undefined}>
   <div class="cta-copy">
   <span class="eyebrow">{eyebrow}</span>
   <h2>{title}</h2>

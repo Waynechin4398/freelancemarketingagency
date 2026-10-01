@@ -1,5 +1,6 @@
 ---
 import site from "../data/site.json";
+import Wordmark from "./Wordmark.astro";
 const nav = [
   { href: "/work", label: "Work" },
   { href: "/services", label: "Services" },
@@ -12,12 +13,11 @@ const menuItems = [...nav, { href: "/contact", label: "Start a project" }];
 ---
 <header class="site-header" transition:persist="site-header">
   <a class="brand" href="/" aria-label="Wayne Omni home">
-    <img class="brand-logo" src="/images/wayne-omni-brush-logo.webp" width="460" height="460" alt="" aria-hidden="true" />
-    <span><strong>{site.brand.toUpperCase()}</strong><small>{site.descriptor}</small></span>
+    <Wordmark class="brand-wordmark" decorative />
   </a>
   <nav class="desktop-nav" aria-label="Main navigation">
     {nav.map((item) => <a href={item.href} aria-current={isCurrent(item.href) ? "page" : undefined}>{item.label}</a>)}
-    <a class="nav-cta" href="/contact">Start a project <span>↗</span></a>
+    <a class="nav-cta" href="/contact"><i class="nav-cta-target" aria-hidden="true"></i>Start a project</a>
   </nav>
   <button class="menu-toggle" data-menu-toggle aria-expanded="false" aria-controls="mobile-nav">Menu</button>
   <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile navigation" aria-hidden="true" inert>
@@ -45,8 +45,8 @@ const menuItems = [...nav, { href: "/contact", label: "Start a project" }];
       </div>
       <div class="motion-marquee menu-marquee" aria-label="Strategy, web, paid media and automation">
         <div class="motion-marquee-track">
-          <span>STRATEGY — WEB — PAID MEDIA — AUTOMATION —</span>
-          <span aria-hidden="true">STRATEGY — WEB — PAID MEDIA — AUTOMATION —</span>
+          <span>STRATEGY ◎ WEB ◎ PAID MEDIA ◎ AUTOMATION ◎</span>
+          <span aria-hidden="true">STRATEGY ◎ WEB ◎ PAID MEDIA ◎ AUTOMATION ◎</span>
         </div>
       </div>
     </div>

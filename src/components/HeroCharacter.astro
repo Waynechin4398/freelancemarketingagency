@@ -1,0 +1,64 @@
+---
+// Brand "character" slot. Today it is the Signal target drawn as an eye whose pupil
+// follows the pointer. To swap in a commissioned mascot later, replace the <svg> inside
+// [data-character-slot] (keep the wrapper so the hero layout and sizing stay the same).
+---
+<span class="hero-character" data-character-slot aria-hidden="true">
+  <svg viewBox="0 0 100 100" focusable="false">
+    <circle class="ring" cx="50" cy="50" r="44"></circle>
+    <circle class="white" cx="50" cy="50" r="38"></circle>
+    <g class="pupil-group">
+      <g class="blink">
+        <circle cx="50" cy="50" r="19" fill="#d4ff3a" stroke="#111111" stroke-width="6"></circle>
+        <circle class="pupil" cx="50" cy="50" r="8.5"></circle>
+        <circle class="shine" cx="45" cy="45" r="3"></circle>
+      </g>
+    </g>
+  </svg>
+</span>
+
+<style>
+  .blink { transform-box: fill-box; transform-origin: 50% 50%; }
+  @media (prefers-reduced-motion: no-preference) {
+    .blink { animation: character-blink 6s ease-in-out 2.4s infinite; }
+    @media (hover: none) {
+      .pupil-group { animation: character-look 7s ease-in-out infinite; }
+    }
+  }
+  @keyframes character-blink { 0%, 94%, 100% { transform: scaleY(1); } 96% { transform: scaleY(.08); } }
+  @keyframes character-look { 0%, 100% { transform: translate(0, 0); } 25% { transform: translate(9%, -6%); } 55% { transform: translate(-10%, 4%); } 80% { transform: translate(4%, 8%); } }
+</style>
+
+<script>
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const fine = window.matchMedia("(hover: hover) and (pointer: fine)");
+  let controller: AbortController | null = null;
+
+  const init = () => {
+    controller?.abort();
+    const slot = document.querySelector<HTMLElement>("[data-character-slot]");
+    if (!slot || reduce.matches || !fine.matches) return;
+    controller = new AbortController();
+    let frame = 0;
+    let px = 0, py = 0;
+    const update = () => {
+      frame = 0;
+      const rect = slot.getBoundingClientRect();
+      if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = px - cx, dy = py - cy;
+      const distance = Math.hypot(dx, dy) || 1;
+      const reach = rect.width * 0.16 * Math.min(1, distance / (rect.width * 1.5));
+      slot.style.setProperty("--look-x", `${(dx / distance) * reach}px`);
+      slot.style.setProperty("--look-y", `${(dy / distance) * reach}px`);
+    };
+    window.addEventListener("pointermove", (event) => {
+      px = event.clientX; py = event.clientY;
+      if (!frame) frame = requestAnimationFrame(update);
+    }, { signal: controller.signal, passive: true });
+  };
+
+  document.addEventListener("astro:page-load", init);
+  if (document.readyState !== "loading") init();
+</script>

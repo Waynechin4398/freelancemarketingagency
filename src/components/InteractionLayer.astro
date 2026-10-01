@@ -1,0 +1,123 @@
+---
+import site from "../data/site.json";
+const onContact = Astro.url.pathname.startsWith("/contact");
+---
+<nav class="mobile-action-bar" aria-label="Quick contact" data-mobile-bar>
+  {onContact ? (
+    <a class="mab-primary" href={site.bookingUrl} target="_blank" rel="noopener noreferrer" data-ga-event="contact_calendly" data-ga-method="calendly" data-ga-location="mobile_bar">Book a 30-min call <span aria-hidden="true">↗</span></a>
+  ) : (
+    <a class="mab-primary" href="/contact">Start a project <span aria-hidden="true">↗</span></a>
+  )}
+  <a class="mab-whatsapp" href={site.whatsappUrl} target="_blank" rel="noopener noreferrer" aria-label="Message Wayne on WhatsApp (opens in a new tab)" data-ga-event="contact_whatsapp" data-ga-method="whatsapp" data-ga-location="mobile_bar">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.69 1.45c6.55 0 11.89-5.34 11.89-11.9A11.82 11.82 0 0 0 12.05 0Zm0 21.79a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88 5.45 0 9.88 4.43 9.88 9.88 0 5.45-4.43 9.89-9.89 9.89Zm5.42-7.41c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.47-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.91-2.2-.25-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.7.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2-1.42.25-.69.25-1.29.18-1.41-.08-.13-.28-.2-.57-.35Z"/></svg>
+  </a>
+</nav>
+
+<script>
+  const fine = window.matchMedia("(hover: hover) and (pointer: fine)");
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let controller = new AbortController();
+  let barObserver: IntersectionObserver | null = null;
+  let lastBody: HTMLElement | null = null;
+
+  // Spotlight + gentle 3D tilt for cards (fine pointers only).
+  const setupCards = (signal: AbortSignal) => {
+    if (!fine.matches || reduce.matches) return;
+    const cards = document.querySelectorAll<HTMLElement>("[data-card-fx], .related-card, .project-card, .insight-card");
+    cards.forEach((card) => {
+      if (getComputedStyle(card).position === "static") card.style.position = "relative";
+      if (!card.querySelector(":scope > .fx-glow")) {
+        const glow = document.createElement("span");
+        glow.className = "fx-glow";
+        glow.setAttribute("aria-hidden", "true");
+        card.append(glow);
+      }
+      card.classList.add("fx-card");
+      let frame = 0;
+      let tx = 0, ty = 0, cx = 0, cy = 0;
+      const render = () => {
+        cx += (tx - cx) * 0.2;
+        cy += (ty - cy) * 0.2;
+        card.style.setProperty("--rx", `${(-cy * 4).toFixed(2)}deg`);
+        card.style.setProperty("--ry", `${(cx * 5).toFixed(2)}deg`);
+        frame = Math.abs(tx - cx) + Math.abs(ty - cy) > 0.002 ? requestAnimationFrame(render) : 0;
+      };
+      card.addEventListener("pointermove", (event) => {
+        const rect = card.getBoundingClientRect();
+        const x = (event.clientX - rect.left) / rect.width;
+        const y = (event.clientY - rect.top) / rect.height;
+        card.style.setProperty("--sx", `${(x * 100).toFixed(1)}%`);
+        card.style.setProperty("--sy", `${(y * 100).toFixed(1)}%`);
+        tx = x - 0.5;
+        ty = y - 0.5;
+        card.classList.add("fx-active");
+        if (!frame) frame = requestAnimationFrame(render);
+      }, { signal, passive: true });
+      card.addEventListener("pointerleave", () => {
+        tx = 0; ty = 0;
+        card.classList.remove("fx-active");
+        if (!frame) frame = requestAnimationFrame(render);
+      }, { signal, passive: true });
+    });
+  };
+
+  // Hero layers drift with the pointer at different depths.
+  const setupHero = (signal: AbortSignal) => {
+    const hero = document.querySelector<HTMLElement>(".personal-hero");
+    if (!hero || !fine.matches || reduce.matches) return;
+    let frame = 0, tx = 0, ty = 0, cx = 0, cy = 0;
+    const render = () => {
+      cx += (tx - cx) * 0.08;
+      cy += (ty - cy) * 0.08;
+      hero.style.setProperty("--px", cx.toFixed(3));
+      hero.style.setProperty("--py", cy.toFixed(3));
+      frame = Math.abs(tx - cx) + Math.abs(ty - cy) > 0.001 ? requestAnimationFrame(render) : 0;
+    };
+    hero.addEventListener("pointermove", (event) => {
+      const rect = hero.getBoundingClientRect();
+      tx = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+      ty = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+      if (!frame) frame = requestAnimationFrame(render);
+    }, { signal, passive: true });
+    hero.addEventListener("pointerleave", () => {
+      tx = 0; ty = 0;
+      if (!frame) frame = requestAnimationFrame(render);
+    }, { signal, passive: true });
+  };
+
+  // Sticky mobile bar: appears after the hero, steps aside near the CTA band and footer.
+  const setupMobileBar = (signal: AbortSignal) => {
+    const bar = document.querySelector<HTMLElement>("[data-mobile-bar]");
+    if (!bar) return;
+    const blockers = new Set<Element>();
+    const update = () => {
+      const pastHero = window.scrollY > window.innerHeight * 0.6;
+      const menuOpen = document.body.classList.contains("menu-open");
+      bar.classList.toggle("is-visible", pastHero && blockers.size === 0 && !menuOpen);
+    };
+    if ("IntersectionObserver" in window) {
+      barObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => entry.isIntersecting ? blockers.add(entry.target) : blockers.delete(entry.target));
+        update();
+      }, { threshold: 0.2 });
+      document.querySelectorAll(".cta-band, .site-footer, .brief-section").forEach((el) => barObserver?.observe(el));
+    }
+    window.addEventListener("scroll", update, { signal, passive: true });
+    new MutationObserver(update).observe(document.body, { attributes: true, attributeFilter: ["class"] });
+    update();
+  };
+
+  const init = () => {
+    if (lastBody === document.body) return;
+    lastBody = document.body;
+    controller.abort();
+    barObserver?.disconnect();
+    controller = new AbortController();
+    setupCards(controller.signal);
+    setupHero(controller.signal);
+    setupMobileBar(controller.signal);
+  };
+
+  document.addEventListener("astro:page-load", init);
+  if (document.readyState !== "loading") init();
+</script>

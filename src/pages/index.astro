@@ -6,6 +6,7 @@ import SectionIntro from "../components/SectionIntro.astro";
 import RelatedWork from "../components/RelatedWork.astro";
 import ProcessFlow from "../components/ProcessFlow.astro";
 import CtaBand from "../components/CtaBand.astro";
+import ResultsStrip from "../components/ResultsStrip.astro";
 import ServicesSkewedCarousel from "../components/ServicesSkewedCarousel.astro";
 import site from "../data/site.json";
 
@@ -44,6 +45,8 @@ const services = (await getCollection("services", ({ data }) => !data.draft)).so
     </div>
   </section>
 
+  <ResultsStrip />
+
   <section class="console-feature section dark-section">
     <SectionIntro number="02" eyebrow="How I work" title="One operator across the whole customer journey." copy="I work where strategy, design, media and technology meet—so the promise in the ad still makes sense on the page, in the CRM and during follow-up." light />
     <div class="console-feature-grid">
@@ -81,5 +84,5 @@ const services = (await getCollection("services", ({ data }) => !data.draft)).so
       <article><span>03</span><h3>Build for learning</h3><p>Use measurement to make the next decision clearer, not to decorate a report.</p></article>
     </div>
   </section>
-  <CtaBand />
+  <CtaBand growthCheck />
 </BaseLayout>

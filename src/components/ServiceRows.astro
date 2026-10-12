@@ -1,0 +1,106 @@
+---
+// Bike Bear-style service list: big rows that flip colour on hover, reveal a one-liner,
+// and show a floating preview card that follows the pointer (fine pointers only).
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  services: CollectionEntry<"services">[];
+  tone?: "lime" | "dark";
+  eyebrow?: string;
+  title?: string;
+  copy?: string;
+  headingId?: string;
+  showAllLink?: boolean;
+}
+const {
+  services,
+  tone = "lime",
+  eyebrow = "Services",
+  title = "Six ways to hit the target.",
+  copy,
+  headingId = "services-showcase-title",
+  showAllLink = false,
+} = Astro.props;
+---
+<section class:list={["services-showcase", { "is-dark": tone === "dark" }]} aria-labelledby={headingId} data-service-rows>
+  <div class="services-showcase-head">
+    <span class:list={["eyebrow", { light: tone === "dark" }]}>{eyebrow}</span>
+    <h2 id={headingId}>{title}</h2>
+    {copy && <p>{copy}</p>}
+  </div>
+  <ul class="service-rows">
+    {services.map((service) => (
+      <li data-reveal="fade-up">
+        <a
+          class="service-row"
+          href={`/services/${service.id}/`}
+          data-preview-title={service.data.title}
+          data-preview-group={service.data.group}
+          data-preview-number={service.data.number}
+          data-preview-short={service.data.short}
+        >
+          <span class="service-row-num">{service.data.number}</span>
+          <span class="service-row-title">{service.data.title}</span>
+          <span class="service-row-short">{service.data.short}</span>
+          <span class="service-row-group">{service.data.group}</span>
+          <i class="service-row-arrow" aria-hidden="true">↗</i>
+        </a>
+      </li>
+    ))}
+  </ul>
+  {showAllLink && (
+    <div class="services-showcase-foot">
+      <a class="button primary" href="/services/">See how each service works <span aria-hidden="true">↗</span></a>
+    </div>
+  )}
+  <div class="service-preview" data-service-preview aria-hidden="true">
+    <span data-preview-number>01 / Build</span>
+    <div><strong data-preview-title>Website Development</strong><p data-preview-text></p></div>
+    <i></i>
+  </div>
+</section>
+
+<script>
+  const fine = window.matchMedia("(hover: hover) and (pointer: fine) and (min-width: 901px)");
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let controller: AbortController | null = null;
+
+  const init = () => {
+    controller?.abort();
+    controller = new AbortController();
+    const { signal } = controller;
+    document.querySelectorAll<HTMLElement>("[data-service-rows]").forEach((section) => {
+      const preview = section.querySelector<HTMLElement>("[data-service-preview]");
+      if (!preview || !fine.matches || reduce.matches) return;
+      const title = preview.querySelector<HTMLElement>("[data-preview-title]");
+      const number = preview.querySelector<HTMLElement>("[data-preview-number]");
+      const short = preview.querySelector<HTMLElement>("[data-preview-text]");
+      let frame = 0, tx = 0, ty = 0, cx = 0, cy = 0;
+      const render = () => {
+        cx += (tx - cx) * 0.18; cy += (ty - cy) * 0.18;
+        preview.style.setProperty("--px", `${cx.toFixed(1)}px`);
+        preview.style.setProperty("--py", `${cy.toFixed(1)}px`);
+        frame = Math.abs(tx - cx) + Math.abs(ty - cy) > 0.5 ? requestAnimationFrame(render) : 0;
+      };
+      section.querySelectorAll<HTMLAnchorElement>(".service-row").forEach((row) => {
+        row.addEventListener("pointerenter", (event) => {
+          if (title) title.textContent = row.dataset.previewTitle ?? "";
+          if (number) number.textContent = `${row.dataset.previewNumber ?? ""} / ${row.dataset.previewGroup ?? ""}`;
+          if (short) short.textContent = row.dataset.previewShort ?? "";
+          tx = cx = event.clientX + 28; ty = cy = event.clientY - 150;
+          render();
+          preview.classList.add("is-visible");
+        }, { signal, passive: true });
+        row.addEventListener("pointermove", (event) => {
+          tx = event.clientX + 28; ty = event.clientY - 150;
+          if (!frame) frame = requestAnimationFrame(render);
+        }, { signal, passive: true });
+        row.addEventListener("pointerleave", () => preview.classList.remove("is-visible"), { signal, passive: true });
+      });
+      window.addEventListener("scroll", () => preview.classList.remove("is-visible"), { signal, passive: true });
+    });
+  };
+
+  document.addEventListener("astro:page-load", init);
+  if (document.readyState !== "loading") init();
+</script>

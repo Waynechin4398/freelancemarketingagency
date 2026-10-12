@@ -1,0 +1,46 @@
+---
+import { getCollection } from "astro:content";
+
+// Picks reported results straight from approved case-study metrics,
+// so the strip can never show a number that is not already published.
+const picks: Array<[string, number]> = [
+  ["singapore-luxury-homes", 0],
+  ["singapore-luxury-homes", 1],
+  ["kamidental-patient-acquisition", 0],
+  ["chatdaddy-saas-growth", 0],
+  ["propertylab-webinar-acquisition", 1],
+  ["chatdaddy-saas-growth", 1],
+];
+
+const projects = await getCollection("caseStudies", ({ data }) => !data.draft);
+const results = picks
+  .map(([slug, index]) => {
+    const project = projects.find((item) => item.id === slug);
+    const metric = project?.data.approvedMetrics?.[index];
+    if (!project || !metric) return undefined;
+    return { slug, client: project.data.client, industry: project.data.industry, ...metric };
+  })
+  .filter((item) => item !== undefined);
+---
+{results.length > 0 && (
+  <section class="results-strip" aria-labelledby="results-strip-title">
+    <div class="results-strip-head">
+      <span class="eyebrow light">Reported results</span>
+      <h2 id="results-strip-title">Numbers from the work, not from a pitch deck.</h2>
+      <p>Each figure comes from a documented project record. Tap one to see the context behind it.</p>
+    </div>
+    <ul class="results-grid">
+      {results.map((result, index) => (
+        <li>
+          <a class="result-card" href={`/work/${result.slug}/`} data-card-fx style={`--i:${index}`}>
+            <strong data-count-to={result.value}>{result.value}</strong>
+            <span class="result-label">{result.label}</span>
+            <span class="result-meta"><b>{result.client}</b> · {result.period}</span>
+            <i aria-hidden="true">↗</i>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <p class="results-note">Results are as reported in each project record; periods and attribution are stated on the case study. They are not presented as independently audited or guaranteed outcomes.</p>
+  </section>
+)}

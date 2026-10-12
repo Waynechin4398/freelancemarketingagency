@@ -66,9 +66,9 @@
         context.quadraticCurveTo(next.x, next.y, midpointX, midpointY);
         context.lineWidth = Math.max(0.35, progress * 2.6 * velocityWidth);
         context.strokeStyle = isLeadingAccent
-          ? `rgba(255, 40, 40, ${opacity})`
-          : `rgba(2, 55, 255, ${opacity})`;
-        context.shadowColor = isLeadingAccent ? "rgba(255, 40, 40, .28)" : "rgba(2, 55, 255, .34)";
+          ? `rgba(255, 255, 255, ${opacity})`
+          : `rgba(255, 255, 255, ${opacity * .85})`;
+        context.shadowColor = "rgba(255, 255, 255, .2)";
         context.stroke();
       }
 
@@ -173,6 +173,7 @@
     display: none;
     pointer-events: none;
     contain: strict;
+    mix-blend-mode: difference;
   }
 
   .smooth-cursor[data-enabled] { display: block; }

@@ -1,0 +1,22 @@
+---
+// Signal wordmark — "WAYNE ◎MNI". Letter outlines are Unbounded ExtraBold converted to paths
+// (src/data/wordmark.json), so the logo renders identically without the font loaded.
+// Letters and ring use currentColor; the target core uses --wm-core (lime by default).
+import geom from "../data/wordmark.json";
+
+interface Props { class?: string; title?: string; decorative?: boolean; }
+const { class: className, title = "Wayne Omni", decorative = false } = Astro.props;
+---
+<svg
+  class:list={["wordmark", className]}
+  viewBox={`0 0 ${geom.W} ${geom.H}`}
+  xmlns="http://www.w3.org/2000/svg"
+  role={decorative ? undefined : "img"}
+  aria-label={decorative ? undefined : title}
+  aria-hidden={decorative ? "true" : undefined}
+  focusable="false"
+>
+  <path fill="currentColor" d={geom.d_letters} />
+  <circle cx={geom.cx} cy={geom.cy} r={geom.r_ring} fill="none" stroke="currentColor" stroke-width={geom.ring_w} />
+  <circle class="wordmark-core" cx={geom.cx} cy={geom.cy} r={geom.r_core} stroke="currentColor" stroke-width={geom.core_stroke} />
+</svg>

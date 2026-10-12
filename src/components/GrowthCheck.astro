@@ -1,0 +1,225 @@
+---
+import { getCollection } from "astro:content";
+import site from "../data/site.json";
+
+interface Props { location?: string; }
+const { location = "growth_check" } = Astro.props;
+
+const services = (await getCollection("services", ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
+const cases = await getCollection("caseStudies", ({ data }) => !data.draft);
+const serviceData = Object.fromEntries(services.map((service) => {
+  const relatedCase = cases.find((item) => item.id === service.data.related?.[0]);
+  return [service.id, {
+    title: service.data.title,
+    short: service.data.short,
+    group: service.data.group,
+    caseSlug: relatedCase?.id ?? "",
+    caseClient: relatedCase?.data.client ?? "",
+  }];
+}));
+const whatsappBase = site.whatsappUrl.split("?")[0];
+
+const steps = [
+  {
+    key: "stuck",
+    question: "Where is growth getting stuck?",
+    options: [
+      { value: "attention", label: "Not enough of the right people find us" },
+      { value: "conversion", label: "People visit, but few enquire or buy" },
+      { value: "followup", label: "Leads come in, then go cold" },
+      { value: "foundation", label: "Our website is outdated or missing" },
+    ],
+  },
+  {
+    key: "channel",
+    question: "Where do most customers come from today?",
+    options: [
+      { value: "ads", label: "Paid ads — Meta, Google or TikTok" },
+      { value: "social", label: "Organic social content" },
+      { value: "web", label: "Website and Google search" },
+      { value: "referral", label: "Referrals, WhatsApp or walk-ins" },
+    ],
+  },
+  {
+    key: "timing",
+    question: "When would you like to start?",
+    options: [
+      { value: "now", label: "As soon as possible" },
+      { value: "soon", label: "In the next 1–3 months" },
+      { value: "exploring", label: "Just exploring for now" },
+    ],
+  },
+];
+---
+<div class="growth-check" data-growth-check data-location={location} data-whatsapp={whatsappBase} data-booking={site.bookingUrl} data-services={JSON.stringify(serviceData)}>
+  <div class="gc-head">
+    <span class="gc-kicker">Growth check · 30 seconds</span>
+    <span class="gc-count" aria-hidden="true"><b data-gc-step-label>01</b> / 03</span>
+  </div>
+  <div class="gc-progress" aria-hidden="true"><i data-gc-progress></i></div>
+
+  <form class="gc-form" data-gc-form>
+    {steps.map((step, stepIndex) => (
+      <fieldset class="gc-step" data-gc-step={stepIndex} data-key={step.key}>
+        <legend>{step.question}</legend>
+        <div class="gc-options">
+          {step.options.map((option, optionIndex) => (
+            <label class="gc-option">
+              <input type="radio" name={`gc-${step.key}`} value={option.value} />
+              <span class="gc-letter" aria-hidden="true">{String.fromCharCode(65 + optionIndex)}</span>
+              <span class="gc-text">{option.label}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+    ))}
+    <div class="gc-nav">
+      <button type="button" class="gc-back" data-gc-back>← Back</button>
+      <button type="submit" class="gc-next" data-gc-next>Next →</button>
+      <noscript><a class="gc-fallback" href={site.whatsappUrl}>Message Wayne on WhatsApp ↗</a></noscript>
+    </div>
+  </form>
+
+  <div class="gc-result" data-gc-result hidden tabindex="-1" aria-live="polite">
+    <span class="gc-kicker">Suggested starting point</span>
+    <h3 data-gc-title></h3>
+    <p data-gc-short></p>
+    <p class="gc-pair" data-gc-pair></p>
+    <div class="gc-actions">
+      <a class="button light-button" data-gc-whatsapp href={site.whatsappUrl} target="_blank" rel="noopener noreferrer" data-ga-event="contact_whatsapp" data-ga-method="whatsapp" data-ga-location={location}>Send my answers on WhatsApp <span>↗</span></a>
+      <a class="gc-link" data-gc-booking href={site.bookingUrl} target="_blank" rel="noopener noreferrer" data-ga-event="contact_calendly" data-ga-method="calendly" data-ga-location={location}>Book a 30-minute call ↗</a>
+      <a class="gc-link" data-gc-service href="/services/">See the service ↗</a>
+      <a class="gc-link" data-gc-case href="/work/">Related case study ↗</a>
+    </div>
+    <button type="button" class="gc-restart" data-gc-restart>↺ Start again</button>
+    <small>A starting suggestion based on three answers, not a diagnosis. Wayne reviews the full journey before recommending anything.</small>
+  </div>
+</div>
+
+<script>
+  type ServiceInfo = { title: string; short: string; group: string; caseSlug: string; caseClient: string };
+  const labels: Record<string, Record<string, string>> = {
+    stuck: { attention: "not enough of the right people find us", conversion: "people visit but few enquire", followup: "leads go cold after they come in", foundation: "our website is outdated or missing" },
+    channel: { ads: "paid ads", social: "organic social", web: "website and search", referral: "referrals / WhatsApp / walk-ins" },
+    timing: { now: "as soon as possible", soon: "in the next 1–3 months", exploring: "just exploring" },
+  };
+
+  const recommend = (stuck: string, channel: string): [string, string] => {
+    if (stuck === "attention") return channel === "social" ? ["social-media", "paid-media"] : ["paid-media", "landing-pages"];
+    if (stuck === "conversion") return channel === "ads" || channel === "social" ? ["landing-pages", "paid-media"] : ["website-development", "landing-pages"];
+    if (stuck === "followup") return channel === "web" ? ["email-marketing", "crm-automation"] : ["crm-automation", "email-marketing"];
+    return ["website-development", channel === "ads" ? "landing-pages" : "paid-media"];
+  };
+
+  const setupGrowthCheck = () => {
+    document.querySelectorAll<HTMLElement>("[data-growth-check]").forEach((root) => {
+      if (root.dataset.gcReady === "true") return;
+      root.dataset.gcReady = "true";
+      root.classList.add("is-enhanced");
+      const services = JSON.parse(root.dataset.services ?? "{}") as Record<string, ServiceInfo>;
+      const steps = Array.from(root.querySelectorAll<HTMLFieldSetElement>("[data-gc-step]"));
+      const form = root.querySelector<HTMLFormElement>("[data-gc-form]")!;
+      const result = root.querySelector<HTMLElement>("[data-gc-result]")!;
+      const back = root.querySelector<HTMLButtonElement>("[data-gc-back]")!;
+      const progress = root.querySelector<HTMLElement>("[data-gc-progress]")!;
+      const stepLabel = root.querySelector<HTMLElement>("[data-gc-step-label]")!;
+      const answers: Record<string, string> = {};
+      let current = 0;
+
+      const show = (index: number, focus = true) => {
+        current = index;
+        steps.forEach((step, i) => {
+          step.hidden = i !== index;
+          step.classList.toggle("is-active", i === index);
+        });
+        back.hidden = index === 0;
+        stepLabel.textContent = String(index + 1).padStart(2, "0");
+        progress.style.transform = `scaleX(${index / steps.length})`;
+        if (focus) steps[index].querySelector<HTMLInputElement>("input:checked, input")?.focus({ preventScroll: true });
+      };
+
+      const finish = () => {
+        const [primary, secondary] = recommend(answers.stuck, answers.channel);
+        const main = services[primary];
+        const pair = services[secondary];
+        if (!main) return;
+        root.querySelector("[data-gc-title]")!.textContent = main.title;
+        root.querySelector("[data-gc-short]")!.textContent = main.short;
+        root.querySelector("[data-gc-pair]")!.textContent = pair ? `Often paired with ${pair.title}.` : "";
+        root.querySelector<HTMLAnchorElement>("[data-gc-service]")!.href = `/services/${primary}/`;
+        const caseLink = root.querySelector<HTMLAnchorElement>("[data-gc-case]")!;
+        caseLink.hidden = !main.caseSlug;
+        if (main.caseSlug) { caseLink.href = `/work/${main.caseSlug}/`; caseLink.textContent = `See ${main.caseClient} ↗`; }
+        const message = [
+          "Hi Wayne, I did the growth check on wayneomni.com.",
+          `Where we're stuck: ${labels.stuck[answers.stuck]}.`,
+          `Main channel today: ${labels.channel[answers.channel]}.`,
+          `Timing: ${labels.timing[answers.timing]}.`,
+          `Suggested starting point: ${main.title}. Could we talk it through?`,
+        ].join("\n");
+        root.querySelector<HTMLAnchorElement>("[data-gc-whatsapp]")!.href = `${root.dataset.whatsapp}?text=${encodeURIComponent(message)}`;
+        const booking = root.querySelector<HTMLElement>("[data-gc-booking]")!;
+        booking.classList.toggle("is-priority", answers.timing !== "exploring");
+        root.classList.toggle("is-exploring", answers.timing === "exploring");
+        progress.style.transform = "scaleX(1)";
+        stepLabel.textContent = "✓";
+        form.hidden = true;
+        result.hidden = false;
+        root.classList.add("is-complete");
+        result.focus({ preventScroll: true });
+        const analyticsWindow = window as Window & { gtag?: (...args: unknown[]) => void };
+        analyticsWindow.gtag?.("event", "growth_check_complete", {
+          recommended_service: primary,
+          growth_constraint: answers.stuck,
+          main_channel: answers.channel,
+          start_timing: answers.timing,
+          cta_location: root.dataset.location ?? "growth_check",
+        });
+      };
+
+      const next = root.querySelector<HTMLButtonElement>("[data-gc-next]")!;
+      const syncNext = () => {
+        const checked = steps[current]?.querySelector<HTMLInputElement>("input:checked");
+        next.disabled = !checked;
+        next.textContent = current === steps.length - 1 ? "See my result →" : "Next →";
+      };
+      const advance = () => {
+        const checked = steps[current].querySelector<HTMLInputElement>("input:checked");
+        if (!checked) return;
+        answers[steps[current].dataset.key ?? ""] = checked.value;
+        if (current + 1 < steps.length) { show(current + 1); syncNext(); }
+        else finish();
+      };
+      // Pointer picks advance automatically; keyboard users choose with arrows, then press Enter or Next.
+      let pointerPick = false;
+      let advanceTimer = 0;
+      form.addEventListener("pointerdown", (event) => {
+        if ((event.target as Element).closest(".gc-option")) pointerPick = true;
+      });
+      form.addEventListener("click", (event) => {
+        const option = (event.target as Element).closest(".gc-option");
+        if (!option || !pointerPick) return;
+        pointerPick = false;
+        window.clearTimeout(advanceTimer);
+        advanceTimer = window.setTimeout(advance, 280);
+      });
+      form.addEventListener("change", syncNext);
+      form.addEventListener("submit", (event) => { event.preventDefault(); window.clearTimeout(advanceTimer); advance(); });
+      back.addEventListener("click", () => { show(Math.max(0, current - 1)); syncNext(); });
+      root.querySelector("[data-gc-restart]")!.addEventListener("click", () => {
+        form.reset();
+        Object.keys(answers).forEach((key) => delete answers[key]);
+        result.hidden = true;
+        form.hidden = false;
+        root.classList.remove("is-complete", "is-exploring");
+        show(0);
+        syncNext();
+      });
+      show(0, false);
+      syncNext();
+    });
+  };
+
+  setupGrowthCheck();
+  document.addEventListener("astro:page-load", setupGrowthCheck);
+</script>

@@ -238,7 +238,7 @@ If Ads Manager stops at the conversation while the sale happens somewhere else, 
 
 - **WhatsApp:** [Message Wayne about offline conversion tracking](https://wa.me/601123394398?text=Hi%20Wayne%2C%20I%27d%20like%20to%20map%20our%20Meta%20Ads%20to%20offline%20sales%20tracking.).
 - **Form:** [Complete the Wayne Omni growth audit](/contact/#audit) and describe where the campaign trail goes cold.
-- **Email:** [Email your current measurement flow](mailto:waynegtcfx@gmail.com?subject=Meta%20Ads%20offline%20conversion%20tracking).
+- **Email:** [Email your current measurement flow](mailto:wayne@wayneomni.com?subject=Meta%20Ads%20offline%20conversion%20tracking).
 - **Discovery call:** Request suitable times through WhatsApp, the growth audit or email; a direct booking link is not yet configured.
 
 Wayne Omni can help you map the journey, define the events, connect the CRM handoff and build a reporting view that keeps platform attribution in context. Before it goes live, have qualified Malaysian privacy counsel review the final personal-data design.

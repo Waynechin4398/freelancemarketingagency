@@ -167,5 +167,5 @@ If you want help connecting those pieces:
 
 - [Message Wayne on WhatsApp](https://wa.me/601123394398?text=Hi%20Wayne%2C%20I%20found%20Wayne%20Omni%20and%20would%20like%20to%20discuss%20a%20project.).
 - [Use the guided project brief](/contact/#audit). It prepares an email draft; nothing is sent until you review and send it from your email app.
-- [Email waynegtcfx@gmail.com](mailto:waynegtcfx@gmail.com).
+- [Email wayne@wayneomni.com](mailto:wayne@wayneomni.com).
 - [Schedule a 30-minute discovery call](https://calendly.com/waynegtcfx/30min).

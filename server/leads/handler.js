@@ -27,7 +27,7 @@ const DEFAULTS = {
   NOTIFY_TO: "waynegtcfx@gmail.com",
   ALERT_FROM: "Wayne Omni Leads <leads@wayneomni.com>",
   COPY_FROM: "Wayne from Wayne Omni <wayne@wayneomni.com>",
-  REPLY_TO: "waynegtcfx@gmail.com",
+  REPLY_TO: "wayne@wayneomni.com",
 };
 
 const LIMITS = { name: 120, email: 254, company: 160, website: 300, brief: 1600, page: 200 };
@@ -63,7 +63,7 @@ function reply(request, status, payload) {
   if (payload.ok) return Response.redirect(new URL("/contact/thanks/", request.url).toString(), 303);
   const message = String(payload.error || "Something went wrong.").replace(/[<>&]/g, "");
   return new Response(
-    `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Brief not sent · Wayne Omni</title><body style="font-family:system-ui,sans-serif;max-width:560px;margin:12vh auto;padding:0 20px;line-height:1.6"><h1>That didn't go through.</h1><p>${message}</p><p><a href="/contact/#audit">Go back to the form</a> or email <a href="mailto:waynegtcfx@gmail.com">waynegtcfx@gmail.com</a>.</p></body>`,
+    `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Brief not sent · Wayne Omni</title><body style="font-family:system-ui,sans-serif;max-width:560px;margin:12vh auto;padding:0 20px;line-height:1.6"><h1>That didn't go through.</h1><p>${message}</p><p><a href="/contact/#audit">Go back to the form</a> or email <a href="mailto:wayne@wayneomni.com">wayne@wayneomni.com</a>.</p></body>`,
     { status, headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" } },
   );
 }

@@ -272,7 +272,7 @@ If GMV Max looks strong but total profit has barely moved, Wayne Omni can separa
 
 - **WhatsApp:** [Message Wayne about a GMV Max ROI audit](https://wa.me/601123394398?text=Hi%20Wayne%2C%20I%27d%20like%20help%20measuring%20our%20true%20GMV%20Max%20ROI.).
 - **Form:** [Open the guided Wayne Omni project brief form](/contact/#audit) and include the products, test dates and current ROI.
-- **Email:** [Email your GMV Max measurement question](mailto:waynegtcfx@gmail.com?subject=TikTok%20Shop%20GMV%20Max%20ROI%20audit).
+- **Email:** [Email your GMV Max measurement question](mailto:wayne@wayneomni.com?subject=TikTok%20Shop%20GMV%20Max%20ROI%20audit).
 - **Discovery call:** [Schedule a 30-minute discovery call](https://calendly.com/waynegtcfx/30min) to review the attribution and test design.
 
 Bring one product's last eight weeks of orders, ad spend, prices, discounts and affiliate activity. That is usually enough to see whether the report is measuring growth—or merely relabelling it.

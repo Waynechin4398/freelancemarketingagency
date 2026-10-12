@@ -194,7 +194,7 @@ No process can guarantee that. Clear permission, relevant messages and respected
 If your ad, form, WhatsApp inbox and CRM tell different stories about permission, start with the handoff between them.
 
 - **Form:** [Complete the Wayne Omni growth audit](/contact/#audit) and describe where consent or follow-up is unclear.
-- **Email:** Send the current workflow to [waynegtcfx@gmail.com](mailto:waynegtcfx@gmail.com?subject=WhatsApp%20follow-up%20workflow).
+- **Email:** Send the current workflow to [wayne@wayneomni.com](mailto:wayne@wayneomni.com?subject=WhatsApp%20follow-up%20workflow).
 - **WhatsApp:** The site does not yet publish a verified WhatsApp destination. Use the form or email to request a WhatsApp reply.
 - **Discovery call:** The booking link is not yet configured. Request a discovery call through the form or email and suggest suitable times.
 

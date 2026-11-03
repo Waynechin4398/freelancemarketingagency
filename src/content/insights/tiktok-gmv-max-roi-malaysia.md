@@ -5,7 +5,7 @@ excerpt: A practical way to separate GMV Max-attributed revenue from genuine sal
 publishDate: 2026-08-19
 updatedDate: 2026-08-29
 authorName: Wayne
-authorRole: Strategist and builder, Wayne Omni
+authorRole: Founder, Wayne Omni
 draft: false
 seoTitle: TikTok GMV Max ROI Malaysia | Real Sales Lift
 seoDescription: "TikTok GMV Max ROI Malaysia explained: separate paid lift from organic and affiliate sales, run a holdout test and calculate incremental profit."
@@ -270,7 +270,7 @@ Use TikTok's gross revenue to reconcile its dashboard. For the business decision
 
 If GMV Max looks strong but total profit has barely moved, Wayne Omni can separate platform attribution from actual sales lift and build a measurement plan your team can run again—not a one-off spreadsheet nobody trusts.
 
-- **WhatsApp:** [Message Wayne about a GMV Max ROI audit](https://wa.me/601123394398?text=Hi%20Wayne%2C%20I%27d%20like%20help%20measuring%20our%20true%20GMV%20Max%20ROI.).
+- **WhatsApp:** [Message Wayne Omni about a GMV Max ROI audit](https://wa.me/601123394398?text=Hi%2C%20I%27d%20like%20help%20measuring%20our%20true%20GMV%20Max%20ROI.).
 - **Form:** [Open the guided Wayne Omni project brief form](/contact/#audit) and include the products, test dates and current ROI.
 - **Email:** [Email your GMV Max measurement question](mailto:wayne@wayneomni.com?subject=TikTok%20Shop%20GMV%20Max%20ROI%20audit).
 - **Discovery call:** [Schedule a 30-minute discovery call](https://calendly.com/waynegtcfx/30min) to review the attribution and test design.

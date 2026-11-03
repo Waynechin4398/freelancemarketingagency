@@ -2,7 +2,8 @@
 import site from "../data/site.json";
 import Wordmark from "./Wordmark.astro";
 const nav = [
-  { href: "/work", label: "Work" },
+  // Portfolio stays in the repo. showWork restores this link and the /work pages.
+  ...(site.showWork ? [{ href: "/work", label: "Work" }] : []),
   { href: "/services", label: "Services" },
   { href: "/about", label: "About" },
   { href: "/insights", label: "Insights" },

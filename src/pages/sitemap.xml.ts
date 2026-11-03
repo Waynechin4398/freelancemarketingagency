@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
+import settings from "../data/site.json";
 
 export const prerender = true;
 
@@ -9,7 +10,7 @@ const staticPaths = [
   "/contact/",
   "/insights/",
   "/services/",
-  "/work/",
+  ...(settings.showWork ? ["/work/"] : []),
 ];
 
 interface SitemapEntry {
@@ -43,7 +44,7 @@ export const GET: APIRoute = async ({ site }) => {
   const entries: SitemapEntry[] = [
     ...staticPaths.map((path) => ({ path })),
     ...services.map((entry) => ({ path: `/services/${entry.id}/` })),
-    ...caseStudies.map((entry) => ({ path: `/work/${entry.id}/` })),
+    ...(settings.showWork ? caseStudies.map((entry) => ({ path: `/work/${entry.id}/` })) : []),
     ...insights.map((entry) => ({
       path: `/insights/${entry.id}/`,
       lastModified: entry.data.updatedDate ?? entry.data.publishDate,

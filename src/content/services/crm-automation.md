@@ -11,7 +11,7 @@ painPoints:
   - Reports show marketing activity but cannot explain what happened after the enquiry.
 solutions:
   - title: Create one lead journey
-    description: I map where leads enter, which information matters, who owns the next action and how each stage should be defined.
+    description: We map where leads enter, which information matters, who owns the next action and how each stage should be defined.
   - title: Design a useful source of truth
     description: CRM fields, statuses and views are kept practical so the team can maintain them and reporting reflects how work actually happens.
   - title: Automate the repeatable handoffs
@@ -57,7 +57,7 @@ faqs:
   - question: Will automation replace my sales or service team?
     answer: No. The goal is to remove avoidable admin work and make the next action visible. Important judgment, relationship-building and exceptions should remain with people who have the right context.
 ctaTitle: If a lead can disappear, the workflow is not finished.
-ctaCopy: Walk me through what happens after an enquiry. I’ll help map the gaps, ownership and first automation worth implementing.
+ctaCopy: Walk us through what happens after an enquiry. We’ll help map the gaps, ownership and first automation worth implementing.
 related:
   - singapore-luxury-homes
   - chatdaddy-saas-growth

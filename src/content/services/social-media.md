@@ -51,13 +51,13 @@ faqs:
   - question: Which social platforms do you manage?
     answer: The core service covers Facebook, Instagram and Redbook/Xiaohongshu. The channel mix is chosen around your audience, market and internal resources rather than forcing the same plan onto every brand.
   - question: Do you create the photos and videos?
-    answer: I provide content strategy, scripts, copy, briefs and production direction. Hands-on filming, photography, editing volume and on-site production are scoped according to location and the assets your team can provide.
+    answer: We provide content strategy, scripts, copy, briefs and production direction. Hands-on filming, photography, editing volume and on-site production are scoped according to location and the assets your team can provide.
   - question: How often should we post?
     answer: Frequency follows the content quality, channel and resources available. A smaller repeatable rhythm is usually more useful than an ambitious calendar the team cannot sustain. The plan will define a realistic cadence and why it exists.
   - question: Can social media generate leads?
-    answer: It can contribute to discovery, trust and response, but results depend on the offer and conversion path. I connect content to appropriate next steps such as a landing page, WhatsApp conversation or campaign instead of promising that every post will create a lead.
+    answer: It can contribute to discovery, trust and response, but results depend on the offer and conversion path. We connect content to appropriate next steps such as a landing page, WhatsApp conversation or campaign instead of promising that every post will create a lead.
 ctaTitle: Stop feeding the calendar. Start building brand memory.
-ctaCopy: Share your current channels, audience and content bottleneck. I’ll help turn scattered posting into a system your team can sustain.
+ctaCopy: Share your current channels, audience and content bottleneck. We’ll help turn scattered posting into a system your team can sustain.
 related:
   - chatdaddy-saas-growth
   - singapore-luxury-homes

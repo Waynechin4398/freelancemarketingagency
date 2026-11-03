@@ -1,5 +1,6 @@
 ---
 import { getCollection } from "astro:content";
+import site from "../data/site.json";
 
 interface Props { slugs: string[]; }
 const { slugs } = Astro.props;
@@ -8,6 +9,7 @@ const projects = slugs
   .map((slug) => allProjects.find((project) => project.id === slug))
   .filter((project) => project !== undefined);
 ---
+{site.showWork && (
 <div class="related-grid">
   {projects.map((project) => (
     <a href={`/work/${project.id}/`} class:list={["related-card", project.data.palette]}>
@@ -18,3 +20,4 @@ const projects = slugs
     </a>
   ))}
 </div>
+)}

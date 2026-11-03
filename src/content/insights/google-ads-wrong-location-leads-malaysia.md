@@ -5,7 +5,7 @@ excerpt: A practical diagnosis for Malaysian service businesses still receiving 
 publishDate: 2026-08-26
 updatedDate: 2026-08-29
 authorName: Wayne
-authorRole: Strategist and builder, Wayne Omni
+authorRole: Founder, Wayne Omni
 draft: false
 seoTitle: Google Ads Leads from Wrong Location
 seoDescription: Google Ads leads from the wrong location? Check Presence targeting, geographic reports, Search Partners and service-area qualification in Malaysia.
@@ -165,7 +165,7 @@ Before tightening the map again, find where the mismatch happens: the enquiry's 
 
 If you want help connecting those pieces:
 
-- [Message Wayne on WhatsApp](https://wa.me/601123394398?text=Hi%20Wayne%2C%20I%20found%20Wayne%20Omni%20and%20would%20like%20to%20discuss%20a%20project.).
+- [Message Wayne Omni on WhatsApp](https://wa.me/601123394398?text=Hi%2C%20I%20found%20Wayne%20Omni%20and%20would%20like%20to%20discuss%20a%20project.).
 - [Use the guided project brief](/contact/#audit). It prepares an email draft; nothing is sent until you review and send it from your email app.
 - [Email wayne@wayneomni.com](mailto:wayne@wayneomni.com).
 - [Schedule a 30-minute discovery call](https://calendly.com/waynegtcfx/30min).

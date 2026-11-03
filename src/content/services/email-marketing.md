@@ -49,15 +49,15 @@ process:
     description: Review engagement and downstream actions to improve subject lines, content, timing and segmentation.
 faqs:
   - question: Can you work with my current email platform?
-    answer: Usually, yes. I first review the platform, list quality, forms, fields and integrations. If the current tool cannot support the required lifecycle or reporting, I will explain the limitation before recommending a change.
+    answer: Usually, yes. We first review the platform, list quality, forms, fields and integrations. If the current tool cannot support the required lifecycle or reporting, we will explain the limitation before recommending a change.
   - question: Do you write the email copy?
     answer: Yes. Sequence strategy and copy can be included together so each message has a clear purpose, context and next step. Brand inputs, offer details and any regulated claims must be supplied or approved by your team.
   - question: Can you clean or use an existing contact list?
-    answer: I can help review segmentation and list health, but contacts should only be messaged where the business has an appropriate permission and lawful basis. Purchased or unclear lists are not a sound foundation for the programme.
+    answer: We can help review segmentation and list health, but contacts should only be messaged where the business has an appropriate permission and lawful basis. Purchased or unclear lists are not a sound foundation for the programme.
   - question: How do we measure whether email is working?
     answer: Opens and clicks are useful diagnostic signals, not the whole result. Measurement should also reflect replies, bookings, qualified actions, onboarding progress or retention behaviour appropriate to the sequence.
 ctaTitle: Your follow-up should feel timely, not automated for its own sake.
-ctaCopy: Show me how leads enter your business and what happens next. I’ll help identify the first lifecycle sequence worth building.
+ctaCopy: Show us how leads enter your business and what happens next. We’ll help identify the first lifecycle sequence worth building.
 related:
   - sweetie-lending
   - langkawi-sunset-cruise

@@ -4,6 +4,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import RelatedWork from "../../components/RelatedWork.astro";
 import CtaBand from "../../components/CtaBand.astro";
 import InteractiveExplorer from "../../components/InteractiveExplorer.astro";
+import site from "../../data/site.json";
 
 export async function getStaticPaths() {
   const projects = await getCollection("caseStudies", ({ data }) => !data.draft);
@@ -21,6 +22,7 @@ const related = allProjects
   .slice(0, 2);
 const orderedProjects = [...allProjects].sort((a: typeof project, b: typeof project) => a.data.order - b.data.order);
 const nextProject = orderedProjects[(orderedProjects.findIndex((item: typeof project) => item.id === project.id) + 1) % orderedProjects.length];
+if (!site.showWork) return Astro.redirect("/services/");
 const story = [
   { label: "The challenge", title: "Understand the decision, not just the deliverable.", description: project.data.challenge, eyebrow: "The starting point" },
   { label: "The strategy", title: "Make the journey feel connected.", description: project.data.strategy, eyebrow: "The thinking behind the work" },

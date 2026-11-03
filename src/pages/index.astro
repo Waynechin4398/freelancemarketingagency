@@ -14,12 +14,15 @@ import site from "../data/site.json";
 
 const services = (await getCollection("services", ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
 const featuredWork = ["singapore-luxury-homes", "propertylab-webinar-acquisition", "summercharter-summermarine"];
-const portfolio = (await getCollection("caseStudies", ({ data }) => !data.draft))
-  .sort((a, b) => a.data.order - b.data.order);
+const portfolio = site.showWork
+  ? (await getCollection("caseStudies", ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order)
+  : [];
+const approachNumber = site.showWork ? "04" : "01";
+const systemNumber = site.showWork ? "05" : "02";
 ---
 <BaseLayout>
   <section class="signal-hero" aria-labelledby="hero-title">
-    <span class="eyebrow">Hi, I’m Wayne · Growth partner, Malaysia</span>
+    <span class="eyebrow">Wayne Omni · Marketing agency, Malaysia</span>
     <h1 id="hero-title" class="signal-hero-title" data-no-stagger>
       <span class="sr-only">Growth, on target. </span>
       <span class="signal-hero-display" aria-hidden="true">
@@ -32,7 +35,11 @@ const portfolio = (await getCollection("caseStudies", ({ data }) => !data.draft)
         <p>{site.heroIntro}</p>
         <div class="button-row">
           <a class="button primary" href="/contact">Start a project <span aria-hidden="true">↗</span></a>
-          <a class="button ghost" href="/work/">See the work <span aria-hidden="true">↗</span></a>
+          {site.showWork ? (
+            <a class="button ghost" href="/work/">See the work <span aria-hidden="true">↗</span></a>
+          ) : (
+            <a class="button ghost" href="/services/">See the services <span aria-hidden="true">↗</span></a>
+          )}
         </div>
       </div>
       <a class="hero-sticker" href="#growth-check" aria-label="Take the 30-second growth check">
@@ -53,7 +60,7 @@ const portfolio = (await getCollection("caseStudies", ({ data }) => !data.draft)
     </div>
   </section>
 
-  <ResultsStrip />
+  {site.showWork && <ResultsStrip />}
 
   <SignalValues />
 
@@ -63,32 +70,34 @@ const portfolio = (await getCollection("caseStudies", ({ data }) => !data.draft)
     showAllLink
   />
 
-  <section class="work-preview section">
-    <SectionIntro number="03" eyebrow="Selected work" title="Proof, not promises." copy="Documented project contexts, the role I played, the systems created and—where the measurement context is available—the reported result." />
-    <RelatedWork slugs={featuredWork} />
-    <div class="client-chips">
-      <span>In the portfolio</span>
-      <ul>
-        {portfolio.map((project) => <li><a href={`/work/${project.id}/`}>{project.data.client}</a></li>)}
-      </ul>
-      <a class="button ghost" href="/work/">View all work <span aria-hidden="true">↗</span></a>
-    </div>
-  </section>
+  {site.showWork && (
+    <section class="work-preview section">
+      <SectionIntro number="03" eyebrow="Selected work" title="Proof, not promises." copy="Documented project contexts, the role played, the systems created and—where the measurement context is available—the reported result." />
+      <RelatedWork slugs={featuredWork} />
+      <div class="client-chips">
+        <span>In the portfolio</span>
+        <ul>
+          {portfolio.map((project) => <li><a href={`/work/${project.id}/`}>{project.data.client}</a></li>)}
+        </ul>
+        <a class="button ghost" href="/work/">View all work <span aria-hidden="true">↗</span></a>
+      </div>
+    </section>
+  )}
 
   <section class="console-feature section dark-section">
-    <SectionIntro number="04" eyebrow="How I work" title="One brain. The whole journey." copy="I work where strategy, design, media and technology meet—so the promise in the ad still makes sense on the page, in the CRM and during follow-up." light />
+    <SectionIntro number={approachNumber} eyebrow="How we work" title="One practice. The whole journey." copy="We work where strategy, design, media and technology meet—so the promise in the ad still makes sense on the page, in the CRM and during follow-up." light />
     <div class="console-feature-grid">
       <div class="console-manifesto">
         <span>WAYNE OMNI / SYSTEM 01</span>
-        <p>Most growth problems are not isolated channel problems. They happen in the handoffs. I design those handoffs as one operating system.</p>
-        <a href="/about/">More about my approach ↗</a>
+        <p>Most growth problems are not isolated channel problems. They happen in the handoffs. We design those handoffs as one operating system.</p>
+        <a href="/about/">More about the approach ↗</a>
       </div>
       <GrowthConsole />
     </div>
   </section>
 
   <section class="system-section section" id="growth-system">
-    <SectionIntro number="05" eyebrow="The growth operating system" title="Every handoff, on target." copy="The strongest gains often appear between channels—where an ad becomes a page visit, a form becomes a lead, and a lead becomes a timely conversation." />
+    <SectionIntro number={systemNumber} eyebrow="The growth operating system" title="Every handoff, on target." copy="The strongest gains often appear between channels—where an ad becomes a page visit, a form becomes a lead, and a lead becomes a timely conversation." />
     <ProcessFlow />
   </section>
 

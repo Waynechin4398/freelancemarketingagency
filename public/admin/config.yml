@@ -28,6 +28,7 @@ collections:
           - { label: Tagline, name: tagline, widget: string }
           - { label: Hero title, name: heroTitle, widget: string }
           - { label: Hero introduction, name: heroIntro, widget: text }
+          - { label: Show work and case studies, name: showWork, widget: boolean, default: false, hint: "Off hides the portfolio, Work navigation and /work pages. Turn on to restore them." }
           - { label: Location line, name: location, widget: string }
           - { label: Contact email, name: contactEmail, widget: string, required: false }
           - { label: WhatsApp URL, name: whatsappUrl, widget: string, required: false }

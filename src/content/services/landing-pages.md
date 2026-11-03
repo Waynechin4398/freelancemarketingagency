@@ -55,9 +55,9 @@ faqs:
   - question: Can the page connect to my CRM or WhatsApp?
     answer: Yes. Forms, booking links, WhatsApp actions, email notifications and CRM routing can be planned as part of the conversion path. The exact integration depends on your current tools and consent requirements.
   - question: Do you guarantee a conversion rate?
-    answer: No responsible partner can guarantee a result without traffic quality, offer strength and historical context. I build a stronger conversion environment and a measurement plan so the page can be improved with real evidence.
+    answer: No responsible partner can guarantee a result without traffic quality, offer strength and historical context. We build a stronger conversion environment and a measurement plan so the page can be improved with real evidence.
 ctaTitle: Do not send another campaign to a page that leaks intent.
-ctaCopy: Share the campaign, audience and offer. I’ll help you identify whether the biggest constraint is the message, page experience, form or follow-up.
+ctaCopy: Share the campaign, audience and offer. We’ll help you identify whether the biggest constraint is the message, page experience, form or follow-up.
 related:
   - propertylab-webinar-acquisition
   - chatdaddy-saas-growth

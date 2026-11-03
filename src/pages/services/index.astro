@@ -14,11 +14,11 @@ const services = (await getCollection("services", ({ data }) => !data.draft)).so
       <span class="eyebrow light">Choose by constraint</span>
       <div>
         <h2>Start with what is getting stuck.</h2>
-        <p>You do not need to diagnose the channel before contacting me. Start with the business problem you can see; we’ll trace the journey and find the part that needs to change first.</p>
+        <p>You do not need to diagnose the channel before getting in touch. Start with the business problem you can see; we’ll trace the journey and find the part that needs to change first.</p>
       </div>
     </div>
     <ServiceFinder services={services} />
   </section>
   <ServiceRows services={services} tone="dark" eyebrow="Explore every capability" title="Every capability, one system." headingId="all-services-title" />
-  <CtaBand title="Not sure which service comes first?" copy="Tell me where growth is getting stuck. I’ll help trace the journey and identify the clearest next move." />
+  <CtaBand title="Not sure which service comes first?" copy="Tell us where growth is getting stuck. We’ll help trace the journey and identify the clearest next move." />
 </BaseLayout>

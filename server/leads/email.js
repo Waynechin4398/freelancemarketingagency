@@ -129,20 +129,20 @@ export function buildLeadCopy({ lead, site }) {
   const html = shell({
     preheader: "Thanks for the brief — here's a copy of what you sent.",
     body: `<h1 style="margin:0 0 14px;font-size:24px;line-height:1.15;">Thanks, ${escapeHtml(firstName)}. Brief received.</h1>
-<p style="margin:0 0 14px;">I read every brief myself and will reply personally within one business day. Here's a copy of what you sent for your records.</p>
+<p style="margin:0 0 14px;">We’ll read your brief and reply within one business day. Here's a copy of what you sent for your records.</p>
 ${detailRows(lead)}
 <p style="margin:22px 0 10px;">Want to move faster?</p>
 <p style="margin:0 0 6px;">
 <a href="${escapeHtml(site.bookingUrl)}" style="display:inline-block;background:${LIME};color:${INK};border:2px solid ${INK};border-radius:999px;padding:11px 20px;font-weight:700;text-decoration:none;margin:0 6px 8px 0;">Book a 30-min call ↗</a>
-<a href="${escapeHtml(site.whatsappUrl)}" style="display:inline-block;background:#ffffff;color:${INK};border:2px solid ${INK};border-radius:999px;padding:11px 20px;font-weight:700;text-decoration:none;margin:0 0 8px;">WhatsApp me ↗</a>
+<a href="${escapeHtml(site.whatsappUrl)}" style="display:inline-block;background:#ffffff;color:${INK};border:2px solid ${INK};border-radius:999px;padding:11px 20px;font-weight:700;text-decoration:none;margin:0 0 8px;">Message on WhatsApp ↗</a>
 </p>
-<p style="margin:16px 0 0;">Talk soon,<br>Wayne<br><span style="color:${MUTED};font-size:13px;">Wayne Omni · wayneomni.com</span></p>
+<p style="margin:16px 0 0;">Talk soon,<br>Wayne Omni<br><span style="color:${MUTED};font-size:13px;">wayneomni.com</span></p>
 <p style="margin:26px 0 0;font-size:11px;color:${MUTED};line-height:1.5;">You're receiving this one-off copy because this address was entered in the project brief form at wayneomni.com/contact. If that wasn't you, you can ignore this email — you won't hear from us again. Wayne Omnipotent (SSM ${escapeHtml(site.ssmNumber)}).</p>`,
   });
   const text = [
     `Thanks, ${firstName}. Brief received.`,
     "",
-    "I read every brief myself and will reply personally within one business day. Here's a copy of what you sent:",
+    "We’ll read your brief and reply within one business day. Here's a copy of what you sent:",
     "",
     `Name: ${lead.name}`,
     `Email: ${lead.email}`,
@@ -155,8 +155,8 @@ ${detailRows(lead)}
     `WhatsApp: ${site.whatsappUrl}`,
     "",
     "Talk soon,",
-    "Wayne",
-    "Wayne Omni · wayneomni.com",
+    "Wayne Omni",
+    "wayneomni.com",
     "",
     "You're receiving this one-off copy because this address was entered in the project brief form at wayneomni.com/contact. If that wasn't you, please ignore this email.",
   ].join("\n");

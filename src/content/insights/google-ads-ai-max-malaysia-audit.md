@@ -4,7 +4,7 @@ category: Paid Media & Measurement
 excerpt: Google’s September migration does not mean every AI Max control was switched on. Use this practical audit to see what changed and decide what to test next.
 publishDate: 2026-09-09
 authorName: Wayne
-authorRole: Strategist and builder, Wayne Omni
+authorRole: Founder, Wayne Omni
 draft: false
 seoTitle: "Google Ads AI Max Malaysia: September 2026 Audit"
 seoDescription: Check whether Google migrated your Search campaigns to AI Max in September 2026, then audit matching, assets, URLs, brand controls and tracking.

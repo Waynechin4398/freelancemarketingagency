@@ -5,7 +5,7 @@ excerpt: Why English, Chinese and Malay campaigns should share a strategy withou
 publishDate: 2026-07-29
 updatedDate: 2026-08-29
 authorName: Wayne
-authorRole: Strategist and builder, Wayne Omni
+authorRole: Founder, Wayne Omni
 draft: false
 seoTitle: Multilingual Campaign Strategy for Malaysia
 seoDescription: Build English, Chinese and Malay campaigns around one strategy while adapting intent, tone, proof, landing pages and measurement.
@@ -180,4 +180,4 @@ Wayne Omni can connect multilingual campaign planning with the pages, tracking a
 - [Discuss a multilingual campaign](/contact/#audit).
 - [Explore paid-media services](/services/paid-media/).
 - [Review the landing-page handoff](/insights/landing-page-friction/).
-- [Message Wayne on WhatsApp](https://wa.me/601123394398?text=Hi%20Wayne%2C%20I%20would%20like%20to%20plan%20a%20multilingual%20campaign.).
+- [Message Wayne Omni on WhatsApp](https://wa.me/601123394398?text=Hi%2C%20I%20would%20like%20to%20plan%20a%20multilingual%20campaign.).

@@ -11,7 +11,7 @@ painPoints:
   - You can see traffic numbers, but not which pages and calls to action create real enquiries.
 solutions:
   - title: Clarify the decision journey
-    description: I organise your positioning, offers, proof and calls to action around the questions a serious buyer needs answered before making contact.
+    description: We organise your positioning, offers, proof and calls to action around the questions a serious buyer needs answered before making contact.
   - title: Design for conversion
     description: Every page receives a clear job, message hierarchy and next step—so the experience guides visitors instead of making them search.
   - title: Build a reusable system
@@ -49,7 +49,7 @@ process:
     description: Check mobile behaviour, accessibility, performance and tracking, then support a controlled launch and handover.
 faqs:
   - question: Which platform will you build the website on?
-    answer: The platform follows the business need. I can work with WordPress for flexible business websites, Shopify for commerce, or a lightweight modern stack when performance and structured content are the priority. I will recommend the option after understanding who will maintain it and what it needs to connect with.
+    answer: The platform follows the business need. We can work with WordPress for flexible business websites, Shopify for commerce, or a lightweight modern stack when performance and structured content are the priority. We will recommend the option after understanding who will maintain it and what it needs to connect with.
   - question: Can you help with the website copy?
     answer: Yes. Every project includes message hierarchy and copy direction. Full copywriting, content migration or multilingual adaptation can be scoped when we know the number and complexity of pages.
   - question: How long does a website project take?
@@ -57,7 +57,7 @@ faqs:
   - question: Will the website be ready for SEO and advertising?
     answer: The build includes technical and on-page foundations such as logical structure, metadata, responsive performance and analytics-ready actions. Ongoing SEO content and paid campaign management can be added as connected services.
 ctaTitle: Your website should make the next decision easier.
-ctaCopy: Bring your current website, offer or launch plan to a focused 30-minute conversation. I’ll help identify the clearest improvement to make first.
+ctaCopy: Bring your current website, offer or launch plan to a focused 30-minute conversation. We’ll help identify the clearest improvement to make first.
 related:
   - summercharter-summermarine
   - kamidental-patient-acquisition

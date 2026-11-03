@@ -5,7 +5,7 @@ excerpt: A practical way to separate a useful reply from future promotions, reco
 publishDate: 2026-08-06
 updatedDate: 2026-08-29
 authorName: Wayne
-authorRole: Strategist and builder, Wayne Omni
+authorRole: Founder, Wayne Omni
 draft: false
 seoTitle: WhatsApp Opt-In Malaysia — A Practical SME Guide
 seoDescription: Learn how Malaysian SMEs can handle WhatsApp opt-in, lead follow-up, consent records and opt-outs without treating every enquiry as permanent permission.

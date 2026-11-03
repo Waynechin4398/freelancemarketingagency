@@ -19,14 +19,14 @@ import { buildLeadAlert, buildLeadCopy, sendWithResend } from "./email.js";
 
 export const SITE = {
   bookingUrl: "https://calendly.com/waynegtcfx/30min",
-  whatsappUrl: "https://wa.me/601123394398?text=Hi%20Wayne%2C%20I%20found%20Wayne%20Omni%20and%20would%20like%20to%20discuss%20a%20project.",
+  whatsappUrl: "https://wa.me/601123394398?text=Hi%2C%20I%20found%20Wayne%20Omni%20and%20would%20like%20to%20discuss%20a%20project.",
   ssmNumber: "202303064098 (CT0118753-P)",
 };
 
 const DEFAULTS = {
   NOTIFY_TO: "waynegtcfx@gmail.com",
   ALERT_FROM: "Wayne Omni Leads <leads@wayneomni.com>",
-  COPY_FROM: "Wayne from Wayne Omni <wayne@wayneomni.com>",
+  COPY_FROM: "Wayne Omni <wayne@wayneomni.com>",
   REPLY_TO: "wayne@wayneomni.com",
 };
 
@@ -113,7 +113,7 @@ export function validateLead(body) {
   if (lead.name.length < 2) errors.name = "Please enter your name.";
   if (!EMAIL_RE.test(lead.email)) errors.email = "Please enter a valid email address.";
   if (lead.brief.length < 15) errors.brief = "Tell me a little more about the project (a sentence or two is fine).";
-  if (!consent) errors.consent = "Please confirm I can use these details to reply to you.";
+  if (!consent) errors.consent = "Please confirm Wayne Omni can use these details to reply to you.";
   if (/https?:\/\//i.test(lead.name) || /https?:\/\//i.test(lead.company)) errors.name = errors.name || "Please enter your name without links.";
   return { lead, consent, errors };
 }
@@ -239,7 +239,7 @@ export async function handleLeadRequest(request, env, waitUntil) {
   const ipHash = ip ? (await sha256Hex(`${env.IP_SALT || "wayne-omni-leads"}:${ip}`)).slice(0, 32) : null;
   try {
     if (ipHash && (await countSince(env.DB, "ip_hash", ipHash, 60)) >= 5) {
-      return reply(request, 429, { ok: false, error: "That's a lot of briefs in a short time. Please try again later or WhatsApp me." });
+      return reply(request, 429, { ok: false, error: "That's a lot of briefs in a short time. Please try again later or message Wayne Omni on WhatsApp." });
     }
     if ((await countSince(env.DB, "email", lead.email, 10)) >= 2) {
       return reply(request, 429, { ok: false, error: "I've already got your brief — I'll be in touch soon." });
@@ -269,7 +269,7 @@ export async function handleLeadRequest(request, env, waitUntil) {
       .run();
   } catch (error) {
     console.error("lead insert failed", error);
-    return reply(request, 500, { ok: false, error: "Couldn't save your brief just now. Please try again, or email or WhatsApp me." });
+    return reply(request, 500, { ok: false, error: "Couldn't save your brief just now. Please try again, or email or WhatsApp Wayne Omni." });
   }
 
   const isPreview = host !== "wayneomni.com" && host !== "www.wayneomni.com";

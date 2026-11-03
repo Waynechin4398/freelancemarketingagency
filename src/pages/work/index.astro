@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PageHero from "../../components/PageHero.astro";
 import CtaBand from "../../components/CtaBand.astro";
+import site from "../../data/site.json";
 
 const projects = (await getCollection("caseStudies", ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
 const serviceFilters = ["Websites", "Landing Pages", "Paid Media", "SEO & Content", "CRM & Automation", "Social Media", "Analytics"];
@@ -47,6 +48,7 @@ const experience = [
     capabilities: ["WordPress", "Wix", "Shopify", "Tracking"],
   },
 ];
+if (!site.showWork) return Astro.redirect("/services/");
 ---
 <BaseLayout title="Work" description="Documented Wayne Omni work across web, SEO, paid acquisition, social media, analytics and marketing automation.">
   <PageHero

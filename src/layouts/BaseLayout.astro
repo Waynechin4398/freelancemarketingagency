@@ -23,7 +23,7 @@ interface Props {
 
 const {
   title = `${site.brand} — ${site.descriptor}`,
-  description = "Connected websites, campaigns and marketing systems built in Malaysia for businesses across markets.",
+  description = "Wayne Omni is a Malaysia-based marketing agency connecting websites, campaigns and follow-up into one customer journey.",
   noindex = false,
 } = Astro.props;
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefined;
@@ -99,7 +99,7 @@ const structuredData = {
       href={site.whatsappUrl}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Message Wayne on WhatsApp (opens in a new tab)"
+      aria-label="Message Wayne Omni on WhatsApp (opens in a new tab)"
       data-ga-event="contact_whatsapp"
       data-ga-method="whatsapp"
       data-ga-location="floating_button"

@@ -5,7 +5,7 @@ excerpt: The small disconnects between promise, proof and action that create unn
 publishDate: 2026-07-29
 updatedDate: 2026-08-29
 authorName: Wayne
-authorRole: Strategist and builder, Wayne Omni
+authorRole: Founder, Wayne Omni
 draft: false
 seoTitle: Five Landing Page Friction Problems That Lose Leads
 seoDescription: Find and fix five common landing-page friction points across message match, calls to action, proof, forms and mobile experience.
@@ -169,4 +169,4 @@ Wayne Omni can review the full path from campaign promise to lead follow-up, the
 - [Request a growth audit](/contact/#audit).
 - [Explore landing-page services](/services/landing-pages/).
 - [Read why a campaign needs a system](/insights/campaign-needs-a-system/).
-- [Message Wayne on WhatsApp](https://wa.me/601123394398?text=Hi%20Wayne%2C%20I%20would%20like%20a%20landing-page%20review.).
+- [Message Wayne Omni on WhatsApp](https://wa.me/601123394398?text=Hi%2C%20I%20would%20like%20a%20landing-page%20review.).

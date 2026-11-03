@@ -11,7 +11,7 @@ painPoints:
   - Leads arrive, but slow routing or inconsistent follow-up makes advertising performance look worse than it is.
 solutions:
   - title: Fix measurement before scale
-    description: I map the conversion path, tracking gaps and lead handoffs before using larger budgets to amplify an unclear system.
+    description: We map the conversion path, tracking gaps and lead handoffs before using larger budgets to amplify an unclear system.
   - title: Give each channel a role
     description: Meta, Google, TikTok and LinkedIn are selected for the demand, audience and buying journey they can realistically serve—not because every brand needs every platform.
   - title: Build a creative learning loop
@@ -49,15 +49,15 @@ process:
     description: Move budget toward combinations that earn it while maintaining a pipeline of new creative and hypotheses.
 faqs:
   - question: Which advertising platforms do you manage?
-    answer: I work across Meta, Google, TikTok and LinkedIn. The recommendation depends on where demand exists, how your audience researches and whether the campaign goal is immediate response, lead generation or longer-consideration growth.
+    answer: We work across Meta, Google, TikTok and LinkedIn. The recommendation depends on where demand exists, how your audience researches and whether the campaign goal is immediate response, lead generation or longer-consideration growth.
   - question: How much advertising budget do I need?
-    answer: There is no responsible universal minimum. The budget must be large enough to reach the audience and generate useful learning within your sales economics. I will assess the offer, market, conversion path and available creative before recommending a channel and test plan.
+    answer: There is no responsible universal minimum. The budget must be large enough to reach the audience and generate useful learning within your sales economics. We will assess the offer, market, conversion path and available creative before recommending a channel and test plan.
   - question: Is creative included?
     answer: Creative strategy, testing angles and production direction are part of the service. The exact volume and production format—static, video, copy variations or collaboration with your internal team—is defined in the scope.
   - question: Can you guarantee ROAS or cost per lead?
-    answer: No. Performance depends on the market, offer, budget, creative, page, tracking and sales response. I provide transparent decisions, disciplined testing and full-funnel diagnosis rather than unsupported performance promises.
+    answer: No. Performance depends on the market, offer, budget, creative, page, tracking and sales response. We provide transparent decisions, disciplined testing and full-funnel diagnosis rather than unsupported performance promises.
 ctaTitle: Before increasing spend, find out what the campaign is really learning.
-ctaCopy: Bring your current ad account, funnel or launch goal. I’ll help identify whether the next move belongs in media, creative, the landing page or follow-up.
+ctaCopy: Bring your current ad account, funnel or launch goal. We’ll help identify whether the next move belongs in media, creative, the landing page or follow-up.
 related:
   - propertylab-webinar-acquisition
   - kamidental-patient-acquisition

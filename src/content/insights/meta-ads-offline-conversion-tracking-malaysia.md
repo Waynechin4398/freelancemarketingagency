@@ -5,7 +5,7 @@ excerpt: A practical measurement loop for connecting Meta campaigns with qualifi
 publishDate: 2026-08-12
 updatedDate: 2026-08-29
 authorName: Wayne
-authorRole: Strategist and builder, Wayne Omni
+authorRole: Founder, Wayne Omni
 draft: false
 seoTitle: Offline Conversion Tracking Malaysia | Meta Ads
 seoDescription: Learn how offline conversion tracking in Malaysia links Meta Ads with CRM, phone, WhatsApp and showroom sales—without treating Ads Manager as accounting.
@@ -236,7 +236,7 @@ Review event definitions, source capture, CRM stages, identifiers, privacy notic
 
 If Ads Manager stops at the conversation while the sale happens somewhere else, map the missing handoff before you add another dashboard.
 
-- **WhatsApp:** [Message Wayne about offline conversion tracking](https://wa.me/601123394398?text=Hi%20Wayne%2C%20I%27d%20like%20to%20map%20our%20Meta%20Ads%20to%20offline%20sales%20tracking.).
+- **WhatsApp:** [Message Wayne Omni about offline conversion tracking](https://wa.me/601123394398?text=Hi%2C%20I%27d%20like%20to%20map%20our%20Meta%20Ads%20to%20offline%20sales%20tracking.).
 - **Form:** [Complete the Wayne Omni growth audit](/contact/#audit) and describe where the campaign trail goes cold.
 - **Email:** [Email your current measurement flow](mailto:wayne@wayneomni.com?subject=Meta%20Ads%20offline%20conversion%20tracking).
 - **Discovery call:** Request suitable times through WhatsApp, the growth audit or email; a direct booking link is not yet configured.

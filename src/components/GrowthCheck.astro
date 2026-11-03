@@ -13,8 +13,8 @@ const serviceData = Object.fromEntries(services.map((service) => {
     title: service.data.title,
     short: service.data.short,
     group: service.data.group,
-    caseSlug: relatedCase?.id ?? "",
-    caseClient: relatedCase?.data.client ?? "",
+    caseSlug: site.showWork ? relatedCase?.id ?? "" : "",
+    caseClient: site.showWork ? relatedCase?.data.client ?? "" : "",
   }];
 }));
 const whatsappBase = site.whatsappUrl.split("?")[0];
@@ -76,7 +76,7 @@ const steps = [
     <div class="gc-nav">
       <button type="button" class="gc-back" data-gc-back>← Back</button>
       <button type="submit" class="gc-next" data-gc-next>Next →</button>
-      <noscript><a class="gc-fallback" href={site.whatsappUrl}>Message Wayne on WhatsApp ↗</a></noscript>
+      <noscript><a class="gc-fallback" href={site.whatsappUrl}>Message Wayne Omni on WhatsApp ↗</a></noscript>
     </div>
   </form>
 
@@ -89,10 +89,10 @@ const steps = [
       <a class="button light-button" data-gc-whatsapp href={site.whatsappUrl} target="_blank" rel="noopener noreferrer" data-ga-event="contact_whatsapp" data-ga-method="whatsapp" data-ga-location={location}>Send my answers on WhatsApp <span>↗</span></a>
       <a class="gc-link" data-gc-booking href={site.bookingUrl} target="_blank" rel="noopener noreferrer" data-ga-event="contact_calendly" data-ga-method="calendly" data-ga-location={location}>Book a 30-minute call ↗</a>
       <a class="gc-link" data-gc-service href="/services/">See the service ↗</a>
-      <a class="gc-link" data-gc-case href="/work/">Related case study ↗</a>
+      {site.showWork && <a class="gc-link" data-gc-case href="/work/">Related case study ↗</a>}
     </div>
     <button type="button" class="gc-restart" data-gc-restart>↺ Start again</button>
-    <small>A starting suggestion based on three answers, not a diagnosis. Wayne reviews the full journey before recommending anything.</small>
+    <small>A starting suggestion based on three answers, not a diagnosis. Wayne Omni reviews the full journey before recommending anything.</small>
   </div>
 </div>
 
@@ -147,11 +147,13 @@ const steps = [
         root.querySelector("[data-gc-short]")!.textContent = main.short;
         root.querySelector("[data-gc-pair]")!.textContent = pair ? `Often paired with ${pair.title}.` : "";
         root.querySelector<HTMLAnchorElement>("[data-gc-service]")!.href = `/services/${primary}/`;
-        const caseLink = root.querySelector<HTMLAnchorElement>("[data-gc-case]")!;
-        caseLink.hidden = !main.caseSlug;
-        if (main.caseSlug) { caseLink.href = `/work/${main.caseSlug}/`; caseLink.textContent = `See ${main.caseClient} ↗`; }
+        const caseLink = root.querySelector<HTMLAnchorElement>("[data-gc-case]");
+        if (caseLink) {
+          caseLink.hidden = !main.caseSlug;
+          if (main.caseSlug) { caseLink.href = `/work/${main.caseSlug}/`; caseLink.textContent = `See ${main.caseClient} ↗`; }
+        }
         const message = [
-          "Hi Wayne, I did the growth check on wayneomni.com.",
+          "Hi, I did the growth check on wayneomni.com.",
           `Where we're stuck: ${labels.stuck[answers.stuck]}.`,
           `Main channel today: ${labels.channel[answers.channel]}.`,
           `Timing: ${labels.timing[answers.timing]}.`,

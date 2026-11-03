@@ -42,7 +42,7 @@ const heroCtaLocation = `service_${service.id}_hero`;
     <div class="service-section-heading">
       <span class="eyebrow">Does this sound familiar?</span>
       <h2 id="problem-heading">The visible problem is rarely the whole problem.</h2>
-      <p>Before recommending more activity, I look for the point where attention, experience and follow-up stop working together.</p>
+      <p>Before recommending more activity, we look for the point where attention, experience and follow-up stop working together.</p>
     </div>
     <div class="pain-grid">
       {service.data.painPoints.map((item: string, index: number) => (
@@ -116,12 +116,14 @@ const heroCtaLocation = `service_${service.id}_hero`;
     </div>
   </section>
 
+  {site.showWork && (
   <section class="section related-section">
     <span class="eyebrow">Relevant experience</span>
     <h2 class="large-section-title">Related work</h2>
     <p class="related-intro">See how connected strategy, experience and execution were applied in real project contexts. Results are only published where evidence and permission allow.</p>
     <RelatedWork slugs={service.data.related} />
   </section>
+  )}
 
   <CtaBand eyebrow="Start with the constraint" title={service.data.ctaTitle} copy={service.data.ctaCopy} serviceId={service.id} />
 </BaseLayout>

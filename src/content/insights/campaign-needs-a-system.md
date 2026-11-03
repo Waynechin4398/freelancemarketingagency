@@ -5,7 +5,7 @@ excerpt: A practical map for connecting the ad, page, form, CRM and follow-up be
 publishDate: 2026-07-29
 updatedDate: 2026-08-29
 authorName: Wayne
-authorRole: Strategist and builder, Wayne Omni
+authorRole: Founder, Wayne Omni
 draft: false
 seoTitle: Build the campaign system before increasing spend
 seoDescription: Connect the ad, landing page, form, CRM and follow-up before scaling marketing spend.
@@ -172,6 +172,6 @@ Use a hierarchy: delivery metrics explain reach, conversion metrics explain acti
 If the ad, page, form and follow-up are managed as separate tasks, start by mapping their handoffs. Wayne Omni can audit that path, identify the first constraint and turn the findings into an implementation plan.
 
 - [Open the guided project brief](/contact/#audit).
-- [Message Wayne on WhatsApp](https://wa.me/601123394398?text=Hi%20Wayne%2C%20I%20would%20like%20to%20audit%20our%20campaign%20system.).
+- [Message Wayne Omni on WhatsApp](https://wa.me/601123394398?text=Hi%2C%20I%20would%20like%20to%20audit%20our%20campaign%20system.).
 - [Review the paid-media service](/services/paid-media/).
 - [See how CRM and automation support follow-up](/services/crm-automation/).

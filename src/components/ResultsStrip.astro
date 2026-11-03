@@ -1,5 +1,6 @@
 ---
 import { getCollection } from "astro:content";
+import site from "../data/site.json";
 
 // Picks reported results straight from approved case-study metrics,
 // so the strip can never show a number that is not already published.
@@ -22,7 +23,7 @@ const results = picks
   })
   .filter((item) => item !== undefined);
 ---
-{results.length > 0 && (
+{site.showWork && results.length > 0 && (
   <section class="results-strip" aria-labelledby="results-strip-title">
     <div class="results-strip-head">
       <span class="eyebrow light">Reported results</span>

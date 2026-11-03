@@ -4,12 +4,12 @@ import PageHero from "../components/PageHero.astro";
 import site from "../data/site.json";
 ---
 <BaseLayout title="Schedule a meeting" description="Book a focused 30-minute meeting with Wayne Omni.">
-  <PageHero dark eyebrow="Start a conversation" title="Hello! Let’s talk growth." intro="Book a focused 30-minute meeting or message Wayne directly on WhatsApp." />
+  <PageHero dark eyebrow="Start a conversation" title="Hello! Let’s talk growth." intro="Book a focused 30-minute meeting or message Wayne Omni on WhatsApp." />
   <section class="brief-section" id="audit" aria-labelledby="brief-title">
     <div class="brief-intro">
       <span class="eyebrow">Guided project brief</span>
       <h2 id="brief-title">Give the first conversation useful context.</h2>
-      <p>Share the business, website and growth problem you want to solve. It comes straight to me—no email app needed—and I reply personally within one business day.</p>
+      <p>Share the business, website and growth problem you want to solve. It comes straight to Wayne Omni, and we reply within one business day.</p>
       <p>You’ll get a copy of your brief in your inbox, so you have a record of what you sent.</p>
     </div>
     <div class="brief-shell">
@@ -53,11 +53,11 @@ import site from "../data/site.json";
       <div class="brief-success" data-brief-success hidden tabindex="-1" aria-labelledby="brief-success-title">
         <span class="brief-success-mark" aria-hidden="true">✓</span>
         <span class="eyebrow">Brief received</span>
-        <h3 id="brief-success-title">Thanks<span data-success-name></span>. It’s on my desk.</h3>
-        <p data-success-copy>I’ll read it properly and reply personally within one business day.</p>
+        <h3 id="brief-success-title">Thanks<span data-success-name></span>. We’ve got it.</h3>
+        <p data-success-copy>We’ll read it and reply within one business day.</p>
         <div class="button-row">
           <a class="button primary" href={site.bookingUrl} target="_blank" rel="noopener noreferrer" data-ga-event="contact_calendly" data-ga-method="calendly" data-ga-location="brief_success">Book a 30-min call now <span aria-hidden="true">↗</span></a>
-          <a class="button ghost" href={site.whatsappUrl} target="_blank" rel="noopener noreferrer" data-ga-event="contact_whatsapp" data-ga-method="whatsapp" data-ga-location="brief_success">WhatsApp me <span aria-hidden="true">↗</span></a>
+          <a class="button ghost" href={site.whatsappUrl} target="_blank" rel="noopener noreferrer" data-ga-event="contact_whatsapp" data-ga-method="whatsapp" data-ga-location="brief_success">Message on WhatsApp <span aria-hidden="true">↗</span></a>
         </div>
       </div>
     </div>
@@ -66,13 +66,13 @@ import site from "../data/site.json";
     <div class="contact-copy">
       <span class="eyebrow">Direct contact</span>
       <h2>Choose the easiest way to start.</h2>
-      <p>Schedule a 30-minute call for a focused conversation. If you have a quick question, message me directly on WhatsApp.</p>
+      <p>Schedule a 30-minute call for a focused conversation. If you have a quick question, message Wayne Omni on WhatsApp.</p>
       <div class="button-row">
-        <a class="button primary" href={site.whatsappUrl} target="_blank" rel="noopener noreferrer" aria-label="Message Wayne on WhatsApp (opens in a new tab)" data-ga-event="contact_whatsapp" data-ga-method="whatsapp" data-ga-location="contact_page">
+        <a class="button primary" href={site.whatsappUrl} target="_blank" rel="noopener noreferrer" aria-label="Message Wayne Omni on WhatsApp (opens in a new tab)" data-ga-event="contact_whatsapp" data-ga-method="whatsapp" data-ga-location="contact_page">
           Message on WhatsApp <span aria-hidden="true">↗</span>
         </a>
       </div>
-      <div class="prelaunch-note"><strong>Email Wayne directly</strong><br /><a href={`mailto:${site.contactEmail}`} data-ga-event="contact_email" data-ga-method="email" data-ga-location="contact_page">{site.contactEmail}</a></div>
+      <div class="prelaunch-note"><strong>Email Wayne Omni</strong><br /><a href={`mailto:${site.contactEmail}`} data-ga-event="contact_email" data-ga-method="email" data-ga-location="contact_page">{site.contactEmail}</a></div>
     </div>
     <aside class="schedule-card" id="schedule" aria-labelledby="schedule-title">
       <div class="schedule-card-top">
@@ -172,7 +172,7 @@ import site from "../data/site.json";
           const nameSlot = success.querySelector<HTMLElement>("[data-success-name]");
           if (nameSlot) nameSlot.textContent = firstName ? `, ${firstName}` : "";
           const copy = success.querySelector<HTMLElement>("[data-success-copy]");
-          if (copy && result.copy) copy.textContent = `A copy is on its way to ${data.email}. I’ll read it properly and reply personally within one business day.`;
+          if (copy && result.copy) copy.textContent = `A copy is on its way to ${data.email}. We’ll read it and reply within one business day.`;
           form.hidden = true;
           success.hidden = false;
           success.focus({ preventScroll: true });

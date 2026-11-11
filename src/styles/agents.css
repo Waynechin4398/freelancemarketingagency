@@ -154,3 +154,5 @@
   .agent-team-foot .button { width: 100%; justify-content: space-between; }
 }
 .signal-hero-display .hero-word { margin-right: .2em; }
+/* The reveal animation leaves clip-path: inset(0) on the list item, which cut off the card's hover lift and shadow. */
+.agent-grid > li[data-reveal].revealed { clip-path: none; }

@@ -29,6 +29,12 @@ const services = defineCollection({
     ctaTitle: z.string(),
     ctaCopy: z.string(),
     related: z.array(z.string()),
+    agent: z.object({
+      name: z.string(),
+      summary: z.string(),
+      daily: z.array(z.string()),
+      approval: z.string(),
+    }).optional(),
     order: z.number(),
     draft: z.boolean().default(false),
   }),

@@ -1,0 +1,27 @@
+---
+// Traditional agency vs the Wayne Omni agent loop. Qualitative on purpose: no unsupported numbers.
+import data from "../data/agents.json";
+interface Props { headingId?: string }
+const { headingId = "compare-title" } = Astro.props;
+---
+<section class="compare-section section" aria-labelledby={headingId}>
+  <div class="compare-head">
+    <span class="eyebrow">Why change</span>
+    <h2 id={headingId}>Same goals. A faster way to reach them.</h2>
+    <p>Traditional marketing is limited by how many hours a team has. An agent team is limited by how good the strategy and the review are, which is where a human belongs.</p>
+  </div>
+  <div class="compare-table" role="table" aria-label="Traditional agency compared with the Wayne Omni agent loop">
+    <div class="compare-row compare-row-head" role="row">
+      <span role="columnheader" class="sr-only">Area</span>
+      <span role="columnheader">Traditional agency</span>
+      <span role="columnheader">Wayne Omni agent loop</span>
+    </div>
+    {data.compare.map((row) => (
+      <div class="compare-row" role="row" data-reveal="fade-up">
+        <strong role="rowheader">{row.label}</strong>
+        <span role="cell" class="compare-old">{row.old}</span>
+        <span role="cell" class="compare-new"><i aria-hidden="true"></i>{row.next}</span>
+      </div>
+    ))}
+  </div>
+</section>

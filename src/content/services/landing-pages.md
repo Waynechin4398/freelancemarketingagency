@@ -61,6 +61,15 @@ ctaCopy: Share the campaign, audience and offer. I’ll help you identify whethe
 related:
   - propertylab-webinar-acquisition
   - chatdaddy-saas-growth
+agent:
+  name: "Web & Landing Page Agent"
+  summary: "The Web & Landing Page Agent builds campaign pages in days and keeps each page matched to the ad that sends visitors to it."
+  daily:
+    - "Builds and updates campaign pages from the offer and the ad message"
+    - "Checks that headline, proof and next step match the campaign"
+    - "Finds friction in forms, load speed and mobile layout"
+    - "Prepares page variants for testing"
+  approval: "Page launches, offers and any price shown to customers are reviewed by Wayne before going live."
 order: 2
 draft: false
 ---

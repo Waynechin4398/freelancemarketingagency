@@ -1,0 +1,17 @@
+---
+// The daily agent loop: five steps, one of them a human review.
+import data from "../data/agents.json";
+interface Props { light?: boolean }
+const { light = false } = Astro.props;
+---
+<ol class:list={["agent-loop", { light }]}>
+  {data.loop.map((step, index) => (
+    <li class:list={{ "is-human": "human" in step && step.human }} data-reveal="fade-up" data-reveal-delay={index * 70}>
+      <span class="agent-loop-num">{String(index + 1).padStart(2, "0")}</span>
+      <h3>{step.title}</h3>
+      <p>{step.copy}</p>
+      {"human" in step && step.human && <b>Human checkpoint</b>}
+    </li>
+  ))}
+</ol>
+<p class:list={["agent-loop-note", { light }]}><span aria-hidden="true">↻</span> The loop repeats every day. Only step 04 needs a person, and that step is never skipped.</p>

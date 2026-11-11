@@ -61,6 +61,15 @@ ctaCopy: Bring your current ad account, funnel or launch goal. I’ll help ident
 related:
   - propertylab-webinar-acquisition
   - kamidental-patient-acquisition
+agent:
+  name: "Ads Agent"
+  summary: "The Ads Agent watches your Meta, Google, TikTok and LinkedIn accounts every day, so testing and optimisation do not wait for a monthly report."
+  daily:
+    - "Reads spend, cost per lead and creative performance across every active campaign"
+    - "Flags creative fatigue and wasted spend as soon as the data is clear"
+    - "Drafts new hooks, copy and creative variants for the next round of tests"
+    - "Proposes budget shifts toward the combinations that are earning it"
+  approval: "Budget changes, new campaigns and every ad are reviewed by Wayne before they go live. Spend limits are agreed with you first."
 order: 3
 draft: false
 ---

@@ -1,0 +1,30 @@
+---
+// FAQ list with FAQPage structured data, written answer-first for search and AI assistants.
+interface Faq { question: string; answer: string }
+interface Props { faqs: Faq[]; eyebrow?: string; title?: string; headingId?: string }
+const { faqs, eyebrow = "Questions worth asking", title = "Straight answers.", headingId = "faq-heading" } = Astro.props;
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.question,
+    acceptedAnswer: { "@type": "Answer", text: faq.answer },
+  })),
+};
+---
+<section class="service-faq" id="faq" aria-labelledby={headingId}>
+  <div class="service-section-heading">
+    <span class="eyebrow">{eyebrow}</span>
+    <h2 id={headingId}>{title}</h2>
+  </div>
+  <div class="faq-list">
+    {faqs.map((faq, index) => (
+      <details>
+        <summary><span>{String(index + 1).padStart(2, "0")}</span>{faq.question}<i aria-hidden="true">+</i></summary>
+        <div class="faq-answer"><p>{faq.answer}</p></div>
+      </details>
+    ))}
+  </div>
+</section>
+<script type="application/ld+json" is:inline set:html={JSON.stringify(schema)}></script>

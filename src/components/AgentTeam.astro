@@ -1,0 +1,55 @@
+---
+// "Meet the agents": one card per AI agent — what it does every day and what Wayne approves.
+import data from "../data/agents.json";
+
+interface Props { headingId?: string; eyebrow?: string; title?: string; copy?: string; showLink?: boolean; }
+const {
+  headingId = "agent-team-title",
+  eyebrow = "Meet the agents",
+  title = "Seven agents. One human in charge.",
+  copy = "Each agent owns one part of your marketing and works on it every day. Every card shows what it does, and what still needs Wayne’s approval.",
+  showLink = false,
+} = Astro.props;
+---
+<section class="agent-team" aria-labelledby={headingId}>
+  <div class="agent-team-head">
+    <span class="eyebrow">{eyebrow}</span>
+    <h2 id={headingId}>{title}</h2>
+    <p>{copy}</p>
+  </div>
+  <ul class="agent-grid">
+    {data.agents.map((agent, index) => (
+      <li id={`agent-${agent.id}`} data-reveal="fade-up" data-reveal-delay={(index % 3) * 60}>
+        <article class="agent-card">
+          <header>
+            <span class="agent-num">{String(index + 1).padStart(2, "0")}</span>
+            <span class="agent-status"><i aria-hidden="true"></i>{agent.channel}</span>
+          </header>
+          <h3>{agent.name}</h3>
+          <dl>
+            <div><dt>Every day</dt><dd>{agent.daily}</dd></div>
+            <div class="agent-approval"><dt>Wayne approves</dt><dd>{agent.approval}</dd></div>
+          </dl>
+          <a href={agent.href}>See how it works <span aria-hidden="true">↗</span></a>
+        </article>
+      </li>
+    ))}
+    <li data-reveal="fade-up">
+      <article class="agent-card is-human">
+        <header>
+          <span class="agent-num">◎</span>
+          <span class="agent-status"><i aria-hidden="true"></i>Strategy · Brand · Sign-off</span>
+        </header>
+        <h3>Wayne</h3>
+        <p>The human in the loop. I set the strategy, define the guardrails, review the work and stay accountable for the result. You always talk to a person, never to a bot.</p>
+        <a href="/about/">More about Wayne <span aria-hidden="true">↗</span></a>
+      </article>
+    </li>
+  </ul>
+  {showLink && (
+    <div class="agent-team-foot">
+      <a class="button primary" href="/ai-agents/">See how the agent team works <span aria-hidden="true">↗</span></a>
+      <a class="button ghost" href="/services/">Browse by service <span aria-hidden="true">↗</span></a>
+    </div>
+  )}
+</section>

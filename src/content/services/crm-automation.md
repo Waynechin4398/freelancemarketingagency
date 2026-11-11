@@ -61,6 +61,15 @@ ctaCopy: Walk me through what happens after an enquiry. I’ll help map the gaps
 related:
   - singapore-luxury-homes
   - chatdaddy-saas-growth
+agent:
+  name: "Reporting Agent"
+  summary: "The Reporting Agent and lead-triage agents make sure every enquiry is read, prioritised and followed up, and that the numbers reach you in plain language."
+  daily:
+    - "Reads each new enquiry and summarises what the lead needs"
+    - "Suggests a priority and drafts a reply for a human to send"
+    - "Pulls ad, site and CRM data into one weekly summary"
+    - "Points to the one constraint worth fixing next"
+  approval: "Replies to leads are sent by a person, not by the agent. Recommendations are reviewed by Wayne before they reach you."
 order: 6
 draft: false
 ---

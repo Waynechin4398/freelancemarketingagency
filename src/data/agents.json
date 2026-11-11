@@ -1,0 +1,81 @@
+{
+  "agents": [
+    {
+      "id": "ads",
+      "name": "Ads Agent",
+      "channel": "Meta · Google · TikTok · LinkedIn",
+      "daily": "Reads spend, cost per lead and creative performance every day. Flags fatigue, drafts new angles and variants, and proposes where the budget should move next.",
+      "approval": "Budget changes, new campaigns and every ad before it goes live.",
+      "href": "/services/paid-media/"
+    },
+    {
+      "id": "social",
+      "name": "Social & Content Agent",
+      "channel": "Facebook · Instagram · TikTok · Redbook",
+      "daily": "Tracks trends and competitor content, drafts posts and captions in English, Chinese and Malay, and keeps the content calendar full.",
+      "approval": "Every post published under your brand name.",
+      "href": "/services/social-media/"
+    },
+    {
+      "id": "video",
+      "name": "Video Agent",
+      "channel": "Reels · TikTok · Video ads",
+      "daily": "Turns offers and winning hooks into short-video scripts, storyboards and AI-generated cuts, so creative testing never waits for a shoot day.",
+      "approval": "Final cuts, product claims and any use of people or brand assets.",
+      "href": "/ai-agents/#agent-video"
+    },
+    {
+      "id": "email",
+      "name": "Email Agent",
+      "channel": "Welcome · Nurture · Re-engagement",
+      "daily": "Segments the list, drafts sequences and follow-ups, tests subject lines and watches deliverability and unsubscribes.",
+      "approval": "Every send to your customer list.",
+      "href": "/services/email-marketing/"
+    },
+    {
+      "id": "web",
+      "name": "Web & Landing Page Agent",
+      "channel": "Websites · Campaign pages",
+      "daily": "Builds and updates pages, keeps the page message matched to the ad that sent the visitor, and finds the friction that stops enquiries.",
+      "approval": "Page launches, offers and pricing shown to customers.",
+      "href": "/services/landing-pages/"
+    },
+    {
+      "id": "search",
+      "name": "Search Agent",
+      "channel": "SEO · AEO · GEO",
+      "daily": "Monitors Google rankings and how ChatGPT, Gemini and AI Overviews answer your buyers’ questions, then drafts answer-first content, FAQs and schema to close the gaps.",
+      "approval": "Published content and every factual claim about your business.",
+      "href": "/ai-visibility/"
+    },
+    {
+      "id": "reporting",
+      "name": "Reporting Agent",
+      "channel": "Ads · Site · CRM data",
+      "daily": "Pulls the numbers together each day, writes a plain-language weekly summary and points to the one constraint worth fixing next.",
+      "approval": "Recommendations and the priorities for the next round.",
+      "href": "/services/crm-automation/"
+    }
+  ],
+  "loop": [
+    { "title": "Read the data", "copy": "The Reporting Agent pulls ad, site and lead data every day, not once a month." },
+    { "title": "Decide the next test", "copy": "Agents propose what to test, pause or scale, based on what the numbers actually show." },
+    { "title": "Create the assets", "copy": "Copy, images, short videos, emails and pages are drafted in hours instead of weeks." },
+    { "title": "Wayne reviews", "copy": "Brand, budget and compliance are checked by a human before anything reaches your customers.", "human": true },
+    { "title": "Launch and learn", "copy": "Approved work goes live, results flow back in, and the loop starts again tomorrow." }
+  ],
+  "compare": [
+    { "label": "Time to launch", "old": "Weeks of briefs, drafts and revisions", "next": "Days, because agents draft while you sleep" },
+    { "label": "Creative testing", "old": "A few versions per month", "next": "A steady pipeline of new angles, formats and videos" },
+    { "label": "Optimisation", "old": "After the monthly report", "next": "Reviewed daily, adjusted as soon as the data is clear" },
+    { "label": "Channels", "old": "Separate teams, separate reports", "next": "One loop, one shared set of data" },
+    { "label": "AI search", "old": "Usually not covered", "next": "SEO, AEO and GEO are part of the system" },
+    { "label": "Who checks the work", "old": "Whoever is assigned that month", "next": "Wayne reviews before anything goes live" }
+  ],
+  "guardrails": [
+    { "title": "A human approves what customers see", "copy": "Ads, posts, emails and pages are reviewed by Wayne before launch. Agents draft and recommend; they do not publish on their own." },
+    { "title": "Budgets have hard limits", "copy": "Spend caps and change limits are agreed with you first. No agent can raise a budget beyond them." },
+    { "title": "Your data stays yours", "copy": "Customer data is handled in line with Malaysia’s PDPA. You are told which tools process it, and ad accounts and assets remain in your name." },
+    { "title": "No inflated promises", "copy": "AI makes the work faster and the testing broader. It does not guarantee rankings, leads or sales, and I will not say it does." }
+  ]
+}

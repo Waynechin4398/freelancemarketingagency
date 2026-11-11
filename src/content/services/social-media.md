@@ -61,6 +61,15 @@ ctaCopy: Share your current channels, audience and content bottleneck. I’ll he
 related:
   - chatdaddy-saas-growth
   - singapore-luxury-homes
+agent:
+  name: "Social & Content Agent"
+  summary: "The Social & Content Agent keeps your content calendar full and on-brand, with the Video Agent turning the best ideas into short videos."
+  daily:
+    - "Tracks trends, competitor content and what your audience responds to"
+    - "Drafts posts and captions in English, 中文 and Bahasa Melayu"
+    - "Turns winning hooks into short-video scripts and AI-generated cuts"
+    - "Prepares the weekly calendar and reports which formats are working"
+  approval: "Every post and video is reviewed by Wayne before it is published under your brand name."
 order: 4
 draft: false
 ---

@@ -61,6 +61,15 @@ ctaCopy: Bring your current website, offer or launch plan to a focused 30-minute
 related:
   - summercharter-summermarine
   - kamidental-patient-acquisition
+agent:
+  name: "Web & Landing Page Agent"
+  summary: "The Web & Landing Page Agent shortens the build from months to weeks, and keeps the site maintained after launch instead of left to age."
+  daily:
+    - "Drafts page structure, copy and components from the agreed strategy"
+    - "Builds and updates pages with clean, fast, search-ready code"
+    - "Adds schema and answer-first content so search engines and AI assistants can read the site"
+    - "Checks links, speed and forms on an ongoing basis"
+  approval: "Site structure, brand, copy and every launch are reviewed by Wayne. You own the site, the code and the domain."
 order: 1
 draft: false
 ---

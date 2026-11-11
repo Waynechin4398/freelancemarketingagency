@@ -1,0 +1,22 @@
+---
+// Human-in-the-loop guardrails: what stays under human control.
+import data from "../data/agents.json";
+interface Props { headingId?: string }
+const { headingId = "guardrails-title" } = Astro.props;
+---
+<section class="guardrails section dark-section" aria-labelledby={headingId}>
+  <div class="guardrails-head">
+    <span class="eyebrow light">Human in the loop</span>
+    <h2 id={headingId}>AI does the work. A human stays responsible.</h2>
+    <p>The fair question about AI marketing is “who checks it?”. Here is the answer, in writing.</p>
+  </div>
+  <ul class="guardrail-grid">
+    {data.guardrails.map((item, index) => (
+      <li data-reveal="fade-up" data-reveal-delay={index * 60}>
+        <span>{String(index + 1).padStart(2, "0")}</span>
+        <h3>{item.title}</h3>
+        <p>{item.copy}</p>
+      </li>
+    ))}
+  </ul>
+</section>

@@ -47,7 +47,10 @@ const experience = [
     capabilities: ["WordPress", "Wix", "Shopify", "Tracking"],
   },
 ];
+import WorkRedirect from "../../components/WorkRedirect.astro";
+import siteData from "../../data/site.json";
 ---
+{siteData.showWork ? (
 <BaseLayout title="Work" description="Documented Wayne Omni work across web, SEO, paid acquisition, social media, analytics and marketing automation.">
   <PageHero
     eyebrow="Selected experience"
@@ -197,6 +200,7 @@ const experience = [
     if (document.readyState !== "loading") initializeWorkFilters();
   </script>
 </BaseLayout>
+) : <WorkRedirect />}
 
 <style>
   .work-proof { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-block: 2px solid var(--ink); background: var(--ink); gap: 2px; }

@@ -59,7 +59,7 @@ const portfolio = (await getCollection("caseStudies", ({ data }) => !data.draft)
     </div>
   </section>
 
-  <ResultsStrip />
+  {site.showWork && <ResultsStrip />}
 
   <SignalValues />
 
@@ -87,6 +87,7 @@ const portfolio = (await getCollection("caseStudies", ({ data }) => !data.draft)
     </div>
   </section>
 
+  {site.showWork && (
   <section class="work-preview section">
     <SectionIntro number="03" eyebrow="Selected work" title="Proof, not promises." copy="Documented project contexts, the role I played, the systems created and, where the measurement context is available, the reported result. This is the experience the agents are trained on and steered by." />
     <RelatedWork slugs={featuredWork} />
@@ -98,6 +99,7 @@ const portfolio = (await getCollection("caseStudies", ({ data }) => !data.draft)
       <a class="button ghost" href="/work/">View all work <span aria-hidden="true">↗</span></a>
     </div>
   </section>
+  )}
 
   <Guardrails />
 

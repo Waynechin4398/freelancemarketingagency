@@ -8,6 +8,6 @@ import site from "../../data/site.json";
   <PageHero dark eyebrow="Brief received" title="Thanks. It’s on my desk." intro="I read every brief myself and reply personally within one business day. Keep an eye on your inbox for a copy of what you sent." />
   <div class="button-row not-found-actions">
     <a class="button primary" href={site.bookingUrl} target="_blank" rel="noopener noreferrer">Book a 30-min call <span aria-hidden="true">↗</span></a>
-    <a class="button ghost" href="/work/">Explore the work</a>
+    {site.showWork ? <a class="button ghost" href="/work/">Explore the work</a> : <a class="button ghost" href="/services/">Explore the services</a>}
   </div>
 </BaseLayout>

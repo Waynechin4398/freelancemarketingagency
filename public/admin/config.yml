@@ -29,6 +29,7 @@ collections:
           - { label: Hero title, name: heroTitle, widget: string }
           - { label: Hero introduction, name: heroIntro, widget: text }
           - { label: Location line, name: location, widget: string }
+          - { label: Show portfolio (Work pages and case studies), name: showWork, widget: boolean, default: false, required: false }
           - { label: Contact email, name: contactEmail, widget: string, required: false }
           - { label: WhatsApp URL, name: whatsappUrl, widget: string, required: false }
           - { label: Booking URL, name: bookingUrl, widget: string, required: false }

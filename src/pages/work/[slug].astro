@@ -27,7 +27,10 @@ const story = [
   { label: "What was created", title: "What was created", bullets: project.data.created, tags: project.data.tools, eyebrow: "Tools, platforms & deliverables" },
   { label: "The insight", title: project.data.insight, eyebrow: "The takeaway" },
 ];
+import WorkRedirect from "../../components/WorkRedirect.astro";
+import siteData from "../../data/site.json";
 ---
+{siteData.showWork ? (
 <BaseLayout title={project.data.client} description={project.data.summary}>
   <section class="case-hero">
     <div>
@@ -75,6 +78,7 @@ const story = [
   </a>
   <CtaBand />
 </BaseLayout>
+) : <WorkRedirect />}
 
 <style>
   .case-walkthrough-heading, .case-evidence h2 { font: 700 clamp(1.8rem, 3vw, 3rem)/1.1 var(--display); letter-spacing: -.02em; margin: 0 0 1.5rem; }

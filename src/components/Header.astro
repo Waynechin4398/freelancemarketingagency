@@ -4,7 +4,7 @@ import Wordmark from "./Wordmark.astro";
 const nav = [
   { href: "/ai-agents", label: "AI Agents" },
   { href: "/services", label: "Services" },
-  { href: "/work", label: "Work" },
+  ...(site.showWork ? [{ href: "/work", label: "Work" }] : []),
   { href: "/about", label: "About" },
   { href: "/insights", label: "Insights" },
 ];

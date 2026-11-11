@@ -7,8 +7,8 @@ import ServiceFinder from "../../components/ServiceFinder.astro";
 import ServiceRows from "../../components/ServiceRows.astro";
 const services = (await getCollection("services", ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
 ---
-<BaseLayout title="Services" description="Connected web, acquisition, engagement and automation capabilities.">
-  <PageHero dark eyebrow="Connected capabilities" title="Six skills. One growth system." intro="Build the experience, acquire the right attention, engage across the lifecycle and automate the handoffs that should never be left to chance." />
+<BaseLayout title="Services" description="Paid media, social media, email, websites, landing pages and CRM automation in Malaysia, each run daily by a dedicated AI agent and reviewed by a human strategist.">
+  <PageHero dark eyebrow="Agent-run services" title="Six services. One agent team." intro="Every service here is run day to day by a dedicated AI agent and reviewed by Wayne. Choose the part of your customer journey that needs to work harder, or let the whole team run as one loop." />
   <section class="service-index">
     <div class="service-index-intro">
       <span class="eyebrow light">Choose by constraint</span>
@@ -20,5 +20,11 @@ const services = (await getCollection("services", ({ data }) => !data.draft)).so
     <ServiceFinder services={services} />
   </section>
   <ServiceRows services={services} tone="dark" eyebrow="Explore every capability" title="Every capability, one system." headingId="all-services-title" />
+  <section class="section plain-section">
+    <div class="agent-team-foot" style="margin-top:0">
+      <a class="button primary" href="/ai-agents/">Meet the AI agent team <span aria-hidden="true">↗</span></a>
+      <a class="button ghost" href="/ai-visibility/">AI search visibility: SEO, AEO, GEO <span aria-hidden="true">↗</span></a>
+    </div>
+  </section>
   <CtaBand title="Not sure which service comes first?" copy="Tell me where growth is getting stuck. I’ll help trace the journey and identify the clearest next move." />
 </BaseLayout>

@@ -6,6 +6,7 @@ import "@fontsource/dm-mono/400.css";
 import "@fontsource/dm-mono/500.css";
 import "../styles/signal.css";
 import "../styles/enhancements.css";
+import "../styles/agents.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import SmoothCursor from "../components/SmoothCursor.astro";
@@ -23,7 +24,7 @@ interface Props {
 
 const {
   title = `${site.brand} — ${site.descriptor}`,
-  description = "Connected websites, campaigns and marketing systems built in Malaysia for businesses across markets.",
+  description = "Wayne Omni is an AI agent marketing team in Malaysia. AI agents run your ads, social content, video, email, websites and SEO, AEO and GEO every day, with a human strategist approving every move.",
   noindex = false,
 } = Astro.props;
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefined;
@@ -38,7 +39,7 @@ const structuredData = {
   logo: Astro.site ? new URL("/images/icon-512.png", Astro.site).toString() : "/images/icon-512.png",
   description,
   areaServed: ["Malaysia", "Singapore", "Southeast Asia"],
-  knowsAbout: ["Website development", "Landing pages", "Paid media", "Social media", "Email marketing", "CRM and marketing automation"],
+  knowsAbout: ["AI marketing agents", "AI agent marketing", "Digital marketing", "Paid media", "Social media marketing", "AI video generation", "Email marketing", "Website development", "Landing pages", "SEO", "Answer engine optimisation (AEO)", "Generative engine optimisation (GEO)", "CRM and marketing automation"],
 };
 ---
 <!doctype html>

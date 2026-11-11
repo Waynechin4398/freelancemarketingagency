@@ -85,6 +85,15 @@ collections:
       - { label: CTA headline, name: ctaTitle, widget: string }
       - { label: CTA copy, name: ctaCopy, widget: text }
       - { label: Related case-study slugs, name: related, widget: list, field: { label: Slug, name: slug, widget: string } }
+      - label: AI agent
+        name: agent
+        widget: object
+        required: false
+        fields:
+          - { label: Agent name, name: name, widget: string }
+          - { label: Summary, name: summary, widget: text }
+          - { label: Daily tasks, name: daily, widget: list, field: { label: Task, name: task, widget: string } }
+          - { label: What Wayne approves, name: approval, widget: text }
       - { label: Display order, name: order, widget: number, value_type: int }
       - { label: Draft, name: draft, widget: boolean, default: true }
       - { label: Body, name: body, widget: markdown, required: false }

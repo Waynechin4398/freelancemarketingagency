@@ -6,6 +6,8 @@ export const prerender = true;
 const staticPaths = [
   "/",
   "/about/",
+  "/ai-agents/",
+  "/ai-visibility/",
   "/contact/",
   "/insights/",
   "/services/",

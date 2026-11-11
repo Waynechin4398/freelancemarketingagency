@@ -1,26 +1,26 @@
-<div class="console" data-growth-console aria-label="Interactive growth console">
-  <div class="console-top"><span class="console-kicker">Growth console <b>01</b></span><span class="status"><i></i> System online</span></div>
-  <div class="console-tabs" role="tablist" aria-label="Marketing channels">
-    {["Web", "Meta", "Google", "TikTok", "Social", "Email"].map((channel, index) => (
+<div class="console" data-growth-console aria-label="Interactive agent console (illustrative)">
+  <div class="console-top"><span class="console-kicker">Agent console <b>01</b></span><span class="status"><i></i> Agents working</span></div>
+  <div class="console-tabs" role="tablist" aria-label="AI agents">
+    {["Ads", "Social", "Video", "Email", "Web", "Search"].map((channel, index) => (
       <button role="tab" data-channel={channel} aria-selected={index === 0 ? "true" : "false"} tabindex={index === 0 ? 0 : -1}>{channel}</button>
     ))}
   </div>
   <div class="console-stage cobalt" data-console-stage aria-live="polite">
-    <div class="console-axis" aria-hidden="true"><span>Signal</span><span>Intent</span><span>Action</span></div>
-    <div class="signal-card"><span data-console-label>Conversion path</span><strong data-console-value>Page → action</strong><p data-console-detail>Clear message, proof and next step.</p></div>
+    <div class="console-axis" aria-hidden="true"><span>Read</span><span>Create</span><span>Review</span></div>
+    <div class="signal-card"><span data-console-label>Ads Agent · today</span><strong data-console-value>Pause → replace</strong><p data-console-detail>Two tired creatives flagged. Three new angles drafted for Wayne’s review.</p></div>
     <div class="signal-lines" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
     <div class="console-orbit" aria-hidden="true"><b></b><b></b><b></b></div>
   </div>
-  <div class="console-foot"><span data-console-module>Module 01 / 06</span><span>Strategy · Creative · Technology</span></div>
+  <div class="console-foot"><span data-console-module>Module 01 / 06</span><span>Illustrative · Human approval required</span></div>
 </div>
 <script>
   const channelData = {
-    Web: ["Conversion path", "Page → action", "Clear message, proof and next step.", "cobalt"],
-    Meta: ["Creative learning", "Hook → signal", "Test angles before scaling spend.", "coral"],
-    Google: ["Search intent", "Query → answer", "Meet active demand with relevance.", "lime"],
-    TikTok: ["Native attention", "Story → response", "Fast, human and channel-aware.", "cyan"],
-    Social: ["Brand memory", "Idea → rhythm", "Repeatable formats that compound.", "pink"],
-    Email: ["Lifecycle", "Lead → follow-up", "Timely messages tied to intent.", "amber"],
+    Ads: ["Ads Agent · today", "Pause → replace", "Two tired creatives flagged. Three new angles drafted for Wayne’s review.", "cobalt"],
+    Social: ["Social Agent · today", "Trend → draft", "Next week’s posts drafted in English, 中文 and Bahasa Melayu.", "coral"],
+    Video: ["Video Agent · today", "Hook → cut", "Best-performing hook turned into three short-video variations.", "lime"],
+    Email: ["Email Agent · today", "Lead → follow-up", "Follow-up sequence drafted for this week’s new enquiries.", "cyan"],
+    Web: ["Web Agent · today", "Ad → page", "Landing page headline matched to the winning ad message.", "pink"],
+    Search: ["Search Agent · today", "Question → answer", "FAQ drafted for a question buyers are asking AI assistants.", "amber"],
   };
   const initializeGrowthConsoles = () => document.querySelectorAll<HTMLElement>("[data-growth-console]").forEach((consoleElement) => {
     if (consoleElement.dataset.consoleReady === "true") return;

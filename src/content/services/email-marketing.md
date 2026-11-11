@@ -61,6 +61,15 @@ ctaCopy: Show me how leads enter your business and what happens next. I’ll hel
 related:
   - sweetie-lending
   - langkawi-sunset-cruise
+agent:
+  name: "Email Agent"
+  summary: "The Email Agent keeps follow-up moving after the first click, so no enquiry is left waiting for someone to find the time."
+  daily:
+    - "Segments the list by behaviour and stage"
+    - "Drafts welcome, nurture and re-engagement sequences"
+    - "Tests subject lines and send times"
+    - "Watches deliverability, unsubscribes and replies"
+  approval: "Every send to your customer list is reviewed by Wayne first, and consent rules under PDPA are followed."
 order: 5
 draft: false
 ---

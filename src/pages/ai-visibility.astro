@@ -1,0 +1,71 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import SectionIntro from "../components/SectionIntro.astro";
+import FaqBlock from "../components/FaqBlock.astro";
+import CtaBand from "../components/CtaBand.astro";
+import site from "../data/site.json";
+
+const work = [
+  { title: "Find the questions buyers ask", copy: "Map what your customers type into Google and ask AI assistants before they choose a supplier, in English, Chinese and Bahasa Melayu." },
+  { title: "Check who gets recommended", copy: "Record which businesses ChatGPT, Gemini, Perplexity and Google AI Overviews mention for those questions, and which sources they rely on." },
+  { title: "Fix the technical base", copy: "Make sure search engines and AI crawlers can read the site: clean structure, fast pages, schema markup and a complete Google Business Profile." },
+  { title: "Publish answer-first content", copy: "Write pages, FAQs and comparisons that answer one question clearly, with real facts, numbers and proof that an assistant can quote." },
+  { title: "Earn mentions beyond your site", copy: "AI answers lean on directories, reviews, media and community pages. We work on the places where your brand should already appear." },
+  { title: "Track and repeat", copy: "The Search Agent re-checks rankings and AI answers on a regular schedule, so content is updated when the answers change." },
+];
+const faqs = [
+  { question: "What is the difference between SEO, AEO and GEO?", answer: "SEO (search engine optimisation) helps your pages rank in Google results. AEO (answer engine optimisation) structures your content so it can be used as the direct answer, for example in featured snippets and Google AI Overviews. GEO (generative engine optimisation) improves the chance that AI assistants such as ChatGPT, Gemini and Perplexity mention or cite your brand when they generate an answer." },
+  { question: "Why does AI search matter for a business in Malaysia?", answer: "More buyers now ask an AI assistant to shortlist suppliers before they visit any website. If the assistant does not know your business, or describes a competitor instead, you are missing from the decision before the customer ever searches for you." },
+  { question: "Can you guarantee that ChatGPT will recommend my business?", answer: "No, and nobody honestly can. AI answers vary by question, wording and time. What can be done is to make your business easier to find, understand and trust for both search engines and AI models, then measure how often you appear and improve from there." },
+  { question: "Does GEO replace SEO?", answer: "No. Good SEO is the foundation, because AI assistants draw heavily on pages that already rank and are well structured. AEO and GEO build on top of it." },
+  { question: "How long does it take to see results?", answer: "Technical fixes and Google Business Profile improvements can show up within weeks. Rankings and AI mentions usually build over a few months of consistent publishing, and depend on how competitive your category is." },
+  { question: "What do you need from me to start?", answer: "Your website address, your main services and locations, and the competitors you care about. Search Console and Google Business Profile access helps but is not required for the first check." },
+];
+---
+<BaseLayout title="AI Visibility: SEO, AEO & GEO" description="Be found on Google and recommended by ChatGPT, Gemini and AI Overviews. SEO, AEO and GEO for Malaysian businesses, run by the Wayne Omni Search Agent and reviewed by a human strategist.">
+  <PageHero eyebrow="Search Agent · SEO · AEO · GEO" title="Be the answer AI gives." intro="Your next customer may ask ChatGPT or Google’s AI Overview before they ever see a search result. AI Visibility makes sure your business can be found on Google and understood, trusted and mentioned by AI assistants." />
+
+  <section class="section plain-section" aria-labelledby="terms-title">
+    <SectionIntro number="01" eyebrow="Three layers of search" title="Rank, answer, get recommended." copy="Search is no longer one results page. These three layers work together, and most agencies in Malaysia still sell only the first." />
+    <h2 id="terms-title" class="sr-only">SEO, AEO and GEO explained</h2>
+    <div class="visibility-terms">
+      <article data-reveal="fade-up">
+        <span>Layer 01</span>
+        <strong>SEO</strong>
+        <h3>Search engine optimisation</h3>
+        <p>Your pages rank in Google when people search for what you sell. Still the foundation for everything else.</p>
+      </article>
+      <article data-reveal="fade-up" data-reveal-delay="60">
+        <span>Layer 02</span>
+        <strong>AEO</strong>
+        <h3>Answer engine optimisation</h3>
+        <p>Your content is structured so it becomes the direct answer in featured snippets, voice results and Google AI Overviews.</p>
+      </article>
+      <article class="is-accent" data-reveal="fade-up" data-reveal-delay="120">
+        <span>Layer 03</span>
+        <strong>GEO</strong>
+        <h3>Generative engine optimisation</h3>
+        <p>AI assistants such as ChatGPT, Gemini and Perplexity know your brand, describe it correctly and mention it when buyers ask for a recommendation.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="visibility-work-title">
+    <SectionIntro number="02" eyebrow="What the Search Agent does" title="Six jobs, on repeat." copy="The Search Agent does the monitoring and drafting. Every published page and every factual claim about your business is reviewed by Wayne first." />
+    <h2 id="visibility-work-title" class="sr-only">What the work includes</h2>
+    <ul class="check-list">
+      {work.map((item) => (
+        <li data-reveal="fade-up"><h3>{item.title}</h3><p>{item.copy}</p></li>
+      ))}
+    </ul>
+    <div class="agent-team-foot">
+      <a class="button primary" href={site.bookingUrl} target="_blank" rel="noopener noreferrer" data-ga-event="contact_calendly" data-ga-method="calendly" data-ga-location="ai_visibility">Ask for an AI visibility check <span aria-hidden="true">↗</span></a>
+      <a class="button ghost" href="/ai-agents/">Meet the whole agent team <span aria-hidden="true">↗</span></a>
+    </div>
+  </section>
+
+  <FaqBlock faqs={faqs} eyebrow="SEO, AEO and GEO, explained" title="Plain answers about AI search." />
+
+  <CtaBand eyebrow="AI visibility check" title="What does AI say about your business?" copy="Send me your website and your main service. I’ll check how you appear on Google and in AI answers, and tell you what I would fix first." />
+</BaseLayout>

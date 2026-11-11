@@ -1,0 +1,78 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import SectionIntro from "../components/SectionIntro.astro";
+import AgentTeam from "../components/AgentTeam.astro";
+import AgentLoop from "../components/AgentLoop.astro";
+import CompareTable from "../components/CompareTable.astro";
+import Guardrails from "../components/Guardrails.astro";
+import GrowthConsole from "../components/GrowthConsole.astro";
+import FaqBlock from "../components/FaqBlock.astro";
+import CtaBand from "../components/CtaBand.astro";
+
+const faqs = [
+  { question: "What is an AI agent marketing team?", answer: "It is a set of specialised AI agents, each responsible for one part of your marketing: ads, social content, video, email, web pages, search visibility and reporting. They work every day in one shared loop, reading the data, proposing the next test and drafting the assets. A human strategist, Wayne, sets the direction and approves the work before it goes live." },
+  { question: "Will AI run my ads or post content without a human checking?", answer: "No. Agents draft, analyse and recommend. Ads, posts, emails and pages are reviewed by Wayne before they reach your customers, and budget changes stay inside limits agreed with you in advance." },
+  { question: "How is this different from using ChatGPT myself?", answer: "A chat tool answers one question at a time and forgets your business afterwards. An agent team is set up around your offer, brand, accounts and data, runs a repeatable daily process across every channel, and is supervised by someone with hands-on campaign experience who is accountable for the outcome." },
+  { question: "Will the content sound like generic AI content?", answer: "It should not. The agents work from your brand voice, offer, customer language and past results, and every piece is edited and approved by a human. Content that sounds generic does not get published." },
+  { question: "Which languages can the agents work in?", answer: "English, Chinese and Bahasa Melayu, which covers most campaigns in Malaysia and Singapore. Multilingual campaigns are planned per audience, not translated word for word." },
+  { question: "What happens to my business and customer data?", answer: "Your ad accounts, website, domain and customer lists stay in your name. Customer data is handled in line with Malaysia’s Personal Data Protection Act (PDPA), and you are told which tools process it before work starts." },
+  { question: "Can you guarantee leads, rankings or sales?", answer: "No. Results depend on your market, offer, budget and follow-up. What an agent team changes is the speed of execution and the amount of testing, which gives a good strategy more chances to work. Any agency that guarantees results from AI is overselling." },
+  { question: "Do I need to replace my current team or agency?", answer: "Not necessarily. The agent team can run the whole loop, or take one part such as ad creative testing, content production or search visibility, and work alongside your existing people." },
+  { question: "How do we start?", answer: "Start with the free growth check or a 30-minute call. I look at where growth is stuck, recommend which agents should start first and agree the scope with you. Scope and fees are discussed after that conversation, once I understand what you need." },
+];
+---
+<BaseLayout title="AI Agents" description="Meet the Wayne Omni AI agent marketing team: seven AI agents running ads, social, video, email, web and search every day in Malaysia, with a human strategist approving every move.">
+  <PageHero dark eyebrow="AI agent marketing team · Malaysia" title="Your marketing team, always on." intro="Seven AI agents plan, create, launch and optimise your marketing every day. One human strategist sets the direction and signs off every move. That is the whole model." />
+
+  <section class="loop-section section" id="the-loop">
+    <SectionIntro number="01" eyebrow="The agent loop" title="How one day of work runs." copy="An agent loop is a simple idea: read the data, decide the next test, create the assets, get a human review, launch, then repeat. The difference is that it happens daily rather than monthly." />
+    <AgentLoop />
+  </section>
+
+  <AgentTeam title="Seven agents. One human in charge." />
+
+  <section class="console-feature section dark-section">
+    <SectionIntro number="02" eyebrow="A day in the loop" title="What the agents hand me each morning." copy="Tap an agent to see the kind of task it completes in a normal day. Every item arrives as a draft or a recommendation, waiting for review." light />
+    <div class="console-feature-grid">
+      <div class="console-manifesto">
+        <span>WAYNE OMNI / AGENT TEAM</span>
+        <p>Agents are fast and tireless. They are not accountable. That is why the strategy and the sign-off stay with a person.</p>
+        <a href="/contact">Talk to Wayne ↗</a>
+      </div>
+      <div>
+        <GrowthConsole />
+        <p class="console-demo-note">Illustrative examples of daily agent tasks, not live client data.</p>
+      </div>
+    </div>
+  </section>
+
+  <CompareTable />
+
+  <section class="dogfood section" aria-labelledby="dogfood-title">
+    <SectionIntro number="03" eyebrow="Built with our own agents" title="We use it before we sell it." copy="The same approach already runs parts of Wayne Omni’s own marketing. These are things built and operating today." />
+    <div class="dogfood-grid">
+      <article data-reveal="fade-up">
+        <strong>100+</strong>
+        <h3>Preview websites generated</h3>
+        <p>More than 100 tailored preview websites for local businesses were generated and deployed from one site engine, each with its own content and design direction.</p>
+      </article>
+      <article data-reveal="fade-up" data-reveal-delay="60">
+        <strong>24/7</strong>
+        <h3>AI lead triage on this site</h3>
+        <p>Every enquiry sent through the Wayne Omni contact form is read by an AI agent, summarised, prioritised and paired with a reply draft. A human sends the reply.</p>
+      </article>
+      <article data-reveal="fade-up" data-reveal-delay="120">
+        <strong>3</strong>
+        <h3>Working languages</h3>
+        <p>Campaign content is drafted in English, 中文 and Bahasa Melayu, so one loop can serve the audiences most Malaysian businesses actually have.</p>
+      </article>
+    </div>
+  </section>
+
+  <Guardrails />
+
+  <FaqBlock faqs={faqs} eyebrow="AI agent marketing, explained" title="Questions worth asking first." />
+
+  <CtaBand growthCheck eyebrow="Free growth check" title="See where your agent team would start." copy="Answer three quick questions. I’ll show you which part of the loop is likely to move first." />
+</BaseLayout>

@@ -22,6 +22,7 @@ const heroCtaLocation = `service_${service.id}_hero`;
     <div>
       <a href="#problems">The problem</a>
       <a href="#solutions">Solutions</a>
+      {service.data.agent && <a href="#agent">The agent</a>}
       <a href="#process">Process</a>
       <a href="#faq">FAQ</a>
     </div>
@@ -62,6 +63,24 @@ const heroCtaLocation = `service_${service.id}_hero`;
     </div>
     <InteractiveExplorer id="service-solutions" label="Explore the solutions" dark items={service.data.solutions.map((solution: { title: string; description: string }) => ({ ...solution, label: solution.title, eyebrow: service.data.title }))} />
   </section>
+
+  {service.data.agent && (
+    <section class="service-agent" id="agent" aria-labelledby="agent-heading">
+      <div class="service-agent-grid">
+        <div>
+          <span class="eyebrow">Agent-run, human-approved</span>
+          <h2 id="agent-heading">Run by the {service.data.agent.name}.</h2>
+          <p>{service.data.agent.summary}</p>
+          <a class="button primary" href="/ai-agents/">Meet the whole agent team <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="service-agent-card" data-reveal="fade-up">
+          <h3>What the agent does every day</h3>
+          <ul>{service.data.agent.daily.map((item: string) => <li>{item}</li>)}</ul>
+          <p class="service-agent-approval"><b>What Wayne approves</b>{service.data.agent.approval}</p>
+        </div>
+      </div>
+    </section>
+  )}
 
   <section class="service-fit" aria-labelledby="fit-heading">
     <div class="service-section-heading">

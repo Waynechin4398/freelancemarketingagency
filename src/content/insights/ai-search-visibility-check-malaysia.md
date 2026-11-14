@@ -3,6 +3,7 @@ title: Does ChatGPT know your business? A 30-minute AI search visibility check
 category: SEO & AI Search
 excerpt: A practical self-check for Malaysian businesses that want to know whether ChatGPT, Google's AI Overviews, Perplexity and Copilot can find, read and recommend them.
 publishDate: 2026-11-15
+updatedDate: 2026-11-15
 authorName: Wayne
 authorRole: Strategist and builder, Wayne Omni
 draft: false
@@ -100,7 +101,7 @@ First, open `yourdomain.com/robots.txt` in a browser and look for `Disallow: /` 
 
 Second, check your hosting or firewall settings. A robots.txt file is a request; a firewall rule is a lock. Many Malaysian SME sites sit behind Cloudflare, which offers [managed robots.txt](https://developers.cloudflare.com/bots/additional-configurations/managed-robots-txt/) entries and AI crawler blocking. Those settings can block an AI search crawler even when robots.txt looks fine.
 
-When my Search Agent ran this check on wayneomni.com in November 2026, the robots.txt file was in order for ChatGPT and Google. But the Cloudflare AI crawler settings were refusing PerplexityBot with a 403 error, which keeps a site out of Perplexity's index. Nothing in robots.txt showed it. That is exactly the kind of quiet block this step is meant to catch.
+When my Search Agent ran this check on wayneomni.com in November 2026, the robots.txt file was in order for ChatGPT and Google. But the Cloudflare AI crawler settings were refusing PerplexityBot with a 403 error, which keeps a site out of Perplexity's index. Nothing in robots.txt showed it. That is exactly the kind of quiet block this step is meant to catch, and it was switched off the same day.
 
 If you are comfortable with a terminal, a quick request with the crawler's name as the user agent shows whether your server answers with a page (200) or a refusal (403). It is only an approximation, because some firewalls treat verified crawlers differently, but a 403 is worth a closer look in your hosting dashboard. If that sounds unfamiliar, ask whoever manages your [website](/services/website-development/) to confirm which AI crawlers are allowed.
 

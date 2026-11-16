@@ -1,6 +1,6 @@
 ---
 title: Is TikTok Shop GMV Max ROI real for Malaysian sellers?
-category: Paid Media & Measurement
+category: TikTok Ads
 excerpt: A practical way to separate GMV Max-attributed revenue from genuine sales lift, then decide whether the campaign is profitable.
 publishDate: 2026-08-19
 updatedDate: 2026-08-29

@@ -1,6 +1,6 @@
 ---
 title: How can Malaysian SMEs track Meta Ads to real offline sales?
-category: Paid Media & Measurement
+category: Meta Ads
 excerpt: A practical measurement loop for connecting Meta campaigns with qualified leads, showroom visits, phone orders and closed sales.
 publishDate: 2026-08-12
 updatedDate: 2026-08-29

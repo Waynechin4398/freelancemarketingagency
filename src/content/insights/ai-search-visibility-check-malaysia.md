@@ -1,6 +1,6 @@
 ---
 title: Does ChatGPT know your business? A 30-minute AI search visibility check
-category: SEO & AI Search
+category: Website Development
 excerpt: A practical self-check for Malaysian businesses that want to know whether ChatGPT, Google's AI Overviews, Perplexity and Copilot can find, read and recommend them.
 publishDate: 2026-11-15
 updatedDate: 2026-11-15

@@ -1,6 +1,6 @@
 ---
 title: Multilingual campaigns need more than translated copy
-category: Market craft
+category: Lead Generation
 excerpt: Why English, Chinese and Malay campaigns should share a strategy without sounding identical.
 publishDate: 2026-07-29
 updatedDate: 2026-08-29

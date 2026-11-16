@@ -1,6 +1,6 @@
 ---
 title: Do Malaysian SMEs need WhatsApp opt‑in before following up with leads?
-category: CRM & Automation
+category: Lead Generation
 excerpt: A practical way to separate a useful reply from future promotions, record permission and stop follow-up when someone opts out.
 publishDate: 2026-08-06
 updatedDate: 2026-08-29

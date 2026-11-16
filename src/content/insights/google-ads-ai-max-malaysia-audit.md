@@ -1,6 +1,6 @@
 ---
 title: Did Google Ads switch on AI Max in your account? A September 2026 audit for Malaysian SMEs
-category: Paid Media & Measurement
+category: Google Ads
 excerpt: Google’s September migration does not mean every AI Max control was switched on. Use this practical audit to see what changed and decide what to test next.
 publishDate: 2026-09-09
 authorName: Wayne

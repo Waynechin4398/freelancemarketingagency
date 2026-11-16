@@ -1,6 +1,6 @@
 ---
 title: Why are Google Ads leads from the wrong location—even with Presence targeting?
-category: Paid Media & Measurement
+category: Google Ads
 excerpt: A practical diagnosis for Malaysian service businesses still receiving out-of-area enquiries after changing their Google Ads location settings.
 publishDate: 2026-08-26
 updatedDate: 2026-08-29

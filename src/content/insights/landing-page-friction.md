@@ -1,6 +1,6 @@
 ---
 title: Five quiet ways a landing page loses qualified leads
-category: Conversion
+category: Website Development
 excerpt: The small disconnects between promise, proof and action that create unnecessary hesitation.
 publishDate: 2026-07-29
 updatedDate: 2026-08-29

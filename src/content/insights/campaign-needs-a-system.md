@@ -1,6 +1,6 @@
 ---
 title: Your campaign needs a system before it needs more spend
-category: Growth systems
+category: Lead Generation
 excerpt: A practical map for connecting the ad, page, form, CRM and follow-up before scaling.
 publishDate: 2026-07-29
 updatedDate: 2026-08-29

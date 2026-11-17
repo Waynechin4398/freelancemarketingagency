@@ -1,0 +1,34 @@
+{
+  "home": {
+    "title": "",
+    "description": "Wayne Omni is an AI agent marketing team in Malaysia. AI agents run your ads, social content, video, email, websites and SEO, AEO and GEO every day, with a human strategist approving every move."
+  },
+  "about": {
+    "title": "About",
+    "description": "Wayne Omni is a Malaysia-registered marketing business where one senior strategist leads a team of AI agents across ads, content, video, email, web and search."
+  },
+  "aiAgents": {
+    "title": "AI Agents",
+    "description": "Meet the Wayne Omni AI agent marketing team: seven AI agents running ads, social, video, email, web and search every day in Malaysia, with a human strategist approving every move."
+  },
+  "aiVisibility": {
+    "title": "AI Visibility: SEO, AEO & GEO",
+    "description": "Be found on Google and recommended by ChatGPT, Gemini and AI Overviews. SEO, AEO and GEO for Malaysian businesses, run by the Wayne Omni Search Agent and reviewed by a human strategist."
+  },
+  "services": {
+    "title": "Services",
+    "description": "Paid media, social media, email, websites, landing pages and CRM automation in Malaysia, each run daily by a dedicated AI agent and reviewed by a human strategist."
+  },
+  "insights": {
+    "title": "Insights",
+    "description": "Practical notes on connected marketing systems, paid media, conversion, CRM and multilingual campaigns."
+  },
+  "work": {
+    "title": "Work",
+    "description": "Documented Wayne Omni work across web, SEO, paid acquisition, social media, analytics and marketing automation."
+  },
+  "contact": {
+    "title": "Schedule a meeting",
+    "description": "Book a focused 30-minute meeting with Wayne Omni."
+  }
+}

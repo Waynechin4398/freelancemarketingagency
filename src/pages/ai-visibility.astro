@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import pages from "../data/pages.json";
 import PageHero from "../components/PageHero.astro";
 import SectionIntro from "../components/SectionIntro.astro";
 import FaqBlock from "../components/FaqBlock.astro";
@@ -23,7 +24,7 @@ const faqs = [
   { question: "What do you need from me to start?", answer: "Your website address, your main services and locations, and the competitors you care about. Search Console and Google Business Profile access helps but is not required for the first check." },
 ];
 ---
-<BaseLayout title="AI Visibility: SEO, AEO & GEO" description="Be found on Google and recommended by ChatGPT, Gemini and AI Overviews. SEO, AEO and GEO for Malaysian businesses, run by the Wayne Omni Search Agent and reviewed by a human strategist.">
+<BaseLayout title={pages.aiVisibility.title || undefined} description={pages.aiVisibility.description || undefined}>
   <PageHero eyebrow="Search Agent · SEO · AEO · GEO" title="Be the answer AI gives." intro="Your next customer may ask ChatGPT or Google’s AI Overview before they ever see a search result. AI Visibility makes sure your business can be found on Google and understood, trusted and mentioned by AI assistants." />
 
   <section class="section plain-section" aria-labelledby="terms-title">

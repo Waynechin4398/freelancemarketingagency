@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import pages from "../data/pages.json";
 import PageHero from "../components/PageHero.astro";
 import SectionIntro from "../components/SectionIntro.astro";
 import AgentTeam from "../components/AgentTeam.astro";
@@ -22,7 +23,7 @@ const faqs = [
   { question: "How do we start?", answer: "Start with the free growth check or a 30-minute call. I look at where growth is stuck, recommend which agents should start first and agree the scope with you. Scope and fees are discussed after that conversation, once I understand what you need." },
 ];
 ---
-<BaseLayout title="AI Agents" description="Meet the Wayne Omni AI agent marketing team: seven AI agents running ads, social, video, email, web and search every day in Malaysia, with a human strategist approving every move.">
+<BaseLayout title={pages.aiAgents.title || undefined} description={pages.aiAgents.description || undefined}>
   <PageHero dark eyebrow="AI agent marketing team · Malaysia" title="Your marketing team, always on." intro="Seven AI agents plan, create, launch and optimise your marketing every day. One human strategist sets the direction and signs off every move. That is the whole model." />
 
   <section class="loop-section section" id="the-loop">

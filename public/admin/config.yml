@@ -1,12 +1,26 @@
 backend:
   name: github
-  repo: Waynechin4398/freelancemarketingagency
+  repo: Waynechin4398/wayneomni
   branch: main
-  # Hosted login needs an OAuth proxy. Add its public URL as base_url after
-  # the GitHub OAuth app and Cloudflare Worker are configured.
+  # Login: GitHub OAuth via Cloudflare Pages Functions (functions/api/auth.js
+  # and functions/api/callback.js). Needs GITHUB_CLIENT_ID and
+  # GITHUB_CLIENT_SECRET in the Cloudflare Pages project settings.
+  base_url: https://wayneomni.com
+  auth_endpoint: api/auth
+  squash_merges: true
+  commit_messages:
+    create: "Create {{collection}} “{{slug}}”"
+    update: "Update {{collection}} “{{slug}}”"
+    delete: "Delete {{collection}} “{{slug}}”"
+    uploadMedia: "Upload “{{path}}”"
+    deleteMedia: "Delete “{{path}}”"
+    openAuthoring: "{{message}}"
 
 local_backend: true
 publish_mode: editorial_workflow
+site_url: https://wayneomni.com
+display_url: https://wayneomni.com
+logo_url: /images/icon-512.png
 media_folder: public/uploads
 public_folder: /uploads
 
@@ -44,6 +58,71 @@ collections:
               - { label: Meta Pixel ID, name: metaPixel, widget: string, required: false }
               - { label: LinkedIn partner ID, name: linkedInPartner, widget: string, required: false }
               - { label: TikTok Pixel ID, name: tiktokPixel, widget: string, required: false }
+
+  - name: pageSeo
+    label: Page SEO
+    files:
+      - name: pages
+        label: Main pages (titles and meta descriptions)
+        file: src/data/pages.json
+        description: "Titles get “ — Wayne Omni” added automatically. Aim for titles of 50–60 characters and descriptions of 140–160 characters."
+        fields:
+          - label: Home page
+            name: home
+            widget: object
+            collapsed: true
+            fields:
+              - { label: SEO title, name: title, widget: string, required: false, hint: "Leave empty to use the brand title (Wayne Omni — AI Agent Marketing Team, Malaysia)." }
+              - { label: Meta description, name: description, widget: text, hint: "Shown under the title in Google results. Aim for 140–160 characters." }
+          - label: About
+            name: about
+            widget: object
+            collapsed: true
+            fields:
+              - { label: SEO title, name: title, widget: string, required: false, hint: "Shown in Google results. Aim for 50–60 characters. Leave empty to use the page title." }
+              - { label: Meta description, name: description, widget: text, hint: "Shown under the title in Google results. Aim for 140–160 characters." }
+          - label: AI Agents
+            name: aiAgents
+            widget: object
+            collapsed: true
+            fields:
+              - { label: SEO title, name: title, widget: string, required: false, hint: "Shown in Google results. Aim for 50–60 characters. Leave empty to use the page title." }
+              - { label: Meta description, name: description, widget: text, hint: "Shown under the title in Google results. Aim for 140–160 characters." }
+          - label: AI Visibility
+            name: aiVisibility
+            widget: object
+            collapsed: true
+            fields:
+              - { label: SEO title, name: title, widget: string, required: false, hint: "Shown in Google results. Aim for 50–60 characters. Leave empty to use the page title." }
+              - { label: Meta description, name: description, widget: text, hint: "Shown under the title in Google results. Aim for 140–160 characters." }
+          - label: Services overview
+            name: services
+            widget: object
+            collapsed: true
+            fields:
+              - { label: SEO title, name: title, widget: string, required: false, hint: "Shown in Google results. Aim for 50–60 characters. Leave empty to use the page title." }
+              - { label: Meta description, name: description, widget: text, hint: "Shown under the title in Google results. Aim for 140–160 characters." }
+          - label: Insights (blog index)
+            name: insights
+            widget: object
+            collapsed: true
+            fields:
+              - { label: SEO title, name: title, widget: string, required: false, hint: "Shown in Google results. Aim for 50–60 characters. Leave empty to use the page title." }
+              - { label: Meta description, name: description, widget: text, hint: "Shown under the title in Google results. Aim for 140–160 characters." }
+          - label: Work
+            name: work
+            widget: object
+            collapsed: true
+            fields:
+              - { label: SEO title, name: title, widget: string, required: false, hint: "Shown in Google results. Aim for 50–60 characters. Leave empty to use the page title." }
+              - { label: Meta description, name: description, widget: text, hint: "Shown under the title in Google results. Aim for 140–160 characters." }
+          - label: Contact
+            name: contact
+            widget: object
+            collapsed: true
+            fields:
+              - { label: SEO title, name: title, widget: string, required: false, hint: "Shown in Google results. Aim for 50–60 characters. Leave empty to use the page title." }
+              - { label: Meta description, name: description, widget: text, hint: "Shown under the title in Google results. Aim for 140–160 characters." }
 
   - name: services
     label: Services
@@ -97,9 +176,9 @@ collections:
           - { label: What Wayne approves, name: approval, widget: text }
       - { label: Display order, name: order, widget: number, value_type: float }
       - { label: Parent service (platform pages only), name: parent, widget: string, required: false }
-      - { label: SEO title, name: seoTitle, widget: string, required: false }
-      - { label: SEO description, name: seoDescription, widget: text, required: false }
-      - { label: Draft, name: draft, widget: boolean, default: true }
+      - { label: SEO title, name: seoTitle, widget: string, required: false, hint: "Shown in Google results. Aim for 50–60 characters. Leave empty to use the page title." }
+      - { label: SEO description, name: seoDescription, widget: text, required: false, hint: "Leave empty to use the introduction. Aim for 140–160 characters." }
+      - { label: Draft (hide from the live site), name: draft, widget: boolean, default: true }
       - { label: Body, name: body, widget: markdown, required: false }
 
   - name: taxonomies
@@ -166,13 +245,18 @@ collections:
     format: frontmatter
     slug: "{{slug}}"
     summary: "{{title}} · {{category}}"
+    preview_path: "insights/{{slug}}/"
+    sortable_fields: [publishDate, title, category]
+    view_groups: [{ label: Category, field: category }]
     fields:
       - { label: Title, name: title, widget: string }
-      - { label: Category, name: category, widget: string }
-      - { label: Excerpt, name: excerpt, widget: text }
-      - { label: Publish date, name: publishDate, widget: datetime, date_format: YYYY-MM-DD, time_format: false }
-      - { label: Updated date, name: updatedDate, widget: datetime, date_format: YYYY-MM-DD, time_format: false, required: false }
-      - { label: Draft, name: draft, widget: boolean, default: true }
-      - { label: SEO title, name: seoTitle, widget: string, required: false }
-      - { label: SEO description, name: seoDescription, widget: text, required: false }
+      - { label: Category, name: category, widget: select, options: [Google Ads, Meta Ads, TikTok Ads, Website Development, Lead Generation] }
+      - { label: Excerpt, name: excerpt, widget: text, hint: "One or two sentences shown on the Insights page." }
+      - { label: Publish date, name: publishDate, widget: datetime, format: YYYY-MM-DD, date_format: YYYY-MM-DD, time_format: false }
+      - { label: Updated date, name: updatedDate, widget: datetime, format: YYYY-MM-DD, date_format: YYYY-MM-DD, time_format: false, required: false, hint: "Set this when you make a meaningful update to the article." }
+      - { label: Author name, name: authorName, widget: string, default: Wayne, required: false }
+      - { label: Author role, name: authorRole, widget: string, default: "Strategist and builder, Wayne Omni", required: false }
+      - { label: Draft (hide from the live site), name: draft, widget: boolean, default: false, hint: "Switch on to keep the article hidden even after it is published." }
+      - { label: SEO title, name: seoTitle, widget: string, required: false, hint: "Shown in Google results. Aim for 50–60 characters. Leave empty to use the page title." }
+      - { label: SEO description, name: seoDescription, widget: text, required: false, hint: "Leave empty to use the excerpt. Aim for 140–160 characters." }
       - { label: Body, name: body, widget: markdown }

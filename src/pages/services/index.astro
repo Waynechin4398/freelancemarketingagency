@@ -1,13 +1,14 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import pages from "../../data/pages.json";
 import PageHero from "../../components/PageHero.astro";
 import CtaBand from "../../components/CtaBand.astro";
 import ServiceFinder from "../../components/ServiceFinder.astro";
 import ServiceRows from "../../components/ServiceRows.astro";
 const services = (await getCollection("services", ({ data }) => !data.draft && !data.parent)).sort((a, b) => a.data.order - b.data.order);
 ---
-<BaseLayout title="Services" description="Paid media, social media, email, websites, landing pages and CRM automation in Malaysia, each run daily by a dedicated AI agent and reviewed by a human strategist.">
+<BaseLayout title={pages.services.title || undefined} description={pages.services.description || undefined}>
   <PageHero dark eyebrow="Agent-run services" title="Six services. One agent team." intro="Every service here is run day to day by a dedicated AI agent and reviewed by Wayne. Choose the part of your customer journey that needs to work harder, or let the whole team run as one loop." />
   <section class="service-index">
     <div class="service-index-intro">

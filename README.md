@@ -53,9 +53,7 @@ Cloudflare Pages will create preview deployments for branches and deploy product
 
 ## Decap CMS hosted login
 
-Local editing works through `local_backend`. Hosted GitHub editing also needs a GitHub OAuth App and an OAuth proxy. Deploy the proxy (a Cloudflare Worker is suitable), store the GitHub client secret in the Worker environment, then add the Worker URL as `base_url` under `backend` in `public/admin/config.yml`.
-
-Never commit the OAuth client secret, analytics credentials or other secrets.
+Hosted login uses GitHub OAuth through the Cloudflare Pages Functions in `functions/api/auth.js` and `functions/api/callback.js`. Setup steps, the Page SEO section and the review queue for agent pull requests are documented in [docs/content-portal.md](docs/content-portal.md).
 
 ## Analytics and launch placeholders
 

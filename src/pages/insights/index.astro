@@ -1,6 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import pages from "../../data/pages.json";
 import PageHero from "../../components/PageHero.astro";
 import CtaBand from "../../components/CtaBand.astro";
 
@@ -29,7 +30,7 @@ const dateFormatter = new Intl.DateTimeFormat("en-MY", {
   year: "numeric",
 });
 ---
-<BaseLayout title="Insights" description="Practical notes on connected marketing systems, paid media, conversion, CRM and multilingual campaigns.">
+<BaseLayout title={pages.insights.title || undefined} description={pages.insights.description || undefined}>
   <PageHero
     eyebrow="Notes from the system"
     title="Smart notes for sharper marketing."

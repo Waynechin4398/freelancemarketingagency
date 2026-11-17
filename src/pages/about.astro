@@ -1,10 +1,11 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import pages from "../data/pages.json";
 import PageHero from "../components/PageHero.astro";
 import ProcessFlow from "../components/ProcessFlow.astro";
 import CtaBand from "../components/CtaBand.astro";
 ---
-<BaseLayout title="About" description="Wayne Omni is a Malaysia-registered marketing business where one senior strategist leads a team of AI agents across ads, content, video, email, web and search.">
+<BaseLayout title={pages.about.title || undefined} description={pages.about.description || undefined}>
   <PageHero eyebrow="Wayne Omnipotent · Malaysia" title="One strategist. A team of agents." intro="Wayne Omni is the public-facing name of Wayne Omnipotent, a Malaysia-registered marketing business. One senior strategist sets the direction. A team of AI agents does the daily work across ads, content, video, email, web and search." />
   <section class="about-grid">
     <div>

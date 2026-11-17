@@ -10,6 +10,7 @@ commit or pull request in this repo, and Cloudflare Pages rebuilds the site afte
 | Page SEO | Title and meta description of Home, About, AI Agents, AI Visibility, Services, Insights, Work, Contact | `src/data/pages.json` |
 | Services | Service page copy, plus SEO title / SEO description per service (incl. Google, Meta, TikTok Ads) | `src/content/services/*.md` |
 | Insights | Articles: category, dates, author, draft switch, SEO title / description, body | `src/content/insights/*.md` |
+| SEO Tasks | To-do board for SEO work that Claude picks up | `seo/tasks/*.md` |
 | Site settings | Brand, contact, analytics IDs, show/hide portfolio | `src/data/site.json` |
 
 Titles get " — Wayne Omni" added automatically. Aim for 50–60 character titles and 140–160
@@ -46,6 +47,12 @@ gh pr create --base main --title "Create Insights “meta-ads-lead-forms-malaysi
 
 Pull requests that do not follow this pattern still work on GitHub; they just do not appear
 in the portal.
+
+## SEO Tasks board
+
+The **SEO Tasks** section is a to-do board for SEO work. Set a task to “Approved” and Claude does it on the next daily run, then sends the change to Workflow. Details for agents: [seo-tasks.md](seo-tasks.md).
+
+Adding or changing a task also goes through Workflow: after **Save**, use **Publish → Publish now**.
 
 ## Login setup (one-time)
 

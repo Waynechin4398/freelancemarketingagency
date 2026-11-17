@@ -70,6 +70,8 @@ agent:
     - "Drafts new hooks, copy and creative variants for the next round of tests"
     - "Proposes budget shifts toward the combinations that are earning it"
   approval: "Budget changes, new campaigns and every ad are reviewed by Wayne before they go live. Spend limits are agreed with you first."
+seoTitle: Paid Ads Management Malaysia (Google, Meta, TikTok)
+seoDescription: Paid advertising for Malaysian businesses across Google, Meta and TikTok, with tracking, landing pages and lead follow-up treated as one system.
 order: 3
 draft: false
 ---

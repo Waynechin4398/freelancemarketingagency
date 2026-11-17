@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: Waynechin4398/freelancemarketingagency
+  repo: Waynechin4398/wayneomni
   branch: main
   # Login: GitHub OAuth via Cloudflare Pages Functions (functions/api/auth.js
   # and functions/api/callback.js). Needs GITHUB_CLIENT_ID and

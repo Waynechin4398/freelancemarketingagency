@@ -36,6 +36,9 @@ const services = defineCollection({
       approval: z.string(),
     }).optional(),
     order: z.number(),
+    parent: z.string().optional(),
+    seoTitle: z.string().optional(),
+    seoDescription: z.string().optional(),
     draft: z.boolean().default(false),
   }),
 });

@@ -15,7 +15,7 @@ import CompareTable from "../components/CompareTable.astro";
 import Guardrails from "../components/Guardrails.astro";
 import site from "../data/site.json";
 
-const services = (await getCollection("services", ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
+const services = (await getCollection("services", ({ data }) => !data.draft && !data.parent)).sort((a, b) => a.data.order - b.data.order);
 const featuredWork = ["singapore-luxury-homes", "propertylab-webinar-acquisition", "summercharter-summermarine"];
 const portfolio = (await getCollection("caseStudies", ({ data }) => !data.draft))
   .sort((a, b) => a.data.order - b.data.order);

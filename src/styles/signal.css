@@ -611,3 +611,9 @@ body:has(.filters, .service-subnav, .insight-filter-shell) .site-header.scrolled
   .whatsapp-float span { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
   .console-feature .console { box-shadow: 8px 8px 0 var(--lime); }
 }
+
+/* Platform links between Paid Media and its Google / Meta / TikTok pages */
+.service-platforms { display: flex; flex-wrap: wrap; gap: 10px; width: min(1180px, calc(100% - 32px)); margin: 28px auto 0; }
+.service-platforms a { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 18px; border: 2px solid var(--ink); border-radius: 999px; background: var(--white); color: var(--ink); font: 500 .78rem/1 var(--mono); text-decoration: none; }
+.service-platforms a:hover, .service-platforms a:focus-visible { background: var(--lime); }
+.service-platforms a span { font-size: .9em; }

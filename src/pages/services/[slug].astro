@@ -14,8 +14,16 @@ export async function getStaticPaths() {
 
 const { service } = Astro.props;
 const heroCtaLocation = `service_${service.id}_hero`;
+const allServices = await getCollection("services", ({ data }) => !data.draft);
+const platformPages = allServices
+  .filter((item) => item.data.parent === service.id)
+  .sort((a, b) => a.data.order - b.data.order);
+const parentService = service.data.parent ? allServices.find((item) => item.id === service.data.parent) : undefined;
+const siblingPages = parentService
+  ? allServices.filter((item) => item.data.parent === parentService.id && item.id !== service.id).sort((a, b) => a.data.order - b.data.order)
+  : [];
 ---
-<BaseLayout title={service.data.title} description={service.data.intro}>
+<BaseLayout title={service.data.seoTitle ?? service.data.title} description={service.data.seoDescription ?? service.data.intro}>
   <PageHero eyebrow={`${service.data.group} · ${service.data.number}`} title={service.data.title} intro={service.data.intro} />
 
   <nav class="service-subnav" aria-label={`${service.data.title} page sections`}>
@@ -38,6 +46,14 @@ const heroCtaLocation = `service_${service.id}_hero`;
       Discuss this service <span aria-hidden="true">↗</span>
     </a>
   </nav>
+
+  {(platformPages.length > 0 || parentService) && (
+    <nav class="service-platforms" aria-label="Platform pages">
+      {parentService && <a href={`/services/${parentService.id}/`}>Part of {parentService.data.title} <span aria-hidden="true">↗</span></a>}
+      {platformPages.map((item) => <a href={`/services/${item.id}/`}>{item.data.title} <span aria-hidden="true">↗</span></a>)}
+      {siblingPages.map((item) => <a href={`/services/${item.id}/`}>{item.data.title} <span aria-hidden="true">↗</span></a>)}
+    </nav>
+  )}
 
   <section class="service-problem" id="problems" aria-labelledby="problem-heading">
     <div class="service-section-heading">

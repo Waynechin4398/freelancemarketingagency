@@ -1,0 +1,35 @@
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Unbounded:wght@500;700&family=DM+Mono:wght@400;500&display=swap");
+:root { --ink:#111; --paper:#f2f1ec; --lime:#d4ff3a; --lilac:#c9b8ff; --muted:#5d5c55; --line:rgba(17,17,17,.16); }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--paper); color:var(--ink); font:16px/1.6 "Instrument Sans", system-ui, sans-serif; }
+.wrap { max-width: 760px; margin: 0 auto; padding: 32px 24px 64px; }
+.display { font-family:"Unbounded","Arial Black",sans-serif; font-weight:700; letter-spacing:-.02em; line-height:1.12; font-size:clamp(26px,4vw,38px); margin:12px 0 16px; }
+.eyebrow { font:500 12px "DM Mono", monospace; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); margin-bottom:8px; }
+.block { margin: 0 0 22px; }
+.pill { display:inline-block; margin:0 6px 6px 0; padding:4px 12px; border-radius:999px; background:var(--lime); font:500 12px "DM Mono", monospace; }
+.pill-warn { background:var(--lilac); }
+.lede { font-size:19px; color:#2b2a26; }
+.byline { font:500 13px "DM Mono", monospace; color:var(--muted); margin:4px 0; }
+.article, .task { background:#fff; border:1px solid var(--line); border-radius:28px; padding:28px; }
+.body { margin-top:20px; }
+.body h2, .body h3 { font-family:"Unbounded",sans-serif; letter-spacing:-.01em; line-height:1.2; }
+.body a { color:var(--ink); text-decoration-color:var(--lime); text-decoration-thickness:3px; }
+.body img { max-width:100%; border-radius:16px; }
+.body blockquote { margin:16px 0; padding:12px 18px; border-left:4px solid var(--lime); background:var(--paper); border-radius:0 12px 12px 0; }
+.body table { border-collapse:collapse; width:100%; font-size:14px; }
+.body th, .body td { border:1px solid var(--line); padding:8px; text-align:left; }
+/* Google snippet */
+.serp { background:#fff; border:1px solid #dadce0; border-radius:16px; padding:16px 18px; font-family:Arial, Helvetica, sans-serif; }
+.serp-site { display:flex; align-items:center; gap:10px; margin-bottom:6px; }
+.serp-icon { width:28px; height:28px; border-radius:50%; background:var(--ink); color:var(--lime); display:grid; place-items:center; font-size:15px; }
+.serp-name { font-size:14px; color:#202124; line-height:1.2; }
+.serp-url { font-size:12px; color:#4d5156; line-height:1.3; }
+.serp-title { font-size:20px; line-height:1.3; color:#1a0dab; margin:2px 0 4px; }
+.serp-desc { font-size:14px; line-height:1.58; color:#4d5156; }
+/* Task status colours */
+.status-idea { background:#eceae3; }
+.status-approved { background:var(--lime); }
+.status-in-progress { background:#ffe59a; }
+.status-in-review { background:var(--lilac); }
+.status-done { background:#111; color:var(--lime); }
+.status-blocked { background:#ffc9c9; }

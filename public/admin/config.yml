@@ -29,6 +29,48 @@ slug:
   clean_accents: true
 
 collections:
+  - name: seoTasks
+    label: SEO Tasks
+    label_singular: SEO task
+    description: "Your SEO to-do board. Set a task to “Approved” and Claude picks it up on the next daily run, then sends the change to Workflow for you to publish."
+    folder: seo/tasks
+    create: true
+    extension: md
+    format: frontmatter
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    summary: "{{status}} · {{title}}"
+    sortable_fields: [status, priority, due, title]
+    view_groups:
+      - { label: Status, field: status }
+      - { label: Type, field: type }
+    view_filters:
+      - { label: "Waiting for Claude (approved)", field: status, pattern: "^approved$" }
+      - { label: "Needs my review", field: status, pattern: "^in-review$" }
+      - { label: "Open (not done)", field: status, pattern: "^(idea|approved|in-progress|in-review|blocked)$" }
+    fields:
+      - { label: Task, name: title, widget: string }
+      - label: Status
+        name: status
+        widget: select
+        default: idea
+        hint: "Idea = parked. Approved = Claude does it on the next run. In review = change is waiting in Workflow."
+        options:
+          - { label: "Idea", value: idea }
+          - { label: "Approved: Claude to do", value: approved }
+          - { label: "In progress", value: in-progress }
+          - { label: "In review (check Workflow)", value: in-review }
+          - { label: "Done", value: done }
+          - { label: "Blocked", value: blocked }
+      - { label: Type, name: type, widget: select, default: "Page SEO", options: ["New article", "Update article", "Page SEO", "Service page", "Technical SEO", "AI visibility (GEO/AEO)", "Other"] }
+      - { label: Priority, name: priority, widget: select, default: medium, options: [high, medium, low] }
+      - { label: Owner, name: owner, widget: select, default: Claude, options: [Claude, Wayne] }
+      - { label: Target page or keyword, name: target, widget: string, required: false, hint: "e.g. /services/google-ads/ or “meta ads agency malaysia”" }
+      - { label: Due date, name: due, widget: datetime, format: YYYY-MM-DD, date_format: YYYY-MM-DD, time_format: false, required: false }
+      - { label: OKR link, name: okr, widget: string, required: false, hint: "Optional: the OKR task ID from the Google Sheet." }
+      - { label: Claude’s notes, name: result, widget: text, required: false, hint: "Claude writes what it did or why it is blocked." }
+      - { label: Change link (PR), name: pr, widget: string, required: false }
+      - { label: Details, name: body, widget: markdown, required: false, hint: "What you want done, in your own words. Chinese or English is fine." }
+
   - name: settings
     label: Site settings
     files:
@@ -70,59 +112,51 @@ collections:
           - label: Home page
             name: home
             widget: object
-            collapsed: true
             fields:
-              - { label: SEO title, name: title, widget: string, required: false, hint: "Leave empty to use the brand title (Wayne Omni — AI Agent Marketing Team, Malaysia)." }
-              - { label: Meta description, name: description, widget: text, hint: "Shown under the title in Google results. Aim for 140–160 characters." }
+              - { label: SEO title, name: title, widget: seo, brand_suffix: true, required: false, hint: "Leave empty to use the brand title (Wayne Omni — AI Agent Marketing Team, Malaysia)." }
+              - { label: Meta description, name: description, widget: seo, multiline: true, required: false, hint: "Shown under the title in Google results. Aim for 140–160 characters." }
           - label: About
             name: about
             widget: object
-            collapsed: true
             fields:
-              - { label: SEO title, name: title, widget: string, required: false, hint: "Shown in Google results. Aim for 50–60 characters. Leave empty to use the page title." }
-              - { label: Meta description, name: description, widget: text, hint: "Shown under the title in Google results. Aim for 140–160 characters." }
+              - { label: SEO title, name: title, widget: seo, brand_suffix: true, required: false, hint: "Shown in Google results. Aim for 50–60 characters. Leave empty to use the page title." }
+              - { label: Meta description, name: description, widget: seo, multiline: true, required: false, hint: "Shown under the title in Google results. Aim for 140–160 characters." }
           - label: AI Agents
             name: aiAgents
             widget: object
-            collapsed: true
             fields:
-              - { label: SEO title, name: title, widget: string, required: false, hint: "Shown in Google results. Aim for 50–60 characters. Leave empty to use the page title." }
-              - { label: Meta description, name: description, widget: text, hint: "Shown under the title in Google results. Aim for 140–160 characters." }
+              - { label: SEO title, name: title, widget: seo, brand_suffix: true, required: false, hint: "Shown in Google results. Aim for 50–60 characters. Leave empty to use the page title." }
+              - { label: Meta description, name: description, widget: seo, multiline: true, required: false, hint: "Shown under the title in Google results. Aim for 140–160 characters." }
           - label: AI Visibility
             name: aiVisibility
             widget: object
-            collapsed: true
             fields:
-              - { label: SEO title, name: title, widget: string, required: false, hint: "Shown in Google results. Aim for 50–60 characters. Leave empty to use the page title." }
-              - { label: Meta description, name: description, widget: text, hint: "Shown under the title in Google results. Aim for 140–160 characters." }
+              - { label: SEO title, name: title, widget: seo, brand_suffix: true, required: false, hint: "Shown in Google results. Aim for 50–60 characters. Leave empty to use the page title." }
+              - { label: Meta description, name: description, widget: seo, multiline: true, required: false, hint: "Shown under the title in Google results. Aim for 140–160 characters." }
           - label: Services overview
             name: services
             widget: object
-            collapsed: true
             fields:
-              - { label: SEO title, name: title, widget: string, required: false, hint: "Shown in Google results. Aim for 50–60 characters. Leave empty to use the page title." }
-              - { label: Meta description, name: description, widget: text, hint: "Shown under the title in Google results. Aim for 140–160 characters." }
+              - { label: SEO title, name: title, widget: seo, brand_suffix: true, required: false, hint: "Shown in Google results. Aim for 50–60 characters. Leave empty to use the page title." }
+              - { label: Meta description, name: description, widget: seo, multiline: true, required: false, hint: "Shown under the title in Google results. Aim for 140–160 characters." }
           - label: Insights (blog index)
             name: insights
             widget: object
-            collapsed: true
             fields:
-              - { label: SEO title, name: title, widget: string, required: false, hint: "Shown in Google results. Aim for 50–60 characters. Leave empty to use the page title." }
-              - { label: Meta description, name: description, widget: text, hint: "Shown under the title in Google results. Aim for 140–160 characters." }
+              - { label: SEO title, name: title, widget: seo, brand_suffix: true, required: false, hint: "Shown in Google results. Aim for 50–60 characters. Leave empty to use the page title." }
+              - { label: Meta description, name: description, widget: seo, multiline: true, required: false, hint: "Shown under the title in Google results. Aim for 140–160 characters." }
           - label: Work
             name: work
             widget: object
-            collapsed: true
             fields:
-              - { label: SEO title, name: title, widget: string, required: false, hint: "Shown in Google results. Aim for 50–60 characters. Leave empty to use the page title." }
-              - { label: Meta description, name: description, widget: text, hint: "Shown under the title in Google results. Aim for 140–160 characters." }
+              - { label: SEO title, name: title, widget: seo, brand_suffix: true, required: false, hint: "Shown in Google results. Aim for 50–60 characters. Leave empty to use the page title." }
+              - { label: Meta description, name: description, widget: seo, multiline: true, required: false, hint: "Shown under the title in Google results. Aim for 140–160 characters." }
           - label: Contact
             name: contact
             widget: object
-            collapsed: true
             fields:
-              - { label: SEO title, name: title, widget: string, required: false, hint: "Shown in Google results. Aim for 50–60 characters. Leave empty to use the page title." }
-              - { label: Meta description, name: description, widget: text, hint: "Shown under the title in Google results. Aim for 140–160 characters." }
+              - { label: SEO title, name: title, widget: seo, brand_suffix: true, required: false, hint: "Shown in Google results. Aim for 50–60 characters. Leave empty to use the page title." }
+              - { label: Meta description, name: description, widget: seo, multiline: true, required: false, hint: "Shown under the title in Google results. Aim for 140–160 characters." }
 
   - name: services
     label: Services
@@ -176,8 +210,8 @@ collections:
           - { label: What Wayne approves, name: approval, widget: text }
       - { label: Display order, name: order, widget: number, value_type: float }
       - { label: Parent service (platform pages only), name: parent, widget: string, required: false }
-      - { label: SEO title, name: seoTitle, widget: string, required: false, hint: "Shown in Google results. Aim for 50–60 characters. Leave empty to use the page title." }
-      - { label: SEO description, name: seoDescription, widget: text, required: false, hint: "Leave empty to use the introduction. Aim for 140–160 characters." }
+      - { label: SEO title, name: seoTitle, widget: seo, brand_suffix: true, required: false, hint: "Shown in Google results. Aim for 50–60 characters. Leave empty to use the page title." }
+      - { label: SEO description, name: seoDescription, widget: seo, multiline: true, required: false, hint: "Leave empty to use the introduction. Aim for 140–160 characters." }
       - { label: Draft (hide from the live site), name: draft, widget: boolean, default: true }
       - { label: Body, name: body, widget: markdown, required: false }
 
@@ -257,6 +291,6 @@ collections:
       - { label: Author name, name: authorName, widget: string, default: Wayne, required: false }
       - { label: Author role, name: authorRole, widget: string, default: "Strategist and builder, Wayne Omni", required: false }
       - { label: Draft (hide from the live site), name: draft, widget: boolean, default: false, hint: "Switch on to keep the article hidden even after it is published." }
-      - { label: SEO title, name: seoTitle, widget: string, required: false, hint: "Shown in Google results. Aim for 50–60 characters. Leave empty to use the page title." }
-      - { label: SEO description, name: seoDescription, widget: text, required: false, hint: "Leave empty to use the excerpt. Aim for 140–160 characters." }
+      - { label: SEO title, name: seoTitle, widget: seo, brand_suffix: true, required: false, hint: "Shown in Google results. Aim for 50–60 characters. Leave empty to use the page title." }
+      - { label: SEO description, name: seoDescription, widget: seo, multiline: true, required: false, hint: "Leave empty to use the excerpt. Aim for 140–160 characters." }
       - { label: Body, name: body, widget: markdown }
